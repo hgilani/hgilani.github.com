@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "NPM and Package.json"
+title: "NPM and package.json"
 date: 2012-07-29 09:28
 comments: true
 categories: [NPM, Node.js]
