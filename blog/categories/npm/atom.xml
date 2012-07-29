@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Sass | Himanshu Gilani]]></title>
-  <link href="http://hgilani.github.com/blog/categories/sass/atom.xml" rel="self"/>
+  <title><![CDATA[Category: NPM | Himanshu Gilani]]></title>
+  <link href="http://hgilani.github.com/blog/categories/npm/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2012-07-29T10:56:24+02:00</updated>
+  <updated>2012-07-29T10:59:39+02:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
