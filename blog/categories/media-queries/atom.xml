@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Himanshu Gilani]]></title>
-  <link href="http://hgilani.github.com/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Media Queries | Himanshu Gilani]]></title>
+  <link href="http://hgilani.github.com/blog/categories/media-queries/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
   <updated>2012-07-29T10:56:24+02:00</updated>
   <id>http://hgilani.github.com/</id>
