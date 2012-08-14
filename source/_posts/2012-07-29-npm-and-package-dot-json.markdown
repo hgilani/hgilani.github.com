@@ -6,3 +6,8 @@ comments: true
 categories: [NPM, Node.js]
 ---
 Describie NPM, package.json and dependencies
+
+NPM is a package manager for node. Working with NPM is really simple. If you want to install any node package then you can simply do following
+
+npm install {package_name}
+
