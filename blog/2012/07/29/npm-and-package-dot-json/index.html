@@ -111,11 +111,15 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'>sudo npm install -g {package_name} </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Notice the use of <code>sudo</code> in the above command. This is because the package that will be available globally in your system and you need admin privileges for making changes that affect the entire system.</p>
+<p>Notice the use of <code>sudo</code> in the above command. This is because the package will be available globally in your system and you need admin privileges for making changes that affect the entire system.</p>
 
 <h2>Local vs Global Install</h2>
 
-<p>When working with NPM packages you want to think in terms of local vs global packages. Local packages are project specific and need to be installed in project root folder. This way 2 different projects can use different version of the same package. So when will you need global packages. Global packages are useful when you need something for maintaining your project e.g. a packages needed for building/testing your project and the packages itself are not part of the production deployment.</p>
+<p>When working with NPM packages you want to think in terms of local vs global packages. Local packages are project specific and need to be installed in project root folder. This way 2 different projects can use different version of the same package.</p>
+
+<h3>So when will you need global packages?</h3>
+
+<p>Global packages are useful when you need something for maintaining your project e.g. a packages needed for building/testing your project. These packages typically do not get installed in the production environment.</p>
 
 <p>For a detailed description of different options available for npm command refer to <a href="http://blog.nodejitsu.com/npm-cheatsheet">npm cheatsheet</a></p>
 
@@ -205,7 +209,13 @@
 
 <h2>Best practices</h2>
 
-<p>For best practices refer to <a href="http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules">Ten Lessons Learned Maintaining Nodejs Modules</a></p>
+<p>For best practices refer to following 2 blog posts</p>
+
+<ul>
+<li><a href="http://blog.nodejitsu.com/package-dependencies-done-right">Package.json dependencies done right</a></li>
+<li><a href="http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules">Ten Lessons Learned Maintaining Nodejs Modules</a></li>
+</ul>
+
 </div>
 
 
