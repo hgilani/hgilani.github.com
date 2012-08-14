@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node.js | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/node-js/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2012-08-14T08:49:26+02:00</updated>
+  <updated>2012-08-14T09:40:20+02:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -18,11 +18,102 @@
     <link href="http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json/"/>
     <updated>2012-07-29T09:28:00+02:00</updated>
     <id>http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json</id>
-    <content type="html"><![CDATA[<p>Describie NPM, package.json and dependencies</p>
+    <content type="html"><![CDATA[<p>NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be installed locally for a project or globally for the entire system. Whenever you install packages these packages are fetched from the <a href="https://npmjs.org/">NPM registry</a>.</p>
 
-<p>NPM is a package manager for node. Working with NPM is really simple. If you want to install any node package then you can simply do following</p>
+<h2>Local Install</h2>
 
-<p>npm install {package_name}</p>
+<p>If you want to install any node package then you can simply do</p>
+
+<p><code>
+npm install {package_name}
+</code></p>
+
+<p>This will install NPM package {package_name} in the current working directory. This is typically root of the project.</p>
+
+<h2>Global Install</h2>
+
+<p>At times you may want to have some packages installed globally in the system. Gloabl packages are not project specific. Any package can be installed globaly if you add the <code>-g</code> switch</p>
+
+<p><code>
+sudo npm install -g {package_name}
+</code></p>
+
+<p>Notice the use of <code>sudo</code> in the above command. This is because the package that will be available globally in your system and you need admin privileges for making changes that affect the entire system.</p>
+
+<h2>Local vs Global Install</h2>
+
+<p>When working with NPM packages you want to think in terms of local vs global packages. Local packages are project specific and need to be installed in project root folder. This way 2 different projects can use different version of the same package. So when will you need global packages. Global packages are useful when you need something for maintaining your project e.g. a packages needed for building/testing your project and the packages itself are not part of the production deployment.</p>
+
+<p>For a detailed description of different options available for npm command refer to <a href="http://blog.nodejitsu.com/npm-cheatsheet">npm cheatsheet</a></p>
+
+<h2>package.json</h2>
+
+<p>This is all good. Now we need a way to maintain a way the dependencies for the project. This is typically done by creating a package.json at the root of the project and project dependencies in dependencies section. In addition to the project dependencies this file can contain project specific metadata like project name, description, version, author, script to execute for running/testing the application, etc.</p>
+
+<p>```json
+{
+  "name": "memento",
+  "description": "Memento: Discover and Save your Web",
+  "subdomain": "memento",
+  "domains": [</p>
+
+<pre><code>"mementodb.com"
+</code></pre>
+
+<p>   ],
+  "version": "0.0.1-77",
+  "homepage": "http://mementodb.com",
+  "author": "Himanshu Gilani <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x68;&#103;&#105;&#x6c;&#x61;&#110;&#x69;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#x68;&#x67;&#x69;&#x6c;&#x61;&#110;&#x69;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;</a> (http://himanshu.gilani.info)",
+  "private": true,
+  "scripts": {</p>
+
+<pre><code>"test": "mocha test/*-test.js",
+"start": "app.js"
+</code></pre>
+
+<p>  },
+  "engines": {</p>
+
+<pre><code>"node": "0.6.x"
+</code></pre>
+
+<p>  },
+  "dependencies": {</p>
+
+<pre><code>"mustache": "0.4.x",
+"request": "2.9.x",
+"express": "2.5.x",
+</code></pre>
+
+<p>   },
+  "devDependencies": {</p>
+
+<pre><code>"mocha": "&gt;=1.0.3",
+"should": "&gt;=0.6.3",
+"assert": "0.4.9",
+"jake": "0.2.33",
+"uglify-js": "1.2.6",
+"cloudfiles": "0.3.3",
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>Armed with this file anybody can get the bigger about the project. In addition to providing bigger it provides a standard way of maintaining node.js packages. Think of this like <strong>Convention over Configuration</strong> as when this file is available it prodvides following useful NPM commands</p>
+
+<ul>
+<li>Install all project specific dependencies - <code>npm install</code></li>
+<li>Start the application - <code>npm start</code></li>
+<li>Execute unit tests - <code>npm test</code></li>
+</ul>
+
+
+<p>For a good description of different properties that can be configured refer to <a href="http://package.json.nodejitsu.com/">package.json cheatsheet</a></p>
+
+<h2>Best practices</h2>
+
+<p>For best practices refer to <a href="http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules">Ten Lessons Learned Maintaining Nodejs Modules</a></p>
 ]]></content>
   </entry>
   
