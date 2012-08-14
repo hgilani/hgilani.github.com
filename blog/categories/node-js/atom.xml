@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node.js | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/node-js/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2012-07-29T11:51:29+02:00</updated>
+  <updated>2012-08-14T08:49:26+02:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -19,6 +19,10 @@
     <updated>2012-07-29T09:28:00+02:00</updated>
     <id>http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json</id>
     <content type="html"><![CDATA[<p>Describie NPM, package.json and dependencies</p>
+
+<p>NPM is a package manager for node. Working with NPM is really simple. If you want to install any node package then you can simply do following</p>
+
+<p>npm install {package_name}</p>
 ]]></content>
   </entry>
   
