@@ -30,6 +30,18 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34055934-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
 
 </head>
 
@@ -86,6 +98,8 @@
 
 <time datetime="2012-07-29T09:28:00+02:00" pubdate data-updated="true">Jul 29<span>th</span>, 2012</time>
         
+         | <a href="#disqus_thread">Comments</a>
+        
       </p>
     
   </header>
@@ -119,13 +133,15 @@
 
 <h3>So when will you need global packages?</h3>
 
-<p>Global packages are useful when you need something for maintaining your project e.g. a packages needed for building/testing your project. These packages typically do not get installed in the production environment.</p>
+<p>Global packages are useful when you need something for maintaining your project e.g. packages needed for building/testing your project. These packages typically do not get installed in the production environment.</p>
 
 <p>For a detailed description of different options available for npm command refer to <a href="http://blog.nodejitsu.com/npm-cheatsheet">npm cheatsheet</a></p>
 
 <h2>package.json</h2>
 
-<p>This is all good. Now we need a way to maintain a way the dependencies for the project. This is typically done by creating a package.json at the root of the project and project dependencies in dependencies section. In addition to the project dependencies this file can contain project specific metadata like project name, description, version, author, script to execute for running/testing the application, etc.</p>
+<p>This is all good. Now we need a way to maintain dependencies for the project. This is typically done by creating a package.json at the root of the project and project dependencies in dependencies section. In addition to the project dependencies this file can contain project specific metadata like project name, description, version, author, script to execute for running/testing the application, etc.</p>
+
+<p>Following is a sample package.json file</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -205,7 +221,9 @@
 </ul>
 
 
-<p>For a good description of different properties that can be configured refer to <a href="http://package.json.nodejitsu.com/">package.json cheatsheet</a></p>
+<p>Since executing these commands does not require any knowledge about the module. This is for the win.</p>
+
+<p>For a good description of different properties that can be configured in package.json file refer to <a href="http://package.json.nodejitsu.com">package.json cheatsheet</a></p>
 
 <h2>Best practices</h2>
 
@@ -243,7 +261,7 @@
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/npm/'>NPM</a>, <a class='category' href='/blog/categories/node-js/'>Node.js</a>
+    <a class='category' href='/blog/categories/node-js/'>node.js</a>, <a class='category' href='/blog/categories/npm/'>npm</a>
   
 </span>
 
@@ -265,6 +283,12 @@
     </p>
   </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -344,6 +368,22 @@
 
 </footer>
   
+
+<script type="text/javascript">
+      var disqus_shortname = 'hgilani';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json/';
+        var disqus_url = 'http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 
