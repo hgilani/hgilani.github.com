@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Himanshu Gilani]]></title>
+  <link href="http://hgilani.github.com/atom.xml" rel="self"/>
+  <link href="http://hgilani.github.com/"/>
+  <updated>2012-08-14T10:12:39+02:00</updated>
+  <id>http://hgilani.github.com/</id>
+  <author>
+    <name><![CDATA[Himanshu Gilani]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[NPM and package.json]]></title>
+    <link href="http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json/"/>
+    <updated>2012-07-29T09:28:00+02:00</updated>
+    <id>http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json</id>
+    <content type="html"><![CDATA[<p>NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be installed locally for a project or globally for the entire system. Whenever you install packages these packages are fetched from the <a href="https://npmjs.org/">NPM registry</a>.</p>
+
+<h2>Local Install</h2>
+
+<p>If you want to install any node package then you can simply do</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install {package_name}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will install NPM package {package_name} in the current working directory. This is typically root of the project.</p>
+
+<h2>Global Install</h2>
+
+<p>At times you may want to have some packages installed globally in the system. Gloabl packages are not project specific. Any package can be installed globaly if you add the <code>-g</code> switch</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo npm install -g {package_name} </span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice the use of <code>sudo</code> in the above command. This is because the package will be available globally in your system and you need admin privileges for making changes that affect the entire system.</p>
+
+<h2>Local vs Global Install</h2>
+
+<p>When working with NPM packages you want to think in terms of local vs global packages. Local packages are project specific and need to be installed in project root folder. This way 2 different projects can use different version of the same package.</p>
+
+<h3>So when will you need global packages?</h3>
+
+<p>Global packages are useful when you need something for maintaining your project e.g. packages needed for building/testing your project. These packages typically do not get installed in the production environment.</p>
+
+<p>For a detailed description of different options available for npm command refer to <a href="http://blog.nodejitsu.com/npm-cheatsheet">npm cheatsheet</a></p>
+
+<h2>package.json</h2>
+
+<p>This is all good. Now we need a way to maintain dependencies for the project. This is typically done by creating a package.json at the root of the project and project dependencies in dependencies section. In addition to the project dependencies this file can contain project specific metadata like project name, description, version, author, script to execute for running/testing the application, etc.</p>
+
+<p>Following is a sample package.json file</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;memento&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Memento: Discover and Save your Web&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;subdomain&quot;</span><span class="p">:</span> <span class="s2">&quot;memento&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;domains&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s2">&quot;mementodb.com&quot;</span>
+</span><span class='line'>   <span class="p">],</span>
+</span><span class='line'>  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1-77&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;homepage&quot;</span><span class="p">:</span> <span class="s2">&quot;http://mementodb.com&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Himanshu Gilani &lt;hgilani@gmail.com&gt; (http://himanshu.gilani.info)&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;private&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;mocha test/*-test.js&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;app.js&quot;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nt">&quot;engines&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;node&quot;</span><span class="p">:</span> <span class="s2">&quot;0.6.x&quot;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;mustache&quot;</span><span class="p">:</span> <span class="s2">&quot;0.4.x&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;request&quot;</span><span class="p">:</span> <span class="s2">&quot;2.9.x&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;express&quot;</span><span class="p">:</span> <span class="s2">&quot;2.5.x&quot;</span><span class="p">,</span>
+</span><span class='line'>   <span class="p">},</span>
+</span><span class='line'>  <span class="nt">&quot;devDependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;mocha&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;=1.0.3&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;should&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;=0.6.3&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;assert&quot;</span><span class="p">:</span> <span class="s2">&quot;0.4.9&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;jake&quot;</span><span class="p">:</span> <span class="s2">&quot;0.2.33&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;uglify-js&quot;</span><span class="p">:</span> <span class="s2">&quot;1.2.6&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;cloudfiles&quot;</span><span class="p">:</span> <span class="s2">&quot;0.3.3&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Armed with this file anybody can get the bigger about the project. In addition to providing bigger it provides a standard way of maintaining node.js packages. Think of this like <strong>Convention over Configuration</strong> as when this file is available it prodvides following useful NPM commands</p>
+
+<ul>
+<li>Install all project specific dependencies - <code>npm install</code></li>
+<li>Start the application - <code>npm start</code></li>
+<li>Execute unit tests - <code>npm test</code></li>
+</ul>
+
+
+<p>Since executing these commands does not require any knowledge about the module. This is for the win.</p>
+
+<p>For a good description of different properties that can be configured in package.json file refer to <a href="http://package.json.nodejitsu.com">package.json cheatsheet</a></p>
+
+<h2>Best practices</h2>
+
+<p>For best practices refer to following 2 blog posts</p>
+
+<ul>
+<li><a href="http://blog.nodejitsu.com/package-dependencies-done-right">Package.json dependencies done right</a></li>
+<li><a href="http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules">Ten Lessons Learned Maintaining Nodejs Modules</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
