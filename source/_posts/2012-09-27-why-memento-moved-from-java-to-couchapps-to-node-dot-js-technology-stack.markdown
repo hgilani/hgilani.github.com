@@ -17,7 +17,7 @@ As the next step I started implementing the back-end logic for the memento. I de
 
 ## VPS and EC2
 
-I started with a VPS provider, [**Webfaction**](http://webfaction.com), for hosting Memento. After spending some time on configuring the VPS m/c and deploying Memento I was happy that memento was up and running. To my surprise, in the next one hour I go an email from the **WebFction** support that they have the killed the java process for my web application as it was taking too much memory. This confused me since during the application development I never noticed any abnormal memory usage. This led to a realization that hosting a basic app on [Tomcat](http://tomcat.apache.org) or [Jetty](http://jetty.codehaus.org) servlet container required 256 MB of minimum RAM. In my opinion this is due to JVM overhead and th number of jars (58 jar files) that memento was loading in the JVM due to frameworks selected for the application. This kicked VPS provider out of equation.
+I started with a VPS provider, [**Webfaction**](http://webfaction.com), for hosting Memento. After spending some time on configuring the VPS m/c and deploying Memento I was happy that memento was up and running. To my surprise, in the next one hour I go an email from the **WebFction** support that they have the killed the java process for my app as it was taking too much memory. This confused me since during the app development I never noticed any abnormal memory usage. This led to a realization that hosting a basic app on [Tomcat](http://tomcat.apache.org) or [Jetty](http://jetty.codehaus.org) servlet container required 256 MB of minimum RAM. In my opinion this is due to JVM overhead and th number of jars (58 jar files) that memento was loading in the JVM due to frameworks selected. This kicked VPS provider out of equation.
 
 Next I decided to evaluate [Amazon EC2](http://aws.amazon.com/). For new customers Amazon EC2 provides a micro instance free for the first year. This meant no upfront cost to get started and no more memory constraints. After using Memento on EC2 for a month, I decided to host a continuous integration server, [Hudson](http://www.eclipse.org/hudson/). At this point I got another surprise. Whenever CI server started building memento on code commits entire EC2 instance would freeze. After some debugging I realized that's how Amazon wants a micro instance to perform. It defines a micro instance as- 
 
@@ -35,20 +35,20 @@ Following is how [couchapp.org](http://couchapp.org) defines what are CouchApps
 
 "CouchApps are JavaScript and HTML5 applications served directly from CouchDB. If you can fit your application into those constraints, then you get CouchDB's scalability and flexibility "for free" (and deploying your app is as simple as replicating it to the production server)."
 
-My initial thought was that CouchApp would act as a lean 2-tier stack with no middle tier and a low resource utilization.I decided to rewrite the java version of memento as CouchApp. However, this technology stack change was not as smooth as I anticipated. It required learning the CouchApps technology and its tool chain for building/deploying the application. This obviously resulted in a tremendous learning effort. JavaScript, jQuery, Sammy.js, Compass, Sass, and Node.js were learnt. After 6 months the second version of the MVP was ready as CouchApp and now it was again time to host it on the web. 
+My initial thought was that CouchApp would act as a lean 2-tier stack with no middle tier and a low resource utilization.I decided to rewrite the java version of memento as CouchApp. However, this technology stack change was not as smooth as I anticipated. It required learning the CouchApps technology and its tool chain for building/deploying the app. This obviously resulted in a tremendous learning effort. JavaScript, jQuery, Sammy.js, Compass, Sass, and Node.js were learnt. After 6 months the second version of the MVP was ready as CouchApp and now it was again time to host it on the web. 
 
-This is when I started realizing the limitations of the CouchApps. Since, the application was hosted out of the CouchDB database I was forced into funky URLs (as dictated by CouchDB design documents), and weak authentication/security. There was limited community support for libraries and tool chains. 
+This is when I started realizing the limitations of the CouchApps. Since, the app was hosted out of the CouchDB database I was forced into funky URLs (as dictated by CouchDB design documents), and weak authentication/security. There was limited community support for libraries and tool chains. 
 
 ## Node.js
 
 The CouchApp tool, [kan.so](http://kan.so/) that I was using for building and deploying CouchApps introduced me to Node.js. **kan.so** used it for packaging and deploying CouchApps. In the process of rewriting [Memento](http://mementodb.com) as a CouchApp I hacked on some of the Node.js modules.  
 
-Since I was again researching solutions CouchApp issues it occurred to me that Node.js could act as a thin layer between CouchDB and HTML5 application. Node.js is event oriented, asynchronous and has low memory and CPU utilization. Community support for the new features in the language itself and libraries/frameworks is fantastic. I was able to quickly iterate third version of MVP using Node.js within next three months and this is the version that is live in production today :-)
+Since I was again researching solutions CouchApp issues it occurred to me that Node.js could act as a thin layer between CouchDB and HTML5 GUI. Node.js is event oriented, asynchronous and has low memory and CPU utilization. Community support for the new features in the language itself and libraries/frameworks is fantastic. I was able to quickly iterate third version of MVP using Node.js within next three months and this is the version that is live in production today :-)
 
 After working with Node.js technology stack I can now say with certainty that Node.js is my favorite language. It is the secret ingredient in Memento. Having said this Java still remains my first love.
 
 ## Conclusion
 
-1. Java is good for developing apps and services when resource utilization is not an issue or you want to execute CPU intensive jobs.
+1. Java is good for developing apps and services when resource utilization is not an issue or if you want to write CPU intensive services.
 2. CouchApps are good for rapid prototyping and for apps that do not have strict security requirements.
-3. Node.js is even driven, light-weight and perfect langauge for developing next generation applications.
+3. Node.js is even driven, light-weight and perfect langauge for developing next generation responsive applications.
