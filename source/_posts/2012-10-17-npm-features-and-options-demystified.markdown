@@ -3,7 +3,7 @@ layout: post
 title: "NPM Features and Options Demystified"
 date: 2012-10-17 16:58
 comments: true
-categories:["node.js","npm"] 
+categories: ["node.js","npm"] 
 ---
 In the previous post, [NPM and package.json](http://himanshu.gilani.info/blog/2012/07/29/npm-and-package-dot-json/), I discussed how NPM and package.json could be used for managing the project and its dependencies. In this post I will discuss some of the overlooked features of NPM that help you in achieving more out of this tool
 
