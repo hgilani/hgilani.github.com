@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Introduction to LDAP - Himanshu Gilani</title>
+  <meta name="author" content="Himanshu Gilani">
+
+  
+  <meta name="description" content="LDAP is definitely not a buzz word technology these days, however a lot of organizations are still using LDAP. So, at some point in time you may be &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Himanshu Gilani" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34055934-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Himanshu Gilani</a></h1>
+  
+    <h2>Web Developer and Entrepreneur. Founder of mementodb.com</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgilani.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Introduction to LDAP</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-12T01:53:00+01:00" pubdate data-updated="true">Jan 12<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>LDAP is definitely not a buzz word technology these days, however a lot of organizations are still using LDAP. So, at some point in time you may be required to develop or maintain projects using LDAP. But since LDAP is an archaic technology, it is tough to discover right information about it on the web. Whenever I searched for it on the web, I found the right information filled with technical jargon and scattered across various articles. This post is my attempt at explaining everything you need to know to understand how LDAP protocol works.</p>
+
+<!-- more -->
+
+
+<h2>What is LDAP?</h2>
+
+<p>LDAP stands for <strong>Lightweight Directory Access Protocol</strong>. It is an Internet protocol for accessing distributed directory services. Using LDAP organizations can organize their users and resources into a hierarchical directory (or tree) structure. Benefits of this organization is that it can act as a centralized source of information for the organization there by providing following services</p>
+
+<ol>
+<li>Organize contact information of users into directories. Think of this as an address book.</li>
+<li>Resources like printers, scanners, meeting rooms , etc can also be organized in LDAP.</li>
+<li>LDAP supports ACLs i.e. you can control what can a user access in the directory.</li>
+<li>LDAP can store login credentials of users, there by acting as a company wide authentication and authorization database. And as such a lot of organizations use LDAP with their Single Sign On (SSO) integration.</li>
+</ol>
+
+
+<h2>Common LDAP Attributes and Acronyms</h2>
+
+<p>Now that we understand why an organization would use LDAP, lets get familiar with some of the common LDAP Acronyms and Attributes so that we can discuss LDAP easily.</p>
+
+<h3>LDAP Acronyms</h3>
+
+<ol>
+<li>DIT: Directory Information Tree - A DIT is hierarchical tree structure which has Distinguished Names (DNs) for directory service entries i.e. users, resources, departments, etc.</li>
+<li>LDIF: LDAP Data Interchange Format - A simple data format that can be used for representing information stored in DIT. LDIF is commonly used for export and import operations on DIT.</li>
+<li>DN: Distinguished NAME - An unique identifier for each entry in the DIT. A DN is composed of series of RDNs found by walking up the directory tree.</li>
+<li>RDN: Relative Distinguished Name - A relative distinguished name (RDN) represents a single node of a DN. Thus if you combine RDNs walking up DIT you can form DN.</li>
+</ol>
+
+
+<h3>LDAP Attributes</h3>
+
+<p>Each node in DIT can use different type of attributes for storing informations. Following are some of the frequently used attributes</p>
+
+<ol>
+<li>dc: domain component</li>
+<li>o: organization</li>
+<li>ou: organizational Unit</li>
+<li>cn: common Name</li>
+<li>sn: surname</li>
+<li>uid: userid</li>
+<li>l: location</li>
+<li>st: status</li>
+<li>c: country</li>
+</ol>
+
+
+<h2>DIT nodes, attributes, and objectclass</h2>
+
+<p>To Understand how a DIT is represented look at the following hypothetical tree.</p>
+
+<p><img src="/images/dit.png" title="[Directory Information Tree [Directory Information Tree]]" ></p>
+
+<p>Observe how the DIT is organized starting at the &#8220;domain component(dc)&#8221; at the root level, followed by &#8220;organizational unit(out)&#8221; i.e. departments. Departments hold persons which can be described using &#8220;common name(cn)&#8221; attributes. Following illustration shows the &#8220;dn of each level in the DIT. Notice how each node includes &#8220;rdn&#8221; of the parent in its &#8220;dn&#8221;.</p>
+
+<p><img src="/images/dn.png" title="[LDAP Distinguished Name [LDAP Distinguished Name]]" ></p>
+
+<p>In the above illustration we used only handful of attributes, but any number of attributes can be used to store information at any node. Some of the commonly used attributes are sn, uid, l, st, and c.</p>
+
+<p>In addition to standard attributes, LDAP also has the concept of &#8220;objectclass&#8221; i.e. schema. An object class specifies what set of mandatory and optional attributes can be used to describe a node in DIT. For example, if you create an object class printer then it could contain attributes that can define printer such as printerid, printername, ip, and modelno. An object class can inherit from other object classes and and all object classes inherit from the abstract object class top. In essence, objectclass is really there to enforce consistency and maintain integrity of the DIT. For more information on objectclass read <a href="http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=%2Frzahy%2Frzahyobjectclass.htm">Object Classes</a></p>
+
+<p><img src="/images/objectclass.png" title="[LDAP Object Class [LDAP Object class]]" ></p>
+
+<p>LDIF is the data interchange format that can be used to represent a DIT. In this format our example DIT will look like as below</p>
+
+<pre><code># domain component level
+dn: dc=mementodb,dc=com
+objectclass: organization
+objectclass: dcObject
+
+# organization unit level
+dn: ou=IT, dc=mementodb,dc=com
+objectclass: organizationalUnit
+ou: IT
+
+dn: ou=SALES, dc=mementodb,dc=com
+objectclass: organizationalUnit 
+ou: SALES
+
+# person level
+dn: cn=Bob Jones, ou=IT, dc=mementodb,dc=com
+objectclass: person
+cn: Bob Jones
+
+dn: cn=Paul Hunt, ou=IT, dc=mementodb,dc=com
+objectclass: person
+cn: Paul Hunt
+</code></pre>
+
+<p>For more information on DIT and LDAP organization refer to <a href="http://coewww.rutgers.edu/www1/linuxclass2003/lessons/lecture8.html">Introduction to LDAP</a> and <a href="http://quark.humbug.org.au/publications/ldap/ldap_tut.html">Introduction to LDAP</a></p>
+
+<h2>Working with LDAP</h2>
+
+<p>LDAP is a connected protocol. What this means is that you first need to create a socket connect to the LDAP server before invoking any operation. Following is a typical sequence of operations when working with LDAP</p>
+
+<ol>
+<li>connect: Create a socket connection</li>
+<li>bind: Set a base DN, all subsequent operations will be performed relative to this DN. For binding to a DN you also need to authenticate. Please note that you can authenticate anonymously as well. Authenticating creates a session.</li>
+<li>execute LDAP operations
+
+<ul>
+<li>create or add</li>
+<li>delete</li>
+<li>modify</li>
+<li>search or filter</li>
+</ul>
+</li>
+<li>unbind - remove session</li>
+<li>disconnect - Release the socket connection</li>
+</ol>
+
+
+<p>For information on how to perform these operations using Java language refer to <a href="http://directory.apache.org/api/five-minutes-tutorial.html">Five Minutes Tutorial</a></p>
+
+<p>If you have any thoughts or any concept that you would like me to incorporate in this tutorial then please feel free to leave a comment.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Himanshu Gilani</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-12T01:53:00+01:00" pubdate data-updated="true">Jan 12<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/dit/'>DIT</a>, <a class='category' href='/blog/categories/ldap/'>LDAP</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap/" data-via="hgilani" data-counturl="http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/12/10/why-i-love-git/" title="Previous Post: Why I Love Git">&laquo; Why I Love Git</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/" title="Next Post: Scripting Google Analytics: Part 1 - Tracking Pages and Events">Scripting Google Analytics: Part 1 - Tracking Pages and Events &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/17/npm-features-and-options-demystified/">NPM Features and Options Demystified</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/">Why Memento moved from Java to CouchApps to Node.js Technology Stack</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hgilani">@hgilani</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hgilani',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("hgilani", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/hgilani" class="twitter-follow-button" data-show-count="false">Follow @hgilani</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Himanshu Gilani -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'hgilani';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap/';
+        var disqus_url = 'http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

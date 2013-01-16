@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Why I Love Git - Himanshu Gilani</title>
+  <meta name="author" content="Himanshu Gilani">
+
+  
+  <meta name="description" content="Recently I was in a discussion with couple of friends who still have to migrate on to the Git version control system. My friends had a lot of &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgilani.github.com/blog/2012/12/10/why-i-love-git/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Himanshu Gilani" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34055934-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Himanshu Gilani</a></h1>
+  
+    <h2>Web Developer and Entrepreneur. Founder of mementodb.com</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgilani.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Why I Love Git</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-10T11:05:00+01:00" pubdate data-updated="true">Dec 10<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Recently I was in a discussion with couple of friends who still have to migrate on to the Git version control system. My friends had a lot of questions and showed hesitation in moving from SVN to Git. This post articulates my thoughts on why you should use Git and contains links to some excellent resources on Git that you can use to understand Git quickly.</p>
+
+<!-- more -->
+
+
+<h2>What is Git?</h2>
+
+<p>Git is a distributed version control(DVCS) system. In Git you are not required to connect to a central server for tracking changes. Changes or revisions to files are tracked locally in Git workspace, <code>.git</code> folder, of the project. Every Git workspace is a complete version control system that maintains complete version history. In other words, Git does not need to connect to any remote server for tracking changes.</p>
+
+<p>Git allows easy collaboration to remote respoitories by using <code>push</code> and <code>pull</code> operations. Since each Git workspace is a complete version control system, developers can also <code>push</code> and <code>pull</code> changes with each other. This is fundamentally different when compared to SVN/CVS which requires a central repository (repo) for tracking changes. To simplify collaboration most project setups have a remote repo where everybody pushes and pulls from. This remote repo is commonly referred as &#8220;origin&#8221;. It is incorrect to think of the &#8220;origin&#8221; as a central repo equivalent of SVN/CVS as Git allows you to have multiple &#8220;origin&#8221; repos. With all this in mind you can also think of Git as &#8220;Decentralized&#8221; version control system.</p>
+
+<h2>Why should you use Git?</h2>
+
+<p>Git is fast as all chnages are first committed to local repo and then later pushed to a remote repository.</p>
+
+<p>In git branching and merging is a first class operation i.e. fast and easy. Compared to SVN it does not involve figuring out change sets that should be merged. Anyone who has created and merged branches in SVN would say you need a whole day to merge branches and resolve conflcts. But, since Git maintains complete revision history merging is simple, does not require figuring out change sets and results in no conflicts. In fact once you start working with local branches in Git, it quickly becomes your favorite and essential feature of Git.</p>
+
+<p>Git also maintains complete SHA1 checkums for each commit to the repository. These checksums help it in maintaning the repo integrity by rejecting malicious code merges from downstream repos that fail checksum verifications.</p>
+
+<p>If you still have doubts on why you should use Git watch the Tech Talk from the master &#8220;Linus Torvalds&#8221; himself on why you should use Git.</p>
+
+<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/4XpnKHJAok8 "></iframe></div>
+
+
+<h2>Learning Git</h2>
+
+<ol>
+<li>Git Basics
+
+<ul>
+<li><a href="http://rogerdudler.github.com/git-guide/">git - the simple guide</a></li>
+<li><a href="http://scottr.org/presentations/git-in-5-minutes/">Git In Five Minutes</a></li>
+</ul>
+</li>
+<li>Beyond Basics
+
+<ul>
+<li><a href="http://git-scm.com/book">Pro Git book</a></li>
+<li><a href="http://www.kernel.org/pub/software/scm/git/docs/user-manual.html">Git User Manual</a></li>
+</ul>
+</li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Himanshu Gilani</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-10T11:05:00+01:00" pubdate data-updated="true">Dec 10<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/dvcs/'>DVCS</a>, <a class='category' href='/blog/categories/git/'>Git</a>, <a class='category' href='/blog/categories/svn/'>SVN</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgilani.github.com/blog/2012/12/10/why-i-love-git/" data-via="hgilani" data-counturl="http://hgilani.github.com/blog/2012/12/10/why-i-love-git/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/10/17/npm-features-and-options-demystified/" title="Previous Post: NPM Features and Options Demystified">&laquo; NPM Features and Options Demystified</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/01/12/introduction-to-ldap/" title="Next Post: Introduction to LDAP">Introduction to LDAP &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/17/npm-features-and-options-demystified/">NPM Features and Options Demystified</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/">Why Memento moved from Java to CouchApps to Node.js Technology Stack</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hgilani">@hgilani</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hgilani',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("hgilani", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/hgilani" class="twitter-follow-button" data-show-count="false">Follow @hgilani</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Himanshu Gilani -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'hgilani';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hgilani.github.com/blog/2012/12/10/why-i-love-git/';
+        var disqus_url = 'http://hgilani.github.com/blog/2012/12/10/why-i-love-git/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

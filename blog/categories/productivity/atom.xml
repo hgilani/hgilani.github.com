@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: productivity | Himanshu Gilani]]></title>
+  <link href="http://hgilani.github.com/blog/categories/productivity/atom.xml" rel="self"/>
+  <link href="http://hgilani.github.com/"/>
+  <updated>2013-01-16T11:37:21+01:00</updated>
+  <id>http://hgilani.github.com/</id>
+  <author>
+    <name><![CDATA[Himanshu Gilani]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Introducing Memento]]></title>
+    <link href="http://hgilani.github.com/blog/2012/09/17/introducing-memento/"/>
+    <updated>2012-09-17T06:19:00+02:00</updated>
+    <id>http://hgilani.github.com/blog/2012/09/17/introducing-memento</id>
+    <content type="html"><![CDATA[<p>Here is a wonderful application that allows you to save any web page that you like. It is your personal space with all that you like on the web. Some space that you can access whenver you like. You can create an account at <a href="http://www.mementodb.com">www.mementodb.com</a></p>
+
+<h2>What are mementos?</h2>
+
+<p>Mementos are anything that you save using this application. You can think of a memento as a copy of the entire web page saved into your account for you to <strong>"use"</strong> later. When we say <strong>"use"</strong> we really mean you should be able to read, edit or print the mementos. For creating mementos we convert web pages that you want to collect into a text format that any one can edit without understanding the techonolgies of the web.</p>
+
+<h2>Why Use Memento?</h2>
+
+<p>Web is constantly changing, pages that you bookmark today may vanish tomorrow. But what if you found something on web that you want to keep as a personal memento. With Memento you can <strong>Save</strong>, <strong>Collect</strong> and <strong>Use</strong> your web.</p>
+
+<h2>How it Works?</h2>
+
+<p>Memento provides a bookmarklet that converts the web page you want to keep into Markdown and saves it to your account.</p>
+
+<h2>Memento Features</h2>
+
+<p>Memento is designed for usability and following are some of its features</p>
+
+<ul>
+<li>Simple and amazingly Fast.</li>
+<li>Convert and Save any page as Memento.</li>
+<li>Takes new Notes or edit your saved mementos.</li>
+<li>Organize saved mementos using Tags.</li>
+<li>Distraction free Reading environment.</li>
+<li>Best Writing experience with Markdown.</li>
+<li>Saved mementos are Printer friendly.</li>
+</ul>
+
+
+<h2>Memento Quicklook</h2>
+
+<h3>List of mementos saved in your personal account</h3>
+
+<p><img src="/images/hero-shot1.png" title="[title text [alt text]]" ></p>
+
+<h3>Saving mementos using bookmarklet</h3>
+
+<p><img src="/images/hero-shot2.png" title="[title text [alt text]]" ></p>
+
+<h3>Saving mementos using bookmarklet (saved copy of page)</h3>
+
+<p><img src="/images/hero-shot3.png" title="[title text [alt text]]" ></p>
+
+<h2>Feedback, Ideas or Suggestions</h2>
+
+<p>If you have any ideas, feedback, or suggestions for improving Memento then please email me at hgilani[at]gmail[dot]com</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,113 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Himanshu Gilani</title>
-  <meta name="author" content="Himanshu Gilani">
-
-  
-  <meta name="description" content="Google Analytics is a free web analytics tool from Google that you can use for tracking website statistics like page views, traffic sources, audience &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://hgilani.github.com/">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <link href="/atom.xml" rel="alternate" title="Himanshu Gilani" type="application/atom+xml">
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-34055934-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Himanshu Gilani</a></h1>
-  
-    <h2>Web Developer and Entrepreneur. Founder of mementodb.com</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:hgilani.github.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+  <title><![CDATA[Himanshu Gilani]]></title>
+  <link href="http://hgilani.github.com/atom.xml" rel="self"/>
+  <link href="http://hgilani.github.com/"/>
+  <updated>2013-01-16T11:37:21+01:00</updated>
+  <id>http://hgilani.github.com/</id>
+  <author>
+    <name><![CDATA[Himanshu Gilani]]></name>
     
-      <h1 class="entry-title"><a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
   
-
-
-<time datetime="2013-01-16T11:31:00+01:00" pubdate data-updated="true">Jan 16<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.google.com/analytics">Google Analytics</a> is a free web analytics tool from Google that you can use for tracking website statistics like page views, traffic sources, audience information, goals, funnels, etc. While a lot of the stuff is tracked automatically, it becomes overwhelming pretty quickly if you want to track customize analytics or want to track or create custom metrics. In this post, I will detail things I learned by experimenting with Google Analytics.</p>
+  <entry>
+    <title type="html"><![CDATA[Scripting Google Analytics: Part 1 - Tracking Pages and Events]]></title>
+    <link href="http://hgilani.github.com/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/"/>
+    <updated>2013-01-16T11:31:00+01:00</updated>
+    <id>http://hgilani.github.com/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events</id>
+    <content type="html"><![CDATA[<p><a href="http://www.google.com/analytics">Google Analytics</a> is a free web analytics tool from Google that you can use for tracking website statistics like page views, traffic sources, audience information, goals, funnels, etc. While a lot of the stuff is tracked automatically, it becomes overwhelming pretty quickly if you want to track customize analytics or want to track or create custom metrics. In this post, I will detail things I learned by experimenting with Google Analytics.</p>
 
 <h2>Setup Google Analytics</h2>
 
@@ -250,130 +161,190 @@
 <p>In the next part of this post I will go over how to analyze the traffic sources, track errors, monitor how far users scroll on your web page</p>
 
 <p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
-</div>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Introduction to LDAP]]></title>
+    <link href="http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap/"/>
+    <updated>2013-01-12T01:53:00+01:00</updated>
+    <id>http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap</id>
+    <content type="html"><![CDATA[<p>LDAP is definitely not a buzz word technology these days, however a lot of organizations are still using LDAP. So, at some point in time you may be required to develop or maintain projects using LDAP. But since LDAP is an archaic technology, it is tough to discover right information about it on the web. Whenever I searched for it on the web, I found the right information filled with technical jargon and scattered across various articles. This post is my attempt at explaining everything you need to know to understand how LDAP protocol works.</p>
+
+<!-- more -->
+
+
+<h2>What is LDAP?</h2>
+
+<p>LDAP stands for <strong>Lightweight Directory Access Protocol</strong>. It is an Internet protocol for accessing distributed directory services. Using LDAP organizations can organize their users and resources into a hierarchical directory (or tree) structure. Benefits of this organization is that it can act as a centralized source of information for the organization there by providing following services</p>
+
+<ol>
+<li>Organize contact information of users into directories. Think of this as an address book.</li>
+<li>Resources like printers, scanners, meeting rooms , etc can also be organized in LDAP.</li>
+<li>LDAP supports ACLs i.e. you can control what can a user access in the directory.</li>
+<li>LDAP can store login credentials of users, there by acting as a company wide authentication and authorization database. And as such a lot of organizations use LDAP with their Single Sign On (SSO) integration.</li>
+</ol>
+
+
+<h2>Common LDAP Attributes and Acronyms</h2>
+
+<p>Now that we understand why an organization would use LDAP, lets get familiar with some of the common LDAP Acronyms and Attributes so that we can discuss LDAP easily.</p>
+
+<h3>LDAP Acronyms</h3>
+
+<ol>
+<li>DIT: Directory Information Tree - A DIT is hierarchical tree structure which has Distinguished Names (DNs) for directory service entries i.e. users, resources, departments, etc.</li>
+<li>LDIF: LDAP Data Interchange Format - A simple data format that can be used for representing information stored in DIT. LDIF is commonly used for export and import operations on DIT.</li>
+<li>DN: Distinguished NAME - An unique identifier for each entry in the DIT. A DN is composed of series of RDNs found by walking up the directory tree.</li>
+<li>RDN: Relative Distinguished Name - A relative distinguished name (RDN) represents a single node of a DN. Thus if you combine RDNs walking up DIT you can form DN.</li>
+</ol>
+
+
+<h3>LDAP Attributes</h3>
+
+<p>Each node in DIT can use different type of attributes for storing informations. Following are some of the frequently used attributes</p>
+
+<ol>
+<li>dc: domain component</li>
+<li>o: organization</li>
+<li>ou: organizational Unit</li>
+<li>cn: common Name</li>
+<li>sn: surname</li>
+<li>uid: userid</li>
+<li>l: location</li>
+<li>st: status</li>
+<li>c: country</li>
+</ol>
+
+
+<h2>DIT nodes, attributes, and objectclass</h2>
+
+<p>To Understand how a DIT is represented look at the following hypothetical tree.</p>
+
+<p><img src="http://hgilani.github.com/images/dit.png" title="[Directory Information Tree [Directory Information Tree]]" ></p>
+
+<p>Observe how the DIT is organized starting at the &#8220;domain component(dc)&#8221; at the root level, followed by &#8220;organizational unit(out)&#8221; i.e. departments. Departments hold persons which can be described using &#8220;common name(cn)&#8221; attributes. Following illustration shows the &#8220;dn of each level in the DIT. Notice how each node includes &#8220;rdn&#8221; of the parent in its &#8220;dn&#8221;.</p>
+
+<p><img src="http://hgilani.github.com/images/dn.png" title="[LDAP Distinguished Name [LDAP Distinguished Name]]" ></p>
+
+<p>In the above illustration we used only handful of attributes, but any number of attributes can be used to store information at any node. Some of the commonly used attributes are sn, uid, l, st, and c.</p>
+
+<p>In addition to standard attributes, LDAP also has the concept of &#8220;objectclass&#8221; i.e. schema. An object class specifies what set of mandatory and optional attributes can be used to describe a node in DIT. For example, if you create an object class printer then it could contain attributes that can define printer such as printerid, printername, ip, and modelno. An object class can inherit from other object classes and and all object classes inherit from the abstract object class top. In essence, objectclass is really there to enforce consistency and maintain integrity of the DIT. For more information on objectclass read <a href="http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=%2Frzahy%2Frzahyobjectclass.htm">Object Classes</a></p>
+
+<p><img src="http://hgilani.github.com/images/objectclass.png" title="[LDAP Object Class [LDAP Object class]]" ></p>
+
+<p>LDIF is the data interchange format that can be used to represent a DIT. In this format our example DIT will look like as below</p>
+
+<pre><code># domain component level
+dn: dc=mementodb,dc=com
+objectclass: organization
+objectclass: dcObject
+
+# organization unit level
+dn: ou=IT, dc=mementodb,dc=com
+objectclass: organizationalUnit
+ou: IT
+
+dn: ou=SALES, dc=mementodb,dc=com
+objectclass: organizationalUnit 
+ou: SALES
+
+# person level
+dn: cn=Bob Jones, ou=IT, dc=mementodb,dc=com
+objectclass: person
+cn: Bob Jones
+
+dn: cn=Paul Hunt, ou=IT, dc=mementodb,dc=com
+objectclass: person
+cn: Paul Hunt
+</code></pre>
+
+<p>For more information on DIT and LDAP organization refer to <a href="http://coewww.rutgers.edu/www1/linuxclass2003/lessons/lecture8.html">Introduction to LDAP</a> and <a href="http://quark.humbug.org.au/publications/ldap/ldap_tut.html">Introduction to LDAP</a></p>
+
+<h2>Working with LDAP</h2>
+
+<p>LDAP is a connected protocol. What this means is that you first need to create a socket connect to the LDAP server before invoking any operation. Following is a typical sequence of operations when working with LDAP</p>
+
+<ol>
+<li>connect: Create a socket connection</li>
+<li>bind: Set a base DN, all subsequent operations will be performed relative to this DN. For binding to a DN you also need to authenticate. Please note that you can authenticate anonymously as well. Authenticating creates a session.</li>
+<li>execute LDAP operations
+
+<ul>
+<li>create or add</li>
+<li>delete</li>
+<li>modify</li>
+<li>search or filter</li>
+</ul>
+</li>
+<li>unbind - remove session</li>
+<li>disconnect - Release the socket connection</li>
+</ol>
+
+
+<p>For information on how to perform these operations using Java language refer to <a href="http://directory.apache.org/api/five-minutes-tutorial.html">Five Minutes Tutorial</a></p>
+
+<p>If you have any thoughts or any concept that you would like me to incorporate in this tutorial then please feel free to leave a comment.</p>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Why I Love Git]]></title>
+    <link href="http://hgilani.github.com/blog/2012/12/10/why-i-love-git/"/>
+    <updated>2012-12-10T11:05:00+01:00</updated>
+    <id>http://hgilani.github.com/blog/2012/12/10/why-i-love-git</id>
+    <content type="html"><![CDATA[<p>Recently I was in a discussion with couple of friends who still have to migrate on to the Git version control system. My friends had a lot of questions and showed hesitation in moving from SVN to Git. This post articulates my thoughts on why you should use Git and contains links to some excellent resources on Git that you can use to understand Git quickly.</p>
+
+<!-- more -->
 
 
-    </article>
+<h2>What is Git?</h2>
+
+<p>Git is a distributed version control(DVCS) system. In Git you are not required to connect to a central server for tracking changes. Changes or revisions to files are tracked locally in Git workspace, <code>.git</code> folder, of the project. Every Git workspace is a complete version control system that maintains complete version history. In other words, Git does not need to connect to any remote server for tracking changes.</p>
+
+<p>Git allows easy collaboration to remote respoitories by using <code>push</code> and <code>pull</code> operations. Since each Git workspace is a complete version control system, developers can also <code>push</code> and <code>pull</code> changes with each other. This is fundamentally different when compared to SVN/CVS which requires a central repository (repo) for tracking changes. To simplify collaboration most project setups have a remote repo where everybody pushes and pulls from. This remote repo is commonly referred as &#8220;origin&#8221;. It is incorrect to think of the &#8220;origin&#8221; as a central repo equivalent of SVN/CVS as Git allows you to have multiple &#8220;origin&#8221; repos. With all this in mind you can also think of Git as &#8220;Decentralized&#8221; version control system.</p>
+
+<h2>Why should you use Git?</h2>
+
+<p>Git is fast as all chnages are first committed to local repo and then later pushed to a remote repository.</p>
+
+<p>In git branching and merging is a first class operation i.e. fast and easy. Compared to SVN it does not involve figuring out change sets that should be merged. Anyone who has created and merged branches in SVN would say you need a whole day to merge branches and resolve conflcts. But, since Git maintains complete revision history merging is simple, does not require figuring out change sets and results in no conflicts. In fact once you start working with local branches in Git, it quickly becomes your favorite and essential feature of Git.</p>
+
+<p>Git also maintains complete SHA1 checkums for each commit to the repository. These checksums help it in maintaning the repo integrity by rejecting malicious code merges from downstream repos that fail checksum verifications.</p>
+
+<p>If you still have doubts on why you should use Git watch the Tech Talk from the master &#8220;Linus Torvalds&#8221; himself on why you should use Git.</p>
+
+<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/4XpnKHJAok8 "></iframe></div>
+
+
+<h2>Learning Git</h2>
+
+<ol>
+<li>Git Basics
+
+<ul>
+<li><a href="http://rogerdudler.github.com/git-guide/">git - the simple guide</a></li>
+<li><a href="http://scottr.org/presentations/git-in-5-minutes/">Git In Five Minutes</a></li>
+</ul>
+</li>
+<li>Beyond Basics
+
+<ul>
+<li><a href="http://git-scm.com/book">Pro Git book</a></li>
+<li><a href="http://www.kernel.org/pub/software/scm/git/docs/user-manual.html">Git User Manual</a></li>
+</ul>
+</li>
+</ol>
+
+]]></content>
+  </entry>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-12T01:53:00+01:00" pubdate data-updated="true">Jan 12<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/01/12/introduction-to-ldap/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>LDAP is definitely not a buzz word technology these days, however a lot of organizations are still using LDAP. So, at some point in time you may be required to develop or maintain projects using LDAP. But since LDAP is an archaic technology, it is tough to discover right information about it on the web. Whenever I searched for it on the web, I found the right information filled with technical jargon and scattered across various articles. This post is my attempt at explaining everything you need to know to understand how LDAP protocol works.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/01/12/introduction-to-ldap/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-10T11:05:00+01:00" pubdate data-updated="true">Dec 10<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/12/10/why-i-love-git/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently I was in a discussion with couple of friends who still have to migrate on to the Git version control system. My friends had a lot of questions and showed hesitation in moving from SVN to Git. This post articulates my thoughts on why you should use Git and contains links to some excellent resources on Git that you can use to understand Git quickly.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/12/10/why-i-love-git/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/10/17/npm-features-and-options-demystified/">NPM Features and Options Demystified</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-10-17T16:58:00+02:00" pubdate data-updated="true">Oct 17<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/10/17/npm-features-and-options-demystified/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In the previous post, <a href="http://himanshu.gilani.info/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a>, I discussed how NPM and package.json could be used for managing the project and its dependencies. In this post I will discuss some of the overlooked features of NPM that help you in achieving more out of this tool</p>
+  <entry>
+    <title type="html"><![CDATA[NPM Features and Options Demystified]]></title>
+    <link href="http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified/"/>
+    <updated>2012-10-17T16:58:00+02:00</updated>
+    <id>http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified</id>
+    <content type="html"><![CDATA[<p>In the previous post, <a href="http://himanshu.gilani.info/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a>, I discussed how NPM and package.json could be used for managing the project and its dependencies. In this post I will discuss some of the overlooked features of NPM that help you in achieving more out of this tool</p>
 
 <h2>npm install and package versions</h2>
 
@@ -514,44 +485,15 @@
 
 
 <p>Executing this command configures the tab completions into your current shell. It also outputs a shell script on command line that you can add to your ~/.bashrc or ~/.zshrcfile to make completions available for future shell sessions.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/">Why Memento Moved From Java to CouchApps to Node.js Technology Stack</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-27T19:53:00+02:00" pubdate data-updated="true">Sep 27<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://mementodb.com">Memento</a>, the app that I launched recently has already seen three technology stack changes. I started working on memento to be able to keep what I find on web with me as a personal memento. Being a Java architect I kicked off memento using Java. Since I was a solo developer on this project I wanted to keep everything lean in order to iterate quickly. This meant having an automatic code generation for the boilerplate code, using simple and powerful frameworks, following best practices, and tons of unit tests for making changes quickly and verifying the health of the app.</p>
+  <entry>
+    <title type="html"><![CDATA[Why Memento moved from Java to CouchApps to Node.js Technology Stack]]></title>
+    <link href="http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/"/>
+    <updated>2012-09-27T19:53:00+02:00</updated>
+    <id>http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack</id>
+    <content type="html"><![CDATA[<p><a href="http://mementodb.com">Memento</a>, the app that I launched recently has already seen three technology stack changes. I started working on memento to be able to keep what I find on web with me as a personal memento. Being a Java architect I kicked off memento using Java. Since I was a solo developer on this project I wanted to keep everything lean in order to iterate quickly. This meant having an automatic code generation for the boilerplate code, using simple and powerful frameworks, following best practices, and tons of unit tests for making changes quickly and verifying the health of the app.</p>
 
 <h2>Spring Roo</h2>
 
@@ -601,44 +543,15 @@
 <li>Node.js is even driven, light-weight and perfect langauge for developing next generation responsive applications.</li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/">Bootstraping a Node.js App for Dev/Prod Environment</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-26T19:30:00+02:00" pubdate data-updated="true">Sep 26<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Setting up a web server in node is really simple. A <a href="http://nodeguide.com/beginner.html#a-hello-world-http-server">basic hello world http server</a> can be written in under 10 lines. However, if you want to write a production grade app then you are better of by using any framework that provides foundation and structure to your logic. When choosing frameworks there are no right or wrong answers. Important thing is to select a framework that is being actively developed, has community support and most of important of all you love the way it works.</p>
+  <entry>
+    <title type="html"><![CDATA[Bootstraping a Node.js App for Dev/Prod Environment]]></title>
+    <link href="http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/"/>
+    <updated>2012-09-26T19:30:00+02:00</updated>
+    <id>http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment</id>
+    <content type="html"><![CDATA[<p>Setting up a web server in node is really simple. A <a href="http://nodeguide.com/beginner.html#a-hello-world-http-server">basic hello world http server</a> can be written in under 10 lines. However, if you want to write a production grade app then you are better of by using any framework that provides foundation and structure to your logic. When choosing frameworks there are no right or wrong answers. Important thing is to select a framework that is being actively developed, has community support and most of important of all you love the way it works.</p>
 
 <h2>Bootstrap a Node.js App with Express Application</h2>
 
@@ -770,44 +683,15 @@
 <h3>Structuring express application with Open/Closed principle</h3>
 
 <p>After you have configured app.js correctly. You want to close it down from future modifications but you still need a way to extend it by adding new routes to the app. This is simple and easy to do. Read <a href="http://blog.pixelingene.com/2012/06/a-simple-organization-scheme-for-expressjs-apps/">A Simple Organization Scheme for Handling Routes in ExpressJS Apps</a> for understanding how to do this by establishing some conventions for your project.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/09/17/introducing-memento/">Introducing Memento</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-17T06:19:00+02:00" pubdate data-updated="true">Sep 17<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/09/17/introducing-memento/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Here is a wonderful application that allows you to save any web page that you like. It is your personal space with all that you like on the web. Some space that you can access whenver you like. You can create an account at <a href="http://www.mementodb.com">www.mementodb.com</a></p>
+  <entry>
+    <title type="html"><![CDATA[Introducing Memento]]></title>
+    <link href="http://hgilani.github.com/blog/2012/09/17/introducing-memento/"/>
+    <updated>2012-09-17T06:19:00+02:00</updated>
+    <id>http://hgilani.github.com/blog/2012/09/17/introducing-memento</id>
+    <content type="html"><![CDATA[<p>Here is a wonderful application that allows you to save any web page that you like. It is your personal space with all that you like on the web. Some space that you can access whenver you like. You can create an account at <a href="http://www.mementodb.com">www.mementodb.com</a></p>
 
 <h2>What are mementos?</h2>
 
@@ -840,57 +724,28 @@
 
 <h3>List of mementos saved in your personal account</h3>
 
-<p><img src="/images/hero-shot1.png" title="[title text [alt text]]" ></p>
+<p><img src="http://hgilani.github.com/images/hero-shot1.png" title="[title text [alt text]]" ></p>
 
 <h3>Saving mementos using bookmarklet</h3>
 
-<p><img src="/images/hero-shot2.png" title="[title text [alt text]]" ></p>
+<p><img src="http://hgilani.github.com/images/hero-shot2.png" title="[title text [alt text]]" ></p>
 
 <h3>Saving mementos using bookmarklet (saved copy of page)</h3>
 
-<p><img src="/images/hero-shot3.png" title="[title text [alt text]]" ></p>
+<p><img src="http://hgilani.github.com/images/hero-shot3.png" title="[title text [alt text]]" ></p>
 
 <h2>Feedback, Ideas or Suggestions</h2>
 
 <p>If you have any ideas, feedback, or suggestions for improving Memento then please email me at hgilani[at]gmail[dot]com</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-29T09:28:00+02:00" pubdate data-updated="true">Jul 29<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/07/29/npm-and-package-dot-json/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be installed locally for a project or globally for the entire system. Whenever you install packages these packages are fetched from the <a href="https://npmjs.org/">NPM registry</a>.</p>
+  <entry>
+    <title type="html"><![CDATA[NPM and package.json]]></title>
+    <link href="http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json/"/>
+    <updated>2012-07-29T09:28:00+02:00</updated>
+    <id>http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json</id>
+    <content type="html"><![CDATA[<p>NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be installed locally for a project or globally for the entire system. Whenever you install packages these packages are fetched from the <a href="https://npmjs.org/">NPM registry</a>.</p>
 
 <h2>Local Install</h2>
 
@@ -1019,143 +874,7 @@
 <li><a href="http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules">Ten Lessons Learned Maintaining Nodejs Modules</a></li>
 </ul>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/17/npm-features-and-options-demystified/">NPM Features and Options Demystified</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/">Why Memento moved from Java to CouchApps to Node.js Technology Stack</a>
-      </li>
-    
-  </ul>
-</section>
-
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/hgilani">@hgilani</a> on GitHub
-  
-  <script type="text/javascript">
-    $.domReady(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'hgilani',
-            count: 5,
-            skip_forks: false,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("hgilani", 5, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/hgilani" class="twitter-follow-button" data-show-count="false">Follow @hgilani</a>
-  
-</section>
-
-
-
-
-
-  
-</aside>
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Himanshu Gilani -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-<script type="text/javascript">
-      var disqus_shortname = 'hgilani';
-      
-        
-        var disqus_script = 'count.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
-</html>
+</feed>

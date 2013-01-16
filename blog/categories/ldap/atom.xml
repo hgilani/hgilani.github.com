@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: LDAP | Himanshu Gilani]]></title>
+  <link href="http://hgilani.github.com/blog/categories/ldap/atom.xml" rel="self"/>
+  <link href="http://hgilani.github.com/"/>
+  <updated>2013-01-16T11:37:21+01:00</updated>
+  <id>http://hgilani.github.com/</id>
+  <author>
+    <name><![CDATA[Himanshu Gilani]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Introduction to LDAP]]></title>
+    <link href="http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap/"/>
+    <updated>2013-01-12T01:53:00+01:00</updated>
+    <id>http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap</id>
+    <content type="html"><![CDATA[<p>LDAP is definitely not a buzz word technology these days, however a lot of organizations are still using LDAP. So, at some point in time you may be required to develop or maintain projects using LDAP. But since LDAP is an archaic technology, it is tough to discover right information about it on the web. Whenever I searched for it on the web, I found the right information filled with technical jargon and scattered across various articles. This post is my attempt at explaining everything you need to know to understand how LDAP protocol works.</p>
+
+<!-- more -->
+
+
+<h2>What is LDAP?</h2>
+
+<p>LDAP stands for <strong>Lightweight Directory Access Protocol</strong>. It is an Internet protocol for accessing distributed directory services. Using LDAP organizations can organize their users and resources into a hierarchical directory (or tree) structure. Benefits of this organization is that it can act as a centralized source of information for the organization there by providing following services</p>
+
+<ol>
+<li>Organize contact information of users into directories. Think of this as an address book.</li>
+<li>Resources like printers, scanners, meeting rooms , etc can also be organized in LDAP.</li>
+<li>LDAP supports ACLs i.e. you can control what can a user access in the directory.</li>
+<li>LDAP can store login credentials of users, there by acting as a company wide authentication and authorization database. And as such a lot of organizations use LDAP with their Single Sign On (SSO) integration.</li>
+</ol>
+
+
+<h2>Common LDAP Attributes and Acronyms</h2>
+
+<p>Now that we understand why an organization would use LDAP, lets get familiar with some of the common LDAP Acronyms and Attributes so that we can discuss LDAP easily.</p>
+
+<h3>LDAP Acronyms</h3>
+
+<ol>
+<li>DIT: Directory Information Tree - A DIT is hierarchical tree structure which has Distinguished Names (DNs) for directory service entries i.e. users, resources, departments, etc.</li>
+<li>LDIF: LDAP Data Interchange Format - A simple data format that can be used for representing information stored in DIT. LDIF is commonly used for export and import operations on DIT.</li>
+<li>DN: Distinguished NAME - An unique identifier for each entry in the DIT. A DN is composed of series of RDNs found by walking up the directory tree.</li>
+<li>RDN: Relative Distinguished Name - A relative distinguished name (RDN) represents a single node of a DN. Thus if you combine RDNs walking up DIT you can form DN.</li>
+</ol>
+
+
+<h3>LDAP Attributes</h3>
+
+<p>Each node in DIT can use different type of attributes for storing informations. Following are some of the frequently used attributes</p>
+
+<ol>
+<li>dc: domain component</li>
+<li>o: organization</li>
+<li>ou: organizational Unit</li>
+<li>cn: common Name</li>
+<li>sn: surname</li>
+<li>uid: userid</li>
+<li>l: location</li>
+<li>st: status</li>
+<li>c: country</li>
+</ol>
+
+
+<h2>DIT nodes, attributes, and objectclass</h2>
+
+<p>To Understand how a DIT is represented look at the following hypothetical tree.</p>
+
+<p><img src="/images/dit.png" title="[Directory Information Tree [Directory Information Tree]]" ></p>
+
+<p>Observe how the DIT is organized starting at the "domain component(dc)" at the root level, followed by "organizational unit(out)" i.e. departments. Departments hold persons which can be described using "common name(cn)" attributes. Following illustration shows the "dn of each level in the DIT. Notice how each node includes "rdn" of the parent in its "dn".</p>
+
+<p><img src="/images/dn.png" title="[LDAP Distinguished Name [LDAP Distinguished Name]]" ></p>
+
+<p>In the above illustration we used only handful of attributes, but any number of attributes can be used to store information at any node. Some of the commonly used attributes are sn, uid, l, st, and c.</p>
+
+<p>In addition to standard attributes, LDAP also has the concept of "objectclass" i.e. schema. An object class specifies what set of mandatory and optional attributes can be used to describe a node in DIT. For example, if you create an object class printer then it could contain attributes that can define printer such as printerid, printername, ip, and modelno. An object class can inherit from other object classes and and all object classes inherit from the abstract object class top. In essence, objectclass is really there to enforce consistency and maintain integrity of the DIT. For more information on objectclass read <a href="http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=%2Frzahy%2Frzahyobjectclass.htm">Object Classes</a></p>
+
+<p><img src="/images/objectclass.png" title="[LDAP Object Class [LDAP Object class]]" ></p>
+
+<p>LDIF is the data interchange format that can be used to represent a DIT. In this format our example DIT will look like as below</p>
+
+<pre><code># domain component level
+dn: dc=mementodb,dc=com
+objectclass: organization
+objectclass: dcObject
+
+# organization unit level
+dn: ou=IT, dc=mementodb,dc=com
+objectclass: organizationalUnit
+ou: IT
+
+dn: ou=SALES, dc=mementodb,dc=com
+objectclass: organizationalUnit 
+ou: SALES
+
+# person level
+dn: cn=Bob Jones, ou=IT, dc=mementodb,dc=com
+objectclass: person
+cn: Bob Jones
+
+dn: cn=Paul Hunt, ou=IT, dc=mementodb,dc=com
+objectclass: person
+cn: Paul Hunt
+</code></pre>
+
+<p>For more information on DIT and LDAP organization refer to <a href="http://coewww.rutgers.edu/www1/linuxclass2003/lessons/lecture8.html">Introduction to LDAP</a> and <a href="http://quark.humbug.org.au/publications/ldap/ldap_tut.html">Introduction to LDAP</a></p>
+
+<h2>Working with LDAP</h2>
+
+<p>LDAP is a connected protocol. What this means is that you first need to create a socket connect to the LDAP server before invoking any operation. Following is a typical sequence of operations when working with LDAP</p>
+
+<ol>
+<li>connect: Create a socket connection</li>
+<li>bind: Set a base DN, all subsequent operations will be performed relative to this DN. For binding to a DN you also need to authenticate. Please note that you can authenticate anonymously as well. Authenticating creates a session.</li>
+<li>execute LDAP operations
+
+<ul>
+<li>create or add</li>
+<li>delete</li>
+<li>modify</li>
+<li>search or filter</li>
+</ul>
+</li>
+<li>unbind - remove session</li>
+<li>disconnect - Release the socket connection</li>
+</ol>
+
+
+<p>For information on how to perform these operations using Java language refer to <a href="http://directory.apache.org/api/five-minutes-tutorial.html">Five Minutes Tutorial</a></p>
+
+<p>If you have any thoughts or any concept that you would like me to incorporate in this tutorial then please feel free to leave a comment.</p>
+]]></content>
+  </entry>
+  
+</feed>

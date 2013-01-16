@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Git | Himanshu Gilani]]></title>
+  <link href="http://hgilani.github.com/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://hgilani.github.com/"/>
+  <updated>2013-01-16T11:37:21+01:00</updated>
+  <id>http://hgilani.github.com/</id>
+  <author>
+    <name><![CDATA[Himanshu Gilani]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Why I Love Git]]></title>
+    <link href="http://hgilani.github.com/blog/2012/12/10/why-i-love-git/"/>
+    <updated>2012-12-10T11:05:00+01:00</updated>
+    <id>http://hgilani.github.com/blog/2012/12/10/why-i-love-git</id>
+    <content type="html"><![CDATA[<p>Recently I was in a discussion with couple of friends who still have to migrate on to the Git version control system. My friends had a lot of questions and showed hesitation in moving from SVN to Git. This post articulates my thoughts on why you should use Git and contains links to some excellent resources on Git that you can use to understand Git quickly.</p>
+
+<!-- more -->
+
+
+<h2>What is Git?</h2>
+
+<p>Git is a distributed version control(DVCS) system. In Git you are not required to connect to a central server for tracking changes. Changes or revisions to files are tracked locally in Git workspace, <code>.git</code> folder, of the project. Every Git workspace is a complete version control system that maintains complete version history. In other words, Git does not need to connect to any remote server for tracking changes.</p>
+
+<p>Git allows easy collaboration to remote respoitories by using <code>push</code> and <code>pull</code> operations. Since each Git workspace is a complete version control system, developers can also <code>push</code> and <code>pull</code> changes with each other. This is fundamentally different when compared to SVN/CVS which requires a central repository (repo) for tracking changes. To simplify collaboration most project setups have a remote repo where everybody pushes and pulls from. This remote repo is commonly referred as "origin". It is incorrect to think of the "origin" as a central repo equivalent of SVN/CVS as Git allows you to have multiple "origin" repos. With all this in mind you can also think of Git as "Decentralized" version control system.</p>
+
+<h2>Why should you use Git?</h2>
+
+<p>Git is fast as all chnages are first committed to local repo and then later pushed to a remote repository.</p>
+
+<p>In git branching and merging is a first class operation i.e. fast and easy. Compared to SVN it does not involve figuring out change sets that should be merged. Anyone who has created and merged branches in SVN would say you need a whole day to merge branches and resolve conflcts. But, since Git maintains complete revision history merging is simple, does not require figuring out change sets and results in no conflicts. In fact once you start working with local branches in Git, it quickly becomes your favorite and essential feature of Git.</p>
+
+<p>Git also maintains complete SHA1 checkums for each commit to the repository. These checksums help it in maintaning the repo integrity by rejecting malicious code merges from downstream repos that fail checksum verifications.</p>
+
+<p>If you still have doubts on why you should use Git watch the Tech Talk from the master "Linus Torvalds" himself on why you should use Git.</p>
+
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/4XpnKHJAok8 "></iframe></div></p>
+
+<h2>Learning Git</h2>
+
+<ol>
+<li>Git Basics
+
+<ul>
+<li><a href="http://rogerdudler.github.com/git-guide/">git - the simple guide</a></li>
+<li><a href="http://scottr.org/presentations/git-in-5-minutes/">Git In Five Minutes</a></li>
+</ul>
+</li>
+<li>Beyond Basics
+
+<ul>
+<li><a href="http://git-scm.com/book">Pro Git book</a></li>
+<li><a href="http://www.kernel.org/pub/software/scm/git/docs/user-manual.html">Git User Manual</a></li>
+</ul>
+</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

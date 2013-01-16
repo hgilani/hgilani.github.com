@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: node.js | Himanshu Gilani]]></title>
+  <link href="http://hgilani.github.com/blog/categories/node-js/atom.xml" rel="self"/>
+  <link href="http://hgilani.github.com/"/>
+  <updated>2013-01-16T11:37:21+01:00</updated>
+  <id>http://hgilani.github.com/</id>
+  <author>
+    <name><![CDATA[Himanshu Gilani]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[NPM Features and Options Demystified]]></title>
+    <link href="http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified/"/>
+    <updated>2012-10-17T16:58:00+02:00</updated>
+    <id>http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified</id>
+    <content type="html"><![CDATA[<p>In the previous post, <a href="http://himanshu.gilani.info/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a>, I discussed how NPM and package.json could be used for managing the project and its dependencies. In this post I will discuss some of the overlooked features of NPM that help you in achieving more out of this tool</p>
+
+<h2>npm install and package versions</h2>
+
+<p><code>npm install {package}</code> by default installs the package version tagged as "latest" in the npm registry. If you do not want the latest version of the package then you have few options. You can execute commands in the following way to control which package should be installed and from where to fetch the package.</p>
+
+<p><strong>Package with Specific Version:</strong> <code>npm install {package}@{version}</code></p>
+
+<p><code>
+npm install express@3.0.0
+</code></p>
+
+<p>This command will install version 3.0.0 of express package form npm registry.</p>
+
+<p><strong>Package in a Version Range:</strong>  <code>npm install {package}@"{version range}"</code></p>
+
+<p><code>
+npm install sax@"&gt;=0.1.0 &lt;0.2.0"
+</code></p>
+
+<p>This command will install sax package between version range 0.1.0 and 0.2.0</p>
+
+<p><strong>Package with Specific Tag:</strong> <code>npm install {package}@{tag}</code></p>
+
+<p><code>
+npm install passport@latest
+</code></p>
+
+<p>This command will install passport package with latest tag.</p>
+
+<p><strong>Private package:</strong> <code>npm install {folder}</code> or <code>npm install {tarball file}</code> or <code>npm install {tarball url}</code></p>
+
+<p><code>
+npm install ./myPackage
+npm install ./myPackage.tgz
+npm install http://download.com/myPackage.tgz
+</code></p>
+
+<p><strong>Package from Git Repository:</strong> <code>npm install {git repo url}</code></p>
+
+<p><code>
+npm install git@github.com:hgilani/html2markdown.git
+</code></p>
+
+<h2>Using npm install to also maintain package.json</h2>
+
+<p>When installing a new package, <code>npm install</code> could also update the package.json if you want. For updating package.json, you need to use one of these flags that indicate what kind of dependency you are installing</p>
+
+<ol>
+<li><code>--save</code>: Package will be added in the dependencies section of package.json</li>
+<li><code>--save-dev</code>: Package will be added in the devDepenctions section of package.json</li>
+<li><code>--save-optional</code>: Package will be added in the optionalDepenctions section of package.json</li>
+</ol>
+
+
+<h2>npm install or npm update</h2>
+
+<p>A lot of time you want to depend on the latest version of the packages so that you automatically get all the bug fixes and new features. If so then you should be able to update some or all the packages installed in your environment to the latest version. You should start by correctly configuring the versions properly in your package.json. For example, if you depend on version 2.0.0 of the express library then your package.json can say</p>
+
+<p>```
+  "dependencies": {</p>
+
+<pre><code>    ...
+"express": "2.0.0",
+    ...
+</code></pre>
+
+<p>}
+```</p>
+
+<p>This tells NPM that you want to depend on a specific version of the package. This will keep things tight but it also makes upgrading to latest packages a manual effort. For ease of update, you should configure flexible versions in package.json that permit upgrading packages</p>
+
+<p>```
+  "dependencies": {</p>
+
+<pre><code>    ...
+"express": "2.x",
+    ...
+</code></pre>
+
+<p>}
+```</p>
+
+<p>What this says is you want to depend on the latest express package with major version 2. With versions configured for easy upgrade, you can update to latest version of express package by executing either <code>npm install express</code> or <code>npm update express</code></p>
+
+<p>You can also update all packages by executing either <code>npm install</code> or <code>npm update</code>. For updating multiple packages you can execute <code>npm install {package1} {package2}</code> or <code>npm install {package1} {package2}</code></p>
+
+<h3>Difference between npm update and npm install</h3>
+
+<ol>
+<li>npm install will also update devDependencies. However, npm update will not</li>
+<li>npm install will always reinstall the package. However, npm update will only update if the latest package is not installed.</li>
+</ol>
+
+
+<p>In addition to upgrading package versions, <code>npm update</code> can also install any missing packages. In other words, it can function as <code>npm install</code> but the difference is that it will not install missing dev dependencies.</p>
+
+<h2>Speeding up npm install</h2>
+
+<p>In the blog post <a href="http://www.devthought.com/2012/02/17/npm-tricks/">NPM Tricks</a>, Guillermo Rauch has mentioned following two tricks that can help in speeding up npm install</p>
+
+<p><code>
+npm install --production
+npm install --loglevel warn
+</code></p>
+
+<p>When you add <code>--production</code> option then npm will skip installing dev dependencies. In addition, when you add <code>--loglevel warn</code> then only useful information will be logged into console.</p>
+
+<h2>Some useful NPM commands</h2>
+
+<ol>
+<li><code>npm list</code>: List installed npm packages with their dependencies.</li>
+<li><code>npm outdated</code>: List all installed packages for which a latest version of package is available in npm registry.</li>
+<li><code>npm prune</code>: This command removes "extraneous" packages i.e. packages installed but not listed in package.json file.</li>
+<li><code>npm pack</code>: This commands creates an installable tarball from a package. This tarball can then be published on npm registry or installed in some other environment e.g. production.</li>
+<li><code>npm help json</code>: If you ever want a reference documentation of different options you can configure in <code>package.json</code> file.</li>
+</ol>
+
+
+<p>There are a lot more commands. To list all the commands you can execute <code>npm help</code> and for reading documentation on a specific command, you can execute <code>npm help {command}</code></p>
+
+<h2>.npmignore and .gitignore</h2>
+
+<p><code>npm pack</code> is a useful command however sometimes you want to avoid packing some project resources in the tarball. For example if you are creating a package for installing in production environment then you will want to avoid packing unit tests in this package. This can be easily achieved by adding either <code>.npmignore</code> file or <code>.gitignore</code> file. Section <a href="https://npmjs.org/doc/developers.html">"Keeping files out of your package"</a> in the "NPM Developer page" states following</p>
+
+<blockquote><p>Use a .npmignorefile to keep stuff out of your package. If there's no .npmignore file, but there is a .gitignore file, then npm will ignore the stuff matched by the .gitignore file. If you want to include something that is excluded by your .gitignore file, you can create an empty .npmignore file to override it.</p></blockquote>
+
+<h2>Setup npm for tab completion</h2>
+
+<p><code>
+npm completion
+</code></p>
+
+<p>Executing this command configures the tab completions into your current shell. It also outputs a shell script on command line that you can add to your ~/.bashrc or ~/.zshrcfile to make completions available for future shell sessions.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why Memento moved from Java to CouchApps to Node.js Technology Stack]]></title>
+    <link href="http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/"/>
+    <updated>2012-09-27T19:53:00+02:00</updated>
+    <id>http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack</id>
+    <content type="html"><![CDATA[<p><a href="http://mementodb.com">Memento</a>, the app that I launched recently has already seen three technology stack changes. I started working on memento to be able to keep what I find on web with me as a personal memento. Being a Java architect I kicked off memento using Java. Since I was a solo developer on this project I wanted to keep everything lean in order to iterate quickly. This meant having an automatic code generation for the boilerplate code, using simple and powerful frameworks, following best practices, and tons of unit tests for making changes quickly and verifying the health of the app.</p>
+
+<h2>Spring Roo</h2>
+
+<p>With my lean strategy in mind I quickly used <a href="http://www.springsource.org/spring-roo"><strong>Spring Roo</strong></a>, a rapid application development tool for Java developers to generate the complete app with front-end, back-end, authentication, persistence, logging, and unit tests within couple of hours. So far I was happy.</p>
+
+<p>Now it was time to learn the magic tool and enhance the app. After hacking on Spring Roo for a couple of days I developed a good understanding of how it works. I absolutely loved the way it bootstrapped the complete app. It’s an absolute must-use tool for anyone who wants to bootstrap a Java web application. Though it has these great features, there are also some not-so-great ones. For front-end of the app, Spring Roo (spring-roo-1.1.4.RELEASE) used Dojo JavaScript framework, Spring MVC JSP tags, and JSPX technology. And the entire front-end generation was tied to the database model. This meant every time I made changes to the database model my user-interface was affected. After some initial hacking I came to an understanding that Spring Roo is not an ideal tool for managing the front-end. With this knowledge I decided to stop using it for managing the user interface changes. I was happy with this decision, as I wanted Memento to have an awesome user interface that I enjoyed using. And this would have required a lot of custom changes.</p>
+
+<p>As the next step I started implementing the back-end logic for the memento. I decided that I will not develop any new logic without writing unit tests for it. These unit tests were really crucial for me because they allow you to discover problems quickly, and reduce manual testing time. After about two months I had a basic MVP (minimum viable product) ready and I wanted to host Memento on the web.</p>
+
+<h2>VPS and EC2</h2>
+
+<p>I started with a VPS provider, <a href="http://webfaction.com"><strong>Webfaction</strong></a>, for hosting Memento. After spending some time on configuring the VPS m/c and deploying Memento I was happy that memento was up and running. To my surprise, in the next one hour I go an email from the <strong>WebFction</strong> support that they have the killed the java process for my app as it was taking too much memory. This confused me since during the app development I never noticed any abnormal memory usage. This led to a realization that hosting a basic app on <a href="http://tomcat.apache.org">Tomcat</a> or <a href="http://jetty.codehaus.org">Jetty</a> servlet container required 256 MB of minimum RAM. In my opinion this is due to JVM overhead and th number of jars (58 jar files) that memento was loading in the JVM due to frameworks selected. This kicked VPS provider out of equation.</p>
+
+<p>Next I decided to evaluate <a href="http://aws.amazon.com/">Amazon EC2</a>. For new customers Amazon EC2 provides a micro instance free for the first year. This meant no upfront cost to get started and no more memory constraints. After using Memento on EC2 for a month, I decided to host a continuous integration server, <a href="http://www.eclipse.org/hudson/">Hudson</a>. At this point I got another surprise. Whenever CI server started building memento on code commits entire EC2 instance would freeze. After some debugging I realized that's how Amazon wants a micro instance to perform. It defines a micro instance as-</p>
+
+<p>"Micro instances (t1.micro) provide a small amount of consistent CPU resources and allow you to increase CPU capacity in short bursts when additional cycles are available. They are well suited for lower throughput applications and web sites that require additional compute cycles periodically"</p>
+
+<p>What this definition does not tell is that every time there is some constant CPU activity for 3 seconds, entire micro-instance will halt for next 6 seconds as it will not get any CPU cycle. This meant EC2 micro instances are not suitable for even light CPU intensive jobs. Once I figured out how CPU bursts work on a EC2 micro instance, I stopped using it as the CI server.</p>
+
+<p>My experience around memory and CPU utilization got me thinking about how to design memento for low resource utilization.</p>
+
+<h2>Moving on to CouchDB and CouchApps</h2>
+
+<p>At the time I was searching for a solution to archive web pages. I did not want to store the web pages in SQL database as that would have caused the database to grow to pretty quickly with maintenance overhead. After some research I decided to use NoSQL data store <a href="http://couchdb.apache.org">CouchDB</a> for storing web pages. I started hacking its <strong>Map</strong> <strong>Reduce</strong> views for querying data and came to know about CouchApps.</p>
+
+<p>Following is how <a href="http://couchapp.org">couchapp.org</a> defines what are CouchApps</p>
+
+<p>"CouchApps are JavaScript and HTML5 applications served directly from CouchDB. If you can fit your application into those constraints, then you get CouchDB's scalability and flexibility "for free" (and deploying your app is as simple as replicating it to the production server)."</p>
+
+<p>My initial thought was that CouchApp would act as a lean 2-tier stack with no middle tier and a low resource utilization.I decided to rewrite the java version of memento as CouchApp. However, this technology stack change was not as smooth as I anticipated. It required learning the CouchApps technology and its tool chain for building/deploying the app. This obviously resulted in a tremendous learning effort. JavaScript, jQuery, Sammy.js, Compass, Sass, and Node.js were learnt. After 6 months the second version of the MVP was ready as CouchApp and now it was again time to host it on the web.</p>
+
+<p>This is when I started realizing the limitations of the CouchApps. Since, the app was hosted out of the CouchDB database I was forced into funky URLs (as dictated by CouchDB design documents), and weak authentication/security. There was limited community support for libraries and tool chains.</p>
+
+<h2>Node.js</h2>
+
+<p>The CouchApp tool, <a href="http://kan.so/">kan.so</a> that I was using for building and deploying CouchApps introduced me to Node.js. <strong>kan.so</strong> used it for packaging and deploying CouchApps. In the process of rewriting <a href="http://mementodb.com">Memento</a> as a CouchApp I hacked on some of the Node.js modules.</p>
+
+<p>Since I was again researching solutions CouchApp issues it occurred to me that Node.js could act as a thin layer between CouchDB and HTML5 GUI. Node.js is event oriented, asynchronous and has low memory and CPU utilization. Community support for the new features in the language itself and libraries/frameworks is fantastic. I was able to quickly iterate third version of MVP using Node.js within next three months and this is the version that is live in production today :-)</p>
+
+<p>After working with Node.js technology stack I can now say with certainty that Node.js is my favorite language. It is the secret ingredient in Memento. Having said this Java still remains my first love.</p>
+
+<h2>Conclusion</h2>
+
+<ol>
+<li>Java is good for developing apps and services when resource utilization is not an issue or if you want to write CPU intensive services.</li>
+<li>CouchApps are good for rapid prototyping and for apps that do not have strict security requirements.</li>
+<li>Node.js is even driven, light-weight and perfect langauge for developing next generation responsive applications.</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Bootstraping a Node.js App for Dev/Prod Environment]]></title>
+    <link href="http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/"/>
+    <updated>2012-09-26T19:30:00+02:00</updated>
+    <id>http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment</id>
+    <content type="html"><![CDATA[<p>Setting up a web server in node is really simple. A <a href="http://nodeguide.com/beginner.html#a-hello-world-http-server">basic hello world http server</a> can be written in under 10 lines. However, if you want to write a production grade app then you are better of by using any framework that provides foundation and structure to your logic. When choosing frameworks there are no right or wrong answers. Important thing is to select a framework that is being actively developed, has community support and most of important of all you love the way it works.</p>
+
+<h2>Bootstrap a Node.js App with Express Application</h2>
+
+<p><a href="http://expressjs.com">Express</a> is a web application framework for Node.js. It is simple to use and can be configured to work with popular technologies. To understand how Express works you can follow the <a href="http://expressjs.com/guide.html">Getting Started</a> page on the express web site. This guide also explains <a href="http://expressjs.com/guide.html#executable">how to use the express global executable</a> for generating a skeleton web app.</p>
+
+<p>Once you have generated a skeleton web application. You need to understand how to structure the skeleton app for the Dev/Prod parity as well as making few changes to the app for making your app modular.</p>
+
+<h3>Dev/Prod parity</h3>
+
+<p>You will notice following snippet in the skeleton app</p>
+
+<p><code>
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
+</code></p>
+
+<p>In the code <code>development</code> refers to the dev environment. Any dev specific setup that you want to do can be configured under this block. This snippet just configures a error handler for the dev environment. If you need to configure settings for any other environments like staging, production, etc then you can configure them the same way.</p>
+
+<p>```
+app.configure('production', function(){</p>
+
+<p>  // production env. specific settings</p>
+
+<p>});
+```</p>
+
+<h3>process.env</h3>
+
+<p>In your express skeleton you will notice that port on which your app listens is configured as following</p>
+
+<p><code>
+process.env.PORT
+</code></p>
+
+<p>Now you may begin to think what is <code>process.env</code>. Node.js <a href="http://nodejs.org/api/process.html#process_process">documentation</a> defines the <code>process</code> as a global object that can be accessed from anywhere. And <code>process.env</code> is an object that contains the user environment.</p>
+
+<p>If you were running in bash shell and you have configured a <code>PORT</code> environment variable with value <code>80</code> then inside the app <code>process.env.PORT</code> will have the value 80. In the same vein you can configure a NODE_ENV environment variable that indicates to express in which environment it is executing.</p>
+
+<p>On the production host you can execute</p>
+
+<p><code>
+export port=80
+export NODE_ENV=prodction
+</code></p>
+
+<p>And on the development host you can let express use its default settings of running on port 3000 and set NODE_ENV to 'development'</p>
+
+<h3>Simulating production environment during testing</h3>
+
+<p>If you ever want to simulate production environment for testing then that is easy. This can be easily done without configuring NODE_ENV variable in your environment. Instead of starting your app using <code>node app.js</code> you can start it as following</p>
+
+<p><code>  
+NODE_ENV=production node app.js
+</code>
+This way NODE_ENV variable is only set for the current process execution and the value is not persisted in the environment settings.</p>
+
+<h3>env.json</h3>
+
+<p>Setting environment variables to configure different settings for different environment is nice but it does not scale well. What we need is persistent storage for the environment properties that can act as a gold standard and is simple and easy to use. Meet <strong>env.json</strong>, add a new file in the project root with the name <code>env.json</code>. You can structure this file in the following way add key/value properties with right settings per environment.</p>
+
+<p>```
+{</p>
+
+<pre><code>"development": {
+    "facebook_app_id": "facebook_dummy_dev_app_id",
+    "facebook_app_secret": "facebook_dummy_dev_app_secret",
+}, 
+"production": {
+    "facebook_app_id": "facebook_dummy_prod_app_id",
+    "facebook_app_secret": "facebook_dummy_prod_app_secret",
+}
+</code></pre>
+
+<p>```</p>
+
+<p>This snippet shows how to configure same settings for development and production environment. If you ever has a need to add a new environment, then you can simply extend this file and add another property block.</p>
+
+<p>Working with <code>env.json</code> is easy. In node parsing is a json file is as simple as loading the file using <code>require</code> statement.</p>
+
+<p>I like to abstract all the code that I can reuse as functions in <code>common.js</code> file. So start by creating <code>common.js</code> file. Following is the parsing logic for env.json in this file.</p>
+
+<p>```
+var env = require('env.json');</p>
+
+<p>exports.config = function() {</p>
+
+<pre><code>var node_env = process.env.NODE_ENV || 'development';
+return env[node_env];
+</code></pre>
+
+<p>};
+```</p>
+
+<p>Once you have created the common.js file using it for reading environment specific properties is as simple as loading it in app.js and using an object property.</p>
+
+<p>```
+var common = require('./routes/common')
+var config = common.config();</p>
+
+<p>...</p>
+
+<p>var facebook_app_id = config.facebook_app_id;
+// do something with facebook_app_id</p>
+
+<p>```</p>
+
+<h3>Structuring express application with Open/Closed principle</h3>
+
+<p>After you have configured app.js correctly. You want to close it down from future modifications but you still need a way to extend it by adding new routes to the app. This is simple and easy to do. Read <a href="http://blog.pixelingene.com/2012/06/a-simple-organization-scheme-for-expressjs-apps/">A Simple Organization Scheme for Handling Routes in ExpressJS Apps</a> for understanding how to do this by establishing some conventions for your project.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[NPM and package.json]]></title>
+    <link href="http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json/"/>
+    <updated>2012-07-29T09:28:00+02:00</updated>
+    <id>http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json</id>
+    <content type="html"><![CDATA[<p>NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be installed locally for a project or globally for the entire system. Whenever you install packages these packages are fetched from the <a href="https://npmjs.org/">NPM registry</a>.</p>
+
+<h2>Local Install</h2>
+
+<p>If you want to install any node package then you can simply do</p>
+
+<p><code>
+npm install {package_name}
+</code></p>
+
+<p>This will install NPM package {package_name} in the current working directory. This is typically root of the project.</p>
+
+<h2>Global Install</h2>
+
+<p>At times you may want to have some packages installed globally in the system. Gloabl packages are not project specific. Any package can be installed globaly if you add the <code>-g</code> switch</p>
+
+<p><code>
+sudo npm install -g {package_name}
+</code></p>
+
+<p>Notice the use of <code>sudo</code> in the above command. This is because the package will be available globally in your system and you need admin privileges for making changes that affect the entire system.</p>
+
+<h2>Local vs Global Install</h2>
+
+<p>When working with NPM packages you want to think in terms of local vs global packages. Local packages are project specific and need to be installed in project root folder. This way 2 different projects can use different version of the same package.</p>
+
+<h3>So when will you need global packages?</h3>
+
+<p>Global packages are useful when you need something for maintaining your project e.g. packages needed for building/testing your project. These packages typically do not get installed in the production environment.</p>
+
+<p>For a detailed description of different options available for npm command refer to <a href="http://blog.nodejitsu.com/npm-cheatsheet">npm cheatsheet</a></p>
+
+<h2>package.json</h2>
+
+<p>This is all good. Now we need a way to maintain dependencies for the project. This is typically done by creating a package.json at the root of the project and project dependencies in dependencies section. In addition to the project dependencies this file can contain project specific metadata like project name, description, version, author, script to execute for running/testing the application, etc.</p>
+
+<p>Following is a sample package.json file</p>
+
+<p>```json
+{
+  "name": "memento",
+  "description": "Memento: Discover and Save your Web",
+  "subdomain": "memento",
+  "domains": [</p>
+
+<pre><code>"mementodb.com"
+</code></pre>
+
+<p>   ],
+  "version": "0.0.1-77",
+  "homepage": "http://mementodb.com",
+  "author": "Himanshu Gilani <a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#104;&#x67;&#105;&#x6c;&#x61;&#110;&#x69;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x68;&#x67;&#x69;&#x6c;&#97;&#x6e;&#105;&#64;&#103;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a> (http://himanshu.gilani.info)",
+  "private": true,
+  "scripts": {</p>
+
+<pre><code>"test": "mocha test/*-test.js",
+"start": "app.js"
+</code></pre>
+
+<p>  },
+  "engines": {</p>
+
+<pre><code>"node": "0.6.x"
+</code></pre>
+
+<p>  },
+  "dependencies": {</p>
+
+<pre><code>"mustache": "0.4.x",
+"request": "2.9.x",
+"express": "2.5.x",
+</code></pre>
+
+<p>   },
+  "devDependencies": {</p>
+
+<pre><code>"mocha": "&gt;=1.0.3",
+"should": "&gt;=0.6.3",
+"assert": "0.4.9",
+"jake": "0.2.33",
+"uglify-js": "1.2.6",
+"cloudfiles": "0.3.3",
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>Armed with this file anybody can get the bigger about the project. In addition to providing bigger it provides a standard way of maintaining node.js packages. Think of this like <strong>Convention over Configuration</strong> as when this file is available it prodvides following useful NPM commands</p>
+
+<ul>
+<li>Install all project specific dependencies - <code>npm install</code></li>
+<li>Start the application - <code>npm start</code></li>
+<li>Execute unit tests - <code>npm test</code></li>
+</ul>
+
+
+<p>Since executing these commands does not require any knowledge about the module. This is for the win.</p>
+
+<p>For a good description of different properties that can be configured in package.json file refer to <a href="http://package.json.nodejitsu.com">package.json cheatsheet</a></p>
+
+<h2>Best practices</h2>
+
+<p>For best practices refer to following 2 blog posts</p>
+
+<ul>
+<li><a href="http://blog.nodejitsu.com/package-dependencies-done-right">Package.json dependencies done right</a></li>
+<li><a href="http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules">Ten Lessons Learned Maintaining Nodejs Modules</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

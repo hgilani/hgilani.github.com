@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>NPM Features and Options Demystified - Himanshu Gilani</title>
+  <meta name="author" content="Himanshu Gilani">
+
+  
+  <meta name="description" content="In the previous post, NPM and package.json, I discussed how NPM and package.json could be used for managing the project and its dependencies. In this &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Himanshu Gilani" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34055934-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Himanshu Gilani</a></h1>
+  
+    <h2>Web Developer and Entrepreneur. Founder of mementodb.com</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgilani.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">NPM Features and Options Demystified</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-17T16:58:00+02:00" pubdate data-updated="true">Oct 17<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In the previous post, <a href="http://himanshu.gilani.info/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a>, I discussed how NPM and package.json could be used for managing the project and its dependencies. In this post I will discuss some of the overlooked features of NPM that help you in achieving more out of this tool</p>
+
+<h2>npm install and package versions</h2>
+
+<p><code>npm install {package}</code> by default installs the package version tagged as &#8220;latest&#8221; in the npm registry. If you do not want the latest version of the package then you have few options. You can execute commands in the following way to control which package should be installed and from where to fetch the package.</p>
+
+<p><strong>Package with Specific Version:</strong> <code>npm install {package}@{version}</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install express@3.0.0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command will install version 3.0.0 of express package form npm registry.</p>
+
+<p><strong>Package in a Version Range:</strong>  <code>npm install {package}@"{version range}"</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install sax@"&gt;=0.1.0 &lt;0.2.0"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command will install sax package between version range 0.1.0 and 0.2.0</p>
+
+<p><strong>Package with Specific Tag:</strong> <code>npm install {package}@{tag}</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install passport@latest</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command will install passport package with latest tag.</p>
+
+<p><strong>Private package:</strong> <code>npm install {folder}</code> or <code>npm install {tarball file}</code> or <code>npm install {tarball url}</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install ./myPackage
+</span><span class='line'>npm install ./myPackage.tgz
+</span><span class='line'>npm install http://download.com/myPackage.tgz</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Package from Git Repository:</strong> <code>npm install {git repo url}</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install git@github.com:hgilani/html2markdown.git</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Using npm install to also maintain package.json</h2>
+
+<p>When installing a new package, <code>npm install</code> could also update the package.json if you want. For updating package.json, you need to use one of these flags that indicate what kind of dependency you are installing</p>
+
+<ol>
+<li><code>--save</code>: Package will be added in the dependencies section of package.json</li>
+<li><code>--save-dev</code>: Package will be added in the devDepenctions section of package.json</li>
+<li><code>--save-optional</code>: Package will be added in the optionalDepenctions section of package.json</li>
+</ol>
+
+
+<h2>npm install or npm update</h2>
+
+<p>A lot of time you want to depend on the latest version of the packages so that you automatically get all the bug fixes and new features. If so then you should be able to update some or all the packages installed in your environment to the latest version. You should start by correctly configuring the versions properly in your package.json. For example, if you depend on version 2.0.0 of the express library then your package.json can say</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  "dependencies": {
+</span><span class='line'>      ...
+</span><span class='line'>    "express": "2.0.0",
+</span><span class='line'>      ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This tells NPM that you want to depend on a specific version of the package. This will keep things tight but it also makes upgrading to latest packages a manual effort. For ease of update, you should configure flexible versions in package.json that permit upgrading packages</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  "dependencies": {
+</span><span class='line'>      ...
+</span><span class='line'>    "express": "2.x",
+</span><span class='line'>      ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>What this says is you want to depend on the latest express package with major version 2. With versions configured for easy upgrade, you can update to latest version of express package by executing either <code>npm install express</code> or <code>npm update express</code></p>
+
+<p>You can also update all packages by executing either <code>npm install</code> or <code>npm update</code>. For updating multiple packages you can execute <code>npm install {package1} {package2}</code> or <code>npm install {package1} {package2}</code></p>
+
+<h3>Difference between npm update and npm install</h3>
+
+<ol>
+<li>npm install will also update devDependencies. However, npm update will not</li>
+<li>npm install will always reinstall the package. However, npm update will only update if the latest package is not installed.</li>
+</ol>
+
+
+<p>In addition to upgrading package versions, <code>npm update</code> can also install any missing packages. In other words, it can function as <code>npm install</code> but the difference is that it will not install missing dev dependencies.</p>
+
+<h2>Speeding up npm install</h2>
+
+<p>In the blog post <a href="http://www.devthought.com/2012/02/17/npm-tricks/">NPM Tricks</a>, Guillermo Rauch has mentioned following two tricks that can help in speeding up npm install</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install --production
+</span><span class='line'>npm install --loglevel warn</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When you add <code>--production</code> option then npm will skip installing dev dependencies. In addition, when you add <code>--loglevel warn</code> then only useful information will be logged into console.</p>
+
+<h2>Some useful NPM commands</h2>
+
+<ol>
+<li><code>npm list</code>: List installed npm packages with their dependencies.</li>
+<li><code>npm outdated</code>: List all installed packages for which a latest version of package is available in npm registry.</li>
+<li><code>npm prune</code>: This command removes &#8220;extraneous&#8221; packages i.e. packages installed but not listed in package.json file.</li>
+<li><code>npm pack</code>: This commands creates an installable tarball from a package. This tarball can then be published on npm registry or installed in some other environment e.g. production.</li>
+<li><code>npm help json</code>: If you ever want a reference documentation of different options you can configure in <code>package.json</code> file.</li>
+</ol>
+
+
+<p>There are a lot more commands. To list all the commands you can execute <code>npm help</code> and for reading documentation on a specific command, you can execute <code>npm help {command}</code></p>
+
+<h2>.npmignore and .gitignore</h2>
+
+<p><code>npm pack</code> is a useful command however sometimes you want to avoid packing some project resources in the tarball. For example if you are creating a package for installing in production environment then you will want to avoid packing unit tests in this package. This can be easily achieved by adding either <code>.npmignore</code> file or <code>.gitignore</code> file. Section <a href="https://npmjs.org/doc/developers.html">&#8220;Keeping files out of your package&#8221;</a> in the &#8220;NPM Developer page&#8221; states following</p>
+
+<blockquote><p>Use a .npmignorefile to keep stuff out of your package. If there&#8217;s no .npmignore file, but there is a .gitignore file, then npm will ignore the stuff matched by the .gitignore file. If you want to include something that is excluded by your .gitignore file, you can create an empty .npmignore file to override it.</p></blockquote>
+
+<h2>Setup npm for tab completion</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm completion</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Executing this command configures the tab completions into your current shell. It also outputs a shell script on command line that you can add to your ~/.bashrc or ~/.zshrcfile to make completions available for future shell sessions.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Himanshu Gilani</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-17T16:58:00+02:00" pubdate data-updated="true">Oct 17<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/node-js/'>node.js</a>, <a class='category' href='/blog/categories/npm/'>npm</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified/" data-via="hgilani" data-counturl="http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/" title="Previous Post: Why Memento moved from Java to CouchApps to Node.js Technology Stack">&laquo; Why Memento moved from Java to CouchApps to Node.js Technology Stack</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/12/10/why-i-love-git/" title="Next Post: Why I Love Git">Why I Love Git &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/17/npm-features-and-options-demystified/">NPM Features and Options Demystified</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/">Why Memento moved from Java to CouchApps to Node.js Technology Stack</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hgilani">@hgilani</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hgilani',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("hgilani", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/hgilani" class="twitter-follow-button" data-show-count="false">Follow @hgilani</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Himanshu Gilani -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'hgilani';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified/';
+        var disqus_url = 'http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

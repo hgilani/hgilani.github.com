@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Why Memento moved from Java to CouchApps to Node.js Technology Stack - Himanshu Gilani</title>
+  <meta name="author" content="Himanshu Gilani">
+
+  
+  <meta name="description" content="Memento, the app that I launched recently has already seen three technology stack changes. I started working on memento to be able to keep what I &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Himanshu Gilani" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34055934-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Himanshu Gilani</a></h1>
+  
+    <h2>Web Developer and Entrepreneur. Founder of mementodb.com</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgilani.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Why Memento Moved From Java to CouchApps to Node.js Technology Stack</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-27T19:53:00+02:00" pubdate data-updated="true">Sep 27<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://mementodb.com">Memento</a>, the app that I launched recently has already seen three technology stack changes. I started working on memento to be able to keep what I find on web with me as a personal memento. Being a Java architect I kicked off memento using Java. Since I was a solo developer on this project I wanted to keep everything lean in order to iterate quickly. This meant having an automatic code generation for the boilerplate code, using simple and powerful frameworks, following best practices, and tons of unit tests for making changes quickly and verifying the health of the app.</p>
+
+<h2>Spring Roo</h2>
+
+<p>With my lean strategy in mind I quickly used <a href="http://www.springsource.org/spring-roo"><strong>Spring Roo</strong></a>, a rapid application development tool for Java developers to generate the complete app with front-end, back-end, authentication, persistence, logging, and unit tests within couple of hours. So far I was happy.</p>
+
+<p>Now it was time to learn the magic tool and enhance the app. After hacking on Spring Roo for a couple of days I developed a good understanding of how it works. I absolutely loved the way it bootstrapped the complete app. It’s an absolute must-use tool for anyone who wants to bootstrap a Java web application. Though it has these great features, there are also some not-so-great ones. For front-end of the app, Spring Roo (spring-roo-1.1.4.RELEASE) used Dojo JavaScript framework, Spring MVC JSP tags, and JSPX technology. And the entire front-end generation was tied to the database model. This meant every time I made changes to the database model my user-interface was affected. After some initial hacking I came to an understanding that Spring Roo is not an ideal tool for managing the front-end. With this knowledge I decided to stop using it for managing the user interface changes. I was happy with this decision, as I wanted Memento to have an awesome user interface that I enjoyed using. And this would have required a lot of custom changes.</p>
+
+<p>As the next step I started implementing the back-end logic for the memento. I decided that I will not develop any new logic without writing unit tests for it. These unit tests were really crucial for me because they allow you to discover problems quickly, and reduce manual testing time. After about two months I had a basic MVP (minimum viable product) ready and I wanted to host Memento on the web.</p>
+
+<h2>VPS and EC2</h2>
+
+<p>I started with a VPS provider, <a href="http://webfaction.com"><strong>Webfaction</strong></a>, for hosting Memento. After spending some time on configuring the VPS m/c and deploying Memento I was happy that memento was up and running. To my surprise, in the next one hour I go an email from the <strong>WebFction</strong> support that they have the killed the java process for my app as it was taking too much memory. This confused me since during the app development I never noticed any abnormal memory usage. This led to a realization that hosting a basic app on <a href="http://tomcat.apache.org">Tomcat</a> or <a href="http://jetty.codehaus.org">Jetty</a> servlet container required 256 MB of minimum RAM. In my opinion this is due to JVM overhead and th number of jars (58 jar files) that memento was loading in the JVM due to frameworks selected. This kicked VPS provider out of equation.</p>
+
+<p>Next I decided to evaluate <a href="http://aws.amazon.com/">Amazon EC2</a>. For new customers Amazon EC2 provides a micro instance free for the first year. This meant no upfront cost to get started and no more memory constraints. After using Memento on EC2 for a month, I decided to host a continuous integration server, <a href="http://www.eclipse.org/hudson/">Hudson</a>. At this point I got another surprise. Whenever CI server started building memento on code commits entire EC2 instance would freeze. After some debugging I realized that&#8217;s how Amazon wants a micro instance to perform. It defines a micro instance as-</p>
+
+<p>&#8220;Micro instances (t1.micro) provide a small amount of consistent CPU resources and allow you to increase CPU capacity in short bursts when additional cycles are available. They are well suited for lower throughput applications and web sites that require additional compute cycles periodically&#8221;</p>
+
+<p>What this definition does not tell is that every time there is some constant CPU activity for 3 seconds, entire micro-instance will halt for next 6 seconds as it will not get any CPU cycle. This meant EC2 micro instances are not suitable for even light CPU intensive jobs. Once I figured out how CPU bursts work on a EC2 micro instance, I stopped using it as the CI server.</p>
+
+<p>My experience around memory and CPU utilization got me thinking about how to design memento for low resource utilization.</p>
+
+<h2>Moving on to CouchDB and CouchApps</h2>
+
+<p>At the time I was searching for a solution to archive web pages. I did not want to store the web pages in SQL database as that would have caused the database to grow to pretty quickly with maintenance overhead. After some research I decided to use NoSQL data store <a href="http://couchdb.apache.org">CouchDB</a> for storing web pages. I started hacking its <strong>Map</strong> <strong>Reduce</strong> views for querying data and came to know about CouchApps.</p>
+
+<p>Following is how <a href="http://couchapp.org">couchapp.org</a> defines what are CouchApps</p>
+
+<p>&#8220;CouchApps are JavaScript and HTML5 applications served directly from CouchDB. If you can fit your application into those constraints, then you get CouchDB&#8217;s scalability and flexibility &#8220;for free&#8221; (and deploying your app is as simple as replicating it to the production server).&#8221;</p>
+
+<p>My initial thought was that CouchApp would act as a lean 2-tier stack with no middle tier and a low resource utilization.I decided to rewrite the java version of memento as CouchApp. However, this technology stack change was not as smooth as I anticipated. It required learning the CouchApps technology and its tool chain for building/deploying the app. This obviously resulted in a tremendous learning effort. JavaScript, jQuery, Sammy.js, Compass, Sass, and Node.js were learnt. After 6 months the second version of the MVP was ready as CouchApp and now it was again time to host it on the web.</p>
+
+<p>This is when I started realizing the limitations of the CouchApps. Since, the app was hosted out of the CouchDB database I was forced into funky URLs (as dictated by CouchDB design documents), and weak authentication/security. There was limited community support for libraries and tool chains.</p>
+
+<h2>Node.js</h2>
+
+<p>The CouchApp tool, <a href="http://kan.so/">kan.so</a> that I was using for building and deploying CouchApps introduced me to Node.js. <strong>kan.so</strong> used it for packaging and deploying CouchApps. In the process of rewriting <a href="http://mementodb.com">Memento</a> as a CouchApp I hacked on some of the Node.js modules.</p>
+
+<p>Since I was again researching solutions CouchApp issues it occurred to me that Node.js could act as a thin layer between CouchDB and HTML5 GUI. Node.js is event oriented, asynchronous and has low memory and CPU utilization. Community support for the new features in the language itself and libraries/frameworks is fantastic. I was able to quickly iterate third version of MVP using Node.js within next three months and this is the version that is live in production today :-)</p>
+
+<p>After working with Node.js technology stack I can now say with certainty that Node.js is my favorite language. It is the secret ingredient in Memento. Having said this Java still remains my first love.</p>
+
+<h2>Conclusion</h2>
+
+<ol>
+<li>Java is good for developing apps and services when resource utilization is not an issue or if you want to write CPU intensive services.</li>
+<li>CouchApps are good for rapid prototyping and for apps that do not have strict security requirements.</li>
+<li>Node.js is even driven, light-weight and perfect langauge for developing next generation responsive applications.</li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Himanshu Gilani</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-27T19:53:00+02:00" pubdate data-updated="true">Sep 27<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/couchapps/'>couchapps</a>, <a class='category' href='/blog/categories/couchdb/'>couchdb</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/node-js/'>node.js</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/" data-via="hgilani" data-counturl="http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/" title="Previous Post: Bootstraping a Node.js App for Dev/Prod Environment">&laquo; Bootstraping a Node.js App for Dev/Prod Environment</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/10/17/npm-features-and-options-demystified/" title="Next Post: NPM Features and Options Demystified">NPM Features and Options Demystified &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/17/npm-features-and-options-demystified/">NPM Features and Options Demystified</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/">Why Memento moved from Java to CouchApps to Node.js Technology Stack</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hgilani">@hgilani</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hgilani',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("hgilani", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/hgilani" class="twitter-follow-button" data-show-count="false">Follow @hgilani</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Himanshu Gilani -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'hgilani';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/';
+        var disqus_url = 'http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Bootstraping a Node.js App for Dev/Prod Environment - Himanshu Gilani</title>
+  <meta name="author" content="Himanshu Gilani">
+
+  
+  <meta name="description" content="Setting up a web server in node is really simple. A basic hello world http server can be written in under 10 lines. However, if you want to write a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Himanshu Gilani" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34055934-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Himanshu Gilani</a></h1>
+  
+    <h2>Web Developer and Entrepreneur. Founder of mementodb.com</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgilani.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Bootstraping a Node.js App for Dev/Prod Environment</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-26T19:30:00+02:00" pubdate data-updated="true">Sep 26<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Setting up a web server in node is really simple. A <a href="http://nodeguide.com/beginner.html#a-hello-world-http-server">basic hello world http server</a> can be written in under 10 lines. However, if you want to write a production grade app then you are better of by using any framework that provides foundation and structure to your logic. When choosing frameworks there are no right or wrong answers. Important thing is to select a framework that is being actively developed, has community support and most of important of all you love the way it works.</p>
+
+<h2>Bootstrap a Node.js App with Express Application</h2>
+
+<p><a href="http://expressjs.com">Express</a> is a web application framework for Node.js. It is simple to use and can be configured to work with popular technologies. To understand how Express works you can follow the <a href="http://expressjs.com/guide.html">Getting Started</a> page on the express web site. This guide also explains <a href="http://expressjs.com/guide.html#executable">how to use the express global executable</a> for generating a skeleton web app.</p>
+
+<p>Once you have generated a skeleton web application. You need to understand how to structure the skeleton app for the Dev/Prod parity as well as making few changes to the app for making your app modular.</p>
+
+<h3>Dev/Prod parity</h3>
+
+<p>You will notice following snippet in the skeleton app</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>app.configure('development', function(){
+</span><span class='line'>  app.use(express.errorHandler());
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the code <code>development</code> refers to the dev environment. Any dev specific setup that you want to do can be configured under this block. This snippet just configures a error handler for the dev environment. If you need to configure settings for any other environments like staging, production, etc then you can configure them the same way.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>app.configure('production', function(){
+</span><span class='line'>
+</span><span class='line'>  // production env. specific settings 
+</span><span class='line'>
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>process.env</h3>
+
+<p>In your express skeleton you will notice that port on which your app listens is configured as following</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>process.env.PORT</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you may begin to think what is <code>process.env</code>. Node.js <a href="http://nodejs.org/api/process.html#process_process">documentation</a> defines the <code>process</code> as a global object that can be accessed from anywhere. And <code>process.env</code> is an object that contains the user environment.</p>
+
+<p>If you were running in bash shell and you have configured a <code>PORT</code> environment variable with value <code>80</code> then inside the app <code>process.env.PORT</code> will have the value 80. In the same vein you can configure a NODE_ENV environment variable that indicates to express in which environment it is executing.</p>
+
+<p>On the production host you can execute</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export port=80
+</span><span class='line'>export NODE_ENV=prodction</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And on the development host you can let express use its default settings of running on port 3000 and set NODE_ENV to &#8216;development&#8217;</p>
+
+<h3>Simulating production environment during testing</h3>
+
+<p>If you ever want to simulate production environment for testing then that is easy. This can be easily done without configuring NODE_ENV variable in your environment. Instead of starting your app using <code>node app.js</code> you can start it as following</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NODE_ENV=production node app.js</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This way NODE_ENV variable is only set for the current process execution and the value is not persisted in the environment settings.</p>
+
+<h3>env.json</h3>
+
+<p>Setting environment variables to configure different settings for different environment is nice but it does not scale well. What we need is persistent storage for the environment properties that can act as a gold standard and is simple and easy to use. Meet <strong>env.json</strong>, add a new file in the project root with the name <code>env.json</code>. You can structure this file in the following way add key/value properties with right settings per environment.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "development": {
+</span><span class='line'>      "facebook_app_id": "facebook_dummy_dev_app_id",
+</span><span class='line'>      "facebook_app_secret": "facebook_dummy_dev_app_secret",
+</span><span class='line'>  }, 
+</span><span class='line'>  "production": {
+</span><span class='line'>      "facebook_app_id": "facebook_dummy_prod_app_id",
+</span><span class='line'>      "facebook_app_secret": "facebook_dummy_prod_app_secret",
+</span><span class='line'>  }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This snippet shows how to configure same settings for development and production environment. If you ever has a need to add a new environment, then you can simply extend this file and add another property block.</p>
+
+<p>Working with <code>env.json</code> is easy. In node parsing is a json file is as simple as loading the file using <code>require</code> statement.</p>
+
+<p>I like to abstract all the code that I can reuse as functions in <code>common.js</code> file. So start by creating <code>common.js</code> file. Following is the parsing logic for env.json in this file.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var env = require('env.json');
+</span><span class='line'>
+</span><span class='line'>exports.config = function() {
+</span><span class='line'>  var node_env = process.env.NODE_ENV || 'development';
+</span><span class='line'>  return env[node_env];
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you have created the common.js file using it for reading environment specific properties is as simple as loading it in app.js and using an object property.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var common = require('./routes/common')
+</span><span class='line'>var config = common.config();
+</span><span class='line'>
+</span><span class='line'>...
+</span><span class='line'>
+</span><span class='line'>var facebook_app_id = config.facebook_app_id;
+</span><span class='line'>// do something with facebook_app_id
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Structuring express application with Open/Closed principle</h3>
+
+<p>After you have configured app.js correctly. You want to close it down from future modifications but you still need a way to extend it by adding new routes to the app. This is simple and easy to do. Read <a href="http://blog.pixelingene.com/2012/06/a-simple-organization-scheme-for-expressjs-apps/">A Simple Organization Scheme for Handling Routes in ExpressJS Apps</a> for understanding how to do this by establishing some conventions for your project.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Himanshu Gilani</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-26T19:30:00+02:00" pubdate data-updated="true">Sep 26<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/express/'>express</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/node-js/'>node.js</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/" data-via="hgilani" data-counturl="http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/09/17/introducing-memento/" title="Previous Post: Introducing Memento">&laquo; Introducing Memento</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/" title="Next Post: Why Memento moved from Java to CouchApps to Node.js Technology Stack">Why Memento moved from Java to CouchApps to Node.js Technology Stack &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/17/npm-features-and-options-demystified/">NPM Features and Options Demystified</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/">Why Memento moved from Java to CouchApps to Node.js Technology Stack</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hgilani">@hgilani</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hgilani',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("hgilani", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/hgilani" class="twitter-follow-button" data-show-count="false">Follow @hgilani</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Himanshu Gilani -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'hgilani';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/';
+        var disqus_url = 'http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
