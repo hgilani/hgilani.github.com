@@ -4,7 +4,7 @@
   <title><![CDATA[Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-01-16T11:46:14+01:00</updated>
+  <updated>2013-01-16T11:48:09+01:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -19,6 +19,9 @@
     <updated>2013-01-16T11:31:00+01:00</updated>
     <id>http://hgilani.github.com/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events</id>
     <content type="html"><![CDATA[<p><a href="http://www.google.com/analytics">Google Analytics</a> is a free web analytics tool from Google that you can use for tracking website statistics like page views, traffic sources, audience information, goals, funnels, etc. While a lot of the stuff is tracked automatically, it becomes overwhelming pretty quickly if you want to track customize analytics or want to track or create custom metrics. In this post, I will detail things I learned by experimenting with Google Analytics.</p>
+
+<!-- more -->
+
 
 <h2>Setup Google Analytics</h2>
 
