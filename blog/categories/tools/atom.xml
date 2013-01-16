@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tools | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/tools/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-01-16T11:46:14+01:00</updated>
+  <updated>2013-01-16T11:47:45+01:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -51,15 +51,15 @@
 
 <h3>List of mementos saved in your personal account</h3>
 
-<p><img src="/images/hero-shot1.png" title="[title text [alt text]]" ></p>
+<p>{% img /images/hero-shot1.png [title text [alt text]] %}</p>
 
 <h3>Saving mementos using bookmarklet</h3>
 
-<p><img src="/images/hero-shot2.png" title="[title text [alt text]]" ></p>
+<p>{% img /images/hero-shot2.png [title text [alt text]] %}</p>
 
 <h3>Saving mementos using bookmarklet (saved copy of page)</h3>
 
-<p><img src="/images/hero-shot3.png" title="[title text [alt text]]" ></p>
+<p>{% img /images/hero-shot3.png [title text [alt text]] %}</p>
 
 <h2>Feedback, Ideas or Suggestions</h2>
 
