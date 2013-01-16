@@ -4,7 +4,7 @@
   <title><![CDATA[Category: npm | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/npm/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-01-16T11:37:21+01:00</updated>
+  <updated>2013-01-16T11:46:14+01:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -152,6 +152,8 @@ npm completion
 </code></p>
 
 <p>Executing this command configures the tab completions into your current shell. It also outputs a shell script on command line that you can add to your ~/.bashrc or ~/.zshrcfile to make completions available for future shell sessions.</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
 ]]></content>
   </entry>
   
@@ -211,7 +213,7 @@ sudo npm install -g {package_name}
 <p>   ],
   "version": "0.0.1-77",
   "homepage": "http://mementodb.com",
-  "author": "Himanshu Gilani <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x68;&#103;&#x69;&#x6c;&#x61;&#110;&#105;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#x68;&#x67;&#105;&#108;&#97;&#110;&#105;&#x40;&#103;&#109;&#97;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;</a> (http://himanshu.gilani.info)",
+  "author": "Himanshu Gilani <a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#104;&#x67;&#105;&#108;&#x61;&#x6e;&#x69;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#109;">&#x68;&#103;&#105;&#108;&#x61;&#x6e;&#105;&#x40;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;</a> (http://himanshu.gilani.info)",
   "private": true,
   "scripts": {</p>
 
@@ -270,6 +272,8 @@ sudo npm install -g {package_name}
 <li><a href="http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules">Ten Lessons Learned Maintaining Nodejs Modules</a></li>
 </ul>
 
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
 ]]></content>
   </entry>
   

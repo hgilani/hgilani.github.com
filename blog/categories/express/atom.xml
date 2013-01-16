@@ -4,7 +4,7 @@
   <title><![CDATA[Category: express | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/express/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-01-16T11:37:21+01:00</updated>
+  <updated>2013-01-16T11:46:14+01:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -129,6 +129,8 @@ var config = common.config();</p>
 <h3>Structuring express application with Open/Closed principle</h3>
 
 <p>After you have configured app.js correctly. You want to close it down from future modifications but you still need a way to extend it by adding new routes to the app. This is simple and easy to do. Read <a href="http://blog.pixelingene.com/2012/06/a-simple-organization-scheme-for-expressjs-apps/">A Simple Organization Scheme for Handling Routes in ExpressJS Apps</a> for understanding how to do this by establishing some conventions for your project.</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
 ]]></content>
   </entry>
   
