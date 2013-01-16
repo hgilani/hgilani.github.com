@@ -103,3 +103,5 @@ LDAP is a connected protocol. What this means is that you first need to create a
 For information on how to perform these operations using Java language refer to [Five Minutes Tutorial](http://directory.apache.org/api/five-minutes-tutorial.html)
 
 If you have any thoughts or any concept that you would like me to incorporate in this tutorial then please feel free to leave a comment.
+
+Follow me on twitter [here](http://twitter.com/hgilani)

@@ -110,3 +110,5 @@ var facebook_app_id = config.facebook_app_id;
 ### Structuring express application with Open/Closed principle
 
 After you have configured app.js correctly. You want to close it down from future modifications but you still need a way to extend it by adding new routes to the app. This is simple and easy to do. Read [A Simple Organization Scheme for Handling Routes in ExpressJS Apps](http://blog.pixelingene.com/2012/06/a-simple-organization-scheme-for-expressjs-apps/) for understanding how to do this by establishing some conventions for your project.
+
+Follow me on twitter [here](http://twitter.com/hgilani)

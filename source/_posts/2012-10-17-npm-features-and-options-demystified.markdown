@@ -124,3 +124,5 @@ npm completion
 ```
 
 Executing this command configures the tab completions into your current shell. It also outputs a shell script on command line that you can add to your ~/.bashrc or ~/.zshrcfile to make completions available for future shell sessions.
+
+Follow me on twitter [here](http://twitter.com/hgilani)

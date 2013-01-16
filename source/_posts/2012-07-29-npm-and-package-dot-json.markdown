@@ -95,3 +95,5 @@ For best practices refer to following 2 blog posts
 
 * [Package.json dependencies done right](http://blog.nodejitsu.com/package-dependencies-done-right)
 * [Ten Lessons Learned Maintaining Nodejs Modules](http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules)
+
+Follow me on twitter [here](http://twitter.com/hgilani)

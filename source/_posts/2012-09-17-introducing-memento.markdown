@@ -45,3 +45,5 @@ Memento is designed for usability and following are some of its features
 ## Feedback, Ideas or Suggestions
 
 If you have any ideas, feedback, or suggestions for improving Memento then please email me at hgilani[at]gmail[dot]com
+
+Follow me on twitter [here](http://twitter.com/hgilani)
