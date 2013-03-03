@@ -4,7 +4,7 @@
   <title><![CDATA[Category: npm | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/npm/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-01-16T11:48:09+01:00</updated>
+  <updated>2013-03-03T21:16:08+01:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -213,7 +213,7 @@ sudo npm install -g {package_name}
 <p>   ],
   "version": "0.0.1-77",
   "homepage": "http://mementodb.com",
-  "author": "Himanshu Gilani <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#104;&#x67;&#105;&#x6c;&#97;&#110;&#105;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;">&#104;&#x67;&#x69;&#108;&#x61;&#x6e;&#105;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#109;</a> (http://himanshu.gilani.info)",
+  "author": "Himanshu Gilani <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x68;&#103;&#x69;&#108;&#97;&#110;&#x69;&#x40;&#103;&#109;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#104;&#103;&#x69;&#x6c;&#97;&#x6e;&#x69;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;</a> (http://himanshu.gilani.info)",
   "private": true,
   "scripts": {</p>
 

@@ -1,0 +1,409 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Scripting Google Analytics: Part 2 - Logging - Himanshu Gilani</title>
+  <meta name="author" content="Himanshu Gilani">
+
+  
+  <meta name="description" content="In part 1 of this post I explained how to track page views and events in Google Analytics. In this post I will explain Logging data and Javascript &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgilani.github.com/blog/2013/03/03/scripting-google-analytics-part-2-logging/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Himanshu Gilani" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34055934-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Himanshu Gilani</a></h1>
+  
+    <h2>Web Developer and Entrepreneur. Founder of mementodb.com</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgilani.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Scripting Google Analytics: Part 2 - Logging</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-03T21:13:00+01:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In <a href="http://himanshu.gilani.info/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">part 1</a> of this post I explained how to track page views and events in <a href="http://www.google.com/analytics/">Google Analytics</a>. In this post I will explain</p>
+
+<ol>
+<li>Logging data and Javascript errors.</li>
+<li>Custom Variables in Google Analytics</li>
+<li>How to track traffic sources in Google Analytics</li>
+</ol>
+
+
+<h1>Logging data and Javascript Errors</h1>
+
+<p>Google analytics events could be used for logging custom data and tracking Javascript errors in Google Analytics. For logging data just execute following</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>_gaq.push(['_trackEvent', 'INFO', 'Data to log...', url]);  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>This mechanism could also be used to track error codes or messages received from AJAX calls. Following example assumes response.code contains the error code received in an AJAX call.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>_gaq.push(['_trackEvent', 'ERROR', response.code, url]);  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>We could also use the same approach for tracking global javascript errors that are not handled.</p>
+
+<figure class='code'><figcaption><span>Tracking Javascript errors using google Analytics</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">lineNumber</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">_gaq</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="nx">file</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">lineNumber</span><span class="p">,</span> <span class="nx">message</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="p">]);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This snippet simply attaches a callback on the <code>onerror</code> callback of the <code>window</code> object for logging errors.</p>
+
+<h1>Custom Variables</h1>
+
+<p>Google analytics is pretty good in tracking page views, but a lot of times we need a way to attach custom data to the page views. Custom variables in google analytics lets you do this. For setting a custom variable you could add following snippet</p>
+
+<figure class='code'><figcaption><span>Setting Up Custom Variables</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">_gaq</span><span class="o">.</span><span class="n">_setCustomVar</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the above snippet, <code>_setCustomVar</code> has 4 arguments.</p>
+
+<ul>
+<li><code>index</code> argument is a slot or the position of the variable. Google analytics only allows you track 5 variables per page page view and as a result this argument has a value between 1 to 5.</li>
+<li><code>name</code> and <code>value</code> define the data that you are tracking. Think of it as <strong>key - value</strong> data associated with the current page view.</li>
+<li><p><code>scope</code> argument defines the duration for which google analytics should track this variable. It can take a value between 1 to 3 i.e. 1 (page level), 2 (session level) and 3 (visitor level)</p>
+
+<ol>
+<li><strong>Page</strong> level scope means variable would be tracked only for the duration of current page view.</li>
+<li><strong>Session</strong> level means variable applies to a single session or visit.</li>
+<li><strong>Visitor</strong> level means variable would be tracked across sessions till users removes the analytics cookie.</li>
+</ol>
+</li>
+</ul>
+
+
+<h2>Custom Variables gotchas</h2>
+
+<ol>
+<li>You can only set 5 variables per page view.</li>
+<li>Do not change the variable names and slots (index) across page views. This will help in keeping things consistent.</li>
+<li>Custom variable are tied to the current page view. So, any variable that you want to be tracked with the page view should be set before the <code>_trackPageview</code> call.</li>
+</ol>
+
+
+<h2>Custom Variables uses</h2>
+
+<p>You might wonder what can I do with custom variables, well possibilities are endless. Once you start tracking some custom information then you could go in google analytics and do some custom analysis to understand how users behave with your website. Following are some examples of what to track using custom variables</p>
+
+<ol>
+<li>Identify type of user  who viewed the page e.g. visitor, member, gold-user, platinum-user, etc</li>
+<li>Track demographic information e.g. age, gender, etc of users who viewed the page.</li>
+<li>Track how user arrived at the page e.g. paid search campaign, RSS, email newsletter, social n/w, etc</li>
+<li>Track users who successfully shopped on your website.</li>
+<li>Track users who contacted customer support.</li>
+</ol>
+
+
+<h1>Track Traffic Sources</h1>
+
+<p>When the visitors start coming to your website then one of the metrics that you would want to track is who is referring users to your website. Users might have discovered your website through a search engine like Google, Yahoo, Bing, etc or might have come to your website by following a link from the newsletter you sent. But, if you want to track other sources then you need to format your inbound URL with following attributes</p>
+
+<ul>
+<li><code>utm_source</code>: name of the traffic source e.g. bing.com, email newsletter, social, etc</li>
+<li><code>utm_medium</code>: medium through which user came to your website e.g. cpc campaign, email, RSS, etc</li>
+<li><code>utm_campaign</code>: string that lets you identify you campaigns e.g. bing_campaign_1, Spring 2013 newsletter, etc</li>
+<li><code>utm_term</code>: keywords or tags that you want to associate with the source in Google Analytics</li>
+</ul>
+
+
+<p>Using these attributes an inbound URL in email newsletter would be formatted like</p>
+
+<figure class='code'><figcaption><span>Setting Up Custom Variables</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">http</span><span class="ss">:/</span><span class="o">/</span><span class="n">mementodb</span><span class="o">.</span><span class="n">com?utm_source</span><span class="o">=</span><span class="n">email_newsletter</span><span class="o">&amp;</span><span class="n">utm_medium</span><span class="o">=</span><span class="n">email</span><span class="o">&amp;</span><span class="n">utm_campaign</span><span class="o">=</span><span class="n">spring_newsletter</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Google analytics automatically tracks the traffic sources, keywords, and type of search i.e. organic or paid (Ad Words campaign) for all traffic coming from google.com What this means is that if you are using an Ad Words campaign then you don&#8217;t need to do anything. But for traffic coming from Bing Ads it will not track the keywords and campaign details. Luckily this could be easily fixed but you would need to format the destination URL of the ads in Bing Ads account to use the <code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, and <code>utm_term</code> query parameters. If the bing campaign name is campaign_1 then this URL would be formatted as shown below</p>
+
+<figure class='code'><figcaption><span>Setting Up Custom Variables</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">http</span><span class="ss">:/</span><span class="o">/</span><span class="n">mementodb</span><span class="o">.</span><span class="n">com?utm_source</span><span class="o">=</span><span class="n">bing</span><span class="o">&amp;</span><span class="n">utm_medium</span><span class="o">=</span><span class="n">cpc</span><span class="o">&amp;</span><span class="n">utm_campaign</span><span class="o">=</span><span class="n">campaign_1</span><span class="o">&amp;</span><span class="n">utm_term</span><span class="o">=</span><span class="p">{</span><span class="no">QueryString</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this URL pay attention to <strong>{QueryString}</strong> this should be entered exactly as shown with curly braces as Bind Ads platform will dynamically replace with search terms when the ad is served.</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Himanshu Gilani</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-03T21:13:00+01:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/analytics/'>analytics</a>, <a class='category' href='/blog/categories/google-analytics/'>google-analytics</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgilani.github.com/blog/2013/03/03/scripting-google-analytics-part-2-logging/" data-via="hgilani" data-counturl="http://hgilani.github.com/blog/2013/03/03/scripting-google-analytics-part-2-logging/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/" title="Previous Post: Scripting Google Analytics: Part 1 - Tracking Pages and Events">&laquo; Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging/">Scripting Google Analytics: Part 2 - Logging</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/17/npm-features-and-options-demystified/">NPM Features and Options Demystified</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hgilani">@hgilani</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hgilani',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("hgilani", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/hgilani" class="twitter-follow-button" data-show-count="false">Follow @hgilani</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Himanshu Gilani -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'hgilani';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hgilani.github.com/blog/2013/03/03/scripting-google-analytics-part-2-logging/';
+        var disqus_url = 'http://hgilani.github.com/blog/2013/03/03/scripting-google-analytics-part-2-logging/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
