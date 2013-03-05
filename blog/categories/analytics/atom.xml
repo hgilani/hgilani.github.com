@@ -4,7 +4,7 @@
   <title><![CDATA[Category: analytics | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/analytics/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-03-03T21:29:00+01:00</updated>
+  <updated>2013-03-05T09:54:02+01:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -20,33 +20,31 @@
     <id>http://hgilani.github.com/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources</id>
     <content type="html"><![CDATA[<p>In <a href="http://himanshu.gilani.info/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">part 1</a> of this post I explained how to track page views and events in <a href="http://www.google.com/analytics/">Google Analytics</a>. In this post I will explain</p>
 
-<ol>
-<li>Logging data and Javascript errors.</li>
-<li>Custom Variables in Google Analytics</li>
-<li>How to track traffic sources in Google Analytics</li>
-</ol>
-
+<pre><code>1. How to use Google Analytics for logging data and javascript errors.
+2. Custom Variables in Google Analytics
+3. How to use Google Analytics for track traffic sources.
+</code></pre>
 
 <!-- more -->
 
 
-<h1>Logging data and Javascript Errors</h1>
+<h2>Logging data and Javascript Errors</h2>
 
-<p>Google analytics events could be used for logging custom data and tracking Javascript errors in Google Analytics. For logging data just execute following</p>
+<p>Google Analytics events could be used for logging custom data and tracking Javascript errors in Google Analytics. For logging data just execute following</p>
 
-<p><code>
+<p><code>javascript Logging Data
 _gaq.push(['_trackEvent', 'INFO', 'Data to log...', url]);  
 </code></p>
 
-<p>This mechanism could also be used to track error codes or messages received from AJAX calls. Following example assumes response.code contains the error code received in an AJAX call.</p>
+<p>This mechanism could also be used to track error codes or messages received from AJAX calls or a REST service call. Following example assumes response.code contains the error code received in an AJAX call.</p>
 
-<p><code>
+<p><code>javascript Logging Error Codes
 _gaq.push(['_trackEvent', 'ERROR', response.code, url]);  
 </code></p>
 
 <p>We could also use the same approach for tracking global javascript errors that are not handled.</p>
 
-<p>``` javascript Tracking Javascript errors using google Analytics
+<p>``` javascript Tracking Javascript errors using Google Analytics
 window.onerror = function(message, file, lineNumber) {</p>
 
 <pre><code>_gaq.push(['_trackEvent', 'Error', file + ':' + lineNumber, message + '']);
@@ -57,9 +55,9 @@ window.onerror = function(message, file, lineNumber) {</p>
 
 <p>This snippet simply attaches a callback on the <code>onerror</code> callback of the <code>window</code> object for logging errors.</p>
 
-<h1>Custom Variables</h1>
+<h2>Custom Variables</h2>
 
-<p>Google analytics is pretty good in tracking page views, but a lot of times we need a way to attach custom data to the page views. Custom variables in google analytics lets you do this. For setting a custom variable you could add following snippet</p>
+<p>Google Analytics is pretty good in tracking page views, but a lot of times we need a way to attach custom data to the page views. Custom variables in Google Analytics lets you do this. For setting a custom variable you could add following snippet</p>
 
 <p><code>ruby Setting Up Custom Variables
 _gaq._setCustomVar(index, name, value, scope)
@@ -68,20 +66,20 @@ _gaq._setCustomVar(index, name, value, scope)
 <p>In the above snippet, <code>_setCustomVar</code> has 4 arguments.</p>
 
 <ul>
-<li><code>index</code> argument is a slot or the position of the variable. Google analytics only allows you track 5 variables per page page view and as a result this argument has a value between 1 to 5.</li>
+<li><code>index</code> argument is a slot or the position of the variable. Google Analytics only allows you track 5 variables per page page view and as a result this argument has a value between 1 to 5.</li>
 <li><code>name</code> and <code>value</code> define the data that you are tracking. Think of it as <strong>key - value</strong> data associated with the current page view.</li>
-<li><p><code>scope</code> argument defines the duration for which google analytics should track this variable. It can take a value between 1 to 3 i.e. 1 (page level), 2 (session level) and 3 (visitor level)</p>
+<li><p><code>scope</code> argument defines the duration for which Google Analytics should track this variable. It can take a value between 1 to 3 i.e. 1 (page level), 2 (session level) and 3 (visitor level)</p>
 
 <ol>
 <li><strong>Page</strong> level scope means variable would be tracked only for the duration of current page view.</li>
 <li><strong>Session</strong> level means variable applies to a single session or visit.</li>
-<li><strong>Visitor</strong> level means variable would be tracked across sessions till users removes the analytics cookie.</li>
+<li><strong>Visitor</strong> level means variable would be tracked across sessions till users removes the Analytics cookie.</li>
 </ol>
 </li>
 </ul>
 
 
-<h2>Custom Variables gotchas</h2>
+<h3>Custom Variables gotchas</h3>
 
 <ol>
 <li>You can only set 5 variables per page view.</li>
@@ -90,9 +88,9 @@ _gaq._setCustomVar(index, name, value, scope)
 </ol>
 
 
-<h2>Custom Variables uses</h2>
+<h3>Custom Variables uses</h3>
 
-<p>You might wonder what can I do with custom variables, well possibilities are endless. Once you start tracking some custom information then you could go in google analytics and do some custom analysis to understand how users behave with your website. Following are some examples of what to track using custom variables</p>
+<p>You might wonder what can I do with custom variables, well possibilities are endless. Once you start tracking some custom information then you could go in Google Analytics and do some custom analysis to understand how users behave with your website. Following are some examples of what to track using custom variables</p>
 
 <ol>
 <li>Identify type of user  who viewed the page e.g. visitor, member, gold-user, platinum-user, etc</li>
@@ -103,7 +101,7 @@ _gaq._setCustomVar(index, name, value, scope)
 </ol>
 
 
-<h1>Track Traffic Sources</h1>
+<h2>Track Traffic Sources</h2>
 
 <p>When the visitors start coming to your website then one of the metrics that you would want to track is who is referring users to your website. Users might have discovered your website through a search engine like Google, Yahoo, Bing, etc or might have come to your website by following a link from the newsletter you sent. But, if you want to track other sources then you need to format your inbound URL with following attributes</p>
 
@@ -121,7 +119,7 @@ _gaq._setCustomVar(index, name, value, scope)
 http://mementodb.com?utm_source=email_newsletter&amp;utm_medium=email&amp;utm_campaign=spring_newsletter
 </code></p>
 
-<p>Google analytics automatically tracks the traffic sources, keywords, and type of search i.e. organic or paid (Ad Words campaign) for all traffic coming from google.com What this means is that if you are using an Ad Words campaign then you don't need to do anything. But for traffic coming from Bing Ads it will not track the keywords and campaign details. Luckily this could be easily fixed but you would need to format the destination URL of the ads in Bing Ads account to use the <code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, and <code>utm_term</code> query parameters. If the bing campaign name is campaign_1 then this URL would be formatted as shown below</p>
+<p>Google Analytics automatically tracks the traffic sources, keywords, and type of search i.e. organic or paid (Ad Words campaign) for all traffic coming from google.com What this means is that if you are using an Ad Words campaign then you don't need to do anything. But for traffic coming from Bing Ads it will not track the keywords and campaign details. Luckily this could be easily fixed but you would need to format the destination URL of the ads in Bing Ads account to use the <code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, and <code>utm_term</code> query parameters. If the bing campaign name is campaign_1 then this URL would be formatted as shown below</p>
 
 <p><code>
 http://mementodb.com?utm_source=bing&amp;utm_medium=cpc&amp;utm_campaign=campaign_1&amp;utm_term={QueryString}
