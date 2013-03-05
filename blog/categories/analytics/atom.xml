@@ -4,7 +4,7 @@
   <title><![CDATA[Category: analytics | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/analytics/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-03-05T09:54:02+01:00</updated>
+  <updated>2013-03-05T10:03:06+01:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -20,10 +20,12 @@
     <id>http://hgilani.github.com/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources</id>
     <content type="html"><![CDATA[<p>In <a href="http://himanshu.gilani.info/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">part 1</a> of this post I explained how to track page views and events in <a href="http://www.google.com/analytics/">Google Analytics</a>. In this post I will explain</p>
 
-<pre><code>1. How to use Google Analytics for logging data and javascript errors.
-2. Custom Variables in Google Analytics
-3. How to use Google Analytics for track traffic sources.
-</code></pre>
+<ul>
+<li>How to use Google Analytics for logging data and javascript errors.</li>
+<li>Custom Variables in Google Analytics.
+*How to use Google Analytics for track traffic sources.</li>
+</ul>
+
 
 <!-- more -->
 
@@ -36,7 +38,7 @@
 _gaq.push(['_trackEvent', 'INFO', 'Data to log...', url]);  
 </code></p>
 
-<p>This mechanism could also be used to track error codes or messages received from AJAX calls or a REST service call. Following example assumes response.code contains the error code received in an AJAX call.</p>
+<p>This mechanism could also be used to track error codes or messages received from AJAX calls or a REST service call. Following example assumes <code>response.code</code> contains the error code received in an AJAX call.</p>
 
 <p><code>javascript Logging Error Codes
 _gaq.push(['_trackEvent', 'ERROR', response.code, url]);  

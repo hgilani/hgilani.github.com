@@ -9,7 +9,7 @@
   <meta name="author" content="Himanshu Gilani">
 
   
-  <meta name="description" content="In part 1 of this post I explained how to track page views and events in Google Analytics. In this post I will explain 1. How to use Google Analytics &hellip;">
+  <meta name="description" content="In part 1 of this post I explained how to track page views and events in Google Analytics. In this post I will explain How to use Google Analytics &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -106,10 +106,12 @@
 
 <div class="entry-content"><p>In <a href="http://himanshu.gilani.info/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">part 1</a> of this post I explained how to track page views and events in <a href="http://www.google.com/analytics/">Google Analytics</a>. In this post I will explain</p>
 
-<pre><code>1. How to use Google Analytics for logging data and javascript errors.
-2. Custom Variables in Google Analytics
-3. How to use Google Analytics for track traffic sources.
-</code></pre>
+<ul>
+<li>How to use Google Analytics for logging data and javascript errors.</li>
+<li>Custom Variables in Google Analytics.
+*How to use Google Analytics for track traffic sources.</li>
+</ul>
+
 
 <!-- more -->
 
@@ -123,7 +125,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This mechanism could also be used to track error codes or messages received from AJAX calls or a REST service call. Following example assumes response.code contains the error code received in an AJAX call.</p>
+<p>This mechanism could also be used to track error codes or messages received from AJAX calls or a REST service call. Following example assumes <code>response.code</code> contains the error code received in an AJAX call.</p>
 
 <figure class='code'><figcaption><span>Logging Error Codes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">_gaq</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">code</span><span class="p">,</span> <span class="nx">url</span><span class="p">]);</span>
