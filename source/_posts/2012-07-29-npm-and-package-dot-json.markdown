@@ -18,6 +18,8 @@ npm install {package_name}
 
 This will install NPM package {package_name} in the current working directory. This is typically root of the project. 
 
+<!-- more -->
+
 ## Global Install
 
 At times you may want to have some packages installed globally in the system. Gloabl packages are not project specific. Any package can be installed globaly if you add the `-g` switch 

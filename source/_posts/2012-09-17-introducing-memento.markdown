@@ -19,6 +19,8 @@ Web is constantly changing, pages that you bookmark today may vanish tomorrow. B
 
 Memento provides a bookmarklet that converts the web page you want to keep into Markdown and saves it to your account.
 
+<!-- more -->
+
 ## Memento Features
 
 Memento is designed for usability and following are some of its features

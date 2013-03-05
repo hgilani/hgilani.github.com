@@ -23,7 +23,7 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 ```
-
+<!-- more -->
 In the code `development` refers to the dev environment. Any dev specific setup that you want to do can be configured under this block. This snippet just configures a error handler for the dev environment. If you need to configure settings for any other environments like staging, production, etc then you can configure them the same way.
 
 ```

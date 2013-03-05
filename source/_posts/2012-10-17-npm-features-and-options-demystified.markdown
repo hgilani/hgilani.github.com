@@ -27,6 +27,8 @@ npm install sax@">=0.1.0 <0.2.0"
 
 This command will install sax package between version range 0.1.0 and 0.2.0
 
+<!-- more -->
+
 **Package with Specific Tag:** `npm install {package}@{tag}`
 
 ```
