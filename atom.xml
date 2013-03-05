@@ -4,7 +4,7 @@
   <title><![CDATA[Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-03-05T10:08:16+01:00</updated>
+  <updated>2013-03-05T10:16:26+01:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -496,6 +496,9 @@ cn: Paul Hunt
 
 <p>This command will install sax package between version range 0.1.0 and 0.2.0</p>
 
+<!-- more -->
+
+
 <p><strong>Package with Specific Tag:</strong> <code>npm install {package}@{tag}</code></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -631,6 +634,9 @@ cn: Paul Hunt
 
 <p>With my lean strategy in mind I quickly used <a href="http://www.springsource.org/spring-roo"><strong>Spring Roo</strong></a>, a rapid application development tool for Java developers to generate the complete app with front-end, back-end, authentication, persistence, logging, and unit tests within couple of hours. So far I was happy.</p>
 
+<!-- more -->
+
+
 <p>Now it was time to learn the magic tool and enhance the app. After hacking on Spring Roo for a couple of days I developed a good understanding of how it works. I absolutely loved the way it bootstrapped the complete app. It’s an absolute must-use tool for anyone who wants to bootstrap a Java web application. Though it has these great features, there are also some not-so-great ones. For front-end of the app, Spring Roo (spring-roo-1.1.4.RELEASE) used Dojo JavaScript framework, Spring MVC JSP tags, and JSPX technology. And the entire front-end generation was tied to the database model. This meant every time I made changes to the database model my user-interface was affected. After some initial hacking I came to an understanding that Spring Roo is not an ideal tool for managing the front-end. With this knowledge I decided to stop using it for managing the user interface changes. I was happy with this decision, as I wanted Memento to have an awesome user interface that I enjoyed using. And this would have required a lot of custom changes.</p>
 
 <p>As the next step I started implementing the back-end logic for the memento. I decided that I will not develop any new logic without writing unit tests for it. These unit tests were really crucial for me because they allow you to discover problems quickly, and reduce manual testing time. After about two months I had a basic MVP (minimum viable product) ready and I wanted to host Memento on the web.</p>
@@ -701,6 +707,9 @@ cn: Paul Hunt
 </pre></td><td class='code'><pre><code class=''><span class='line'>app.configure('development', function(){
 </span><span class='line'>  app.use(express.errorHandler());
 </span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
 
 
 <p>In the code <code>development</code> refers to the dev environment. Any dev specific setup that you want to do can be configured under this block. This snippet just configures a error handler for the dev environment. If you need to configure settings for any other environments like staging, production, etc then you can configure them the same way.</p>
@@ -839,6 +848,9 @@ cn: Paul Hunt
 
 <p>Memento provides a bookmarklet that converts the web page you want to keep into Markdown and saves it to your account.</p>
 
+<!-- more -->
+
+
 <h2>Memento Features</h2>
 
 <p>Memento is designed for usability and following are some of its features</p>
@@ -892,6 +904,9 @@ cn: Paul Hunt
 
 
 <p>This will install NPM package {package_name} in the current working directory. This is typically root of the project.</p>
+
+<!-- more -->
+
 
 <h2>Global Install</h2>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: npm | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/npm/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-03-05T10:08:16+01:00</updated>
+  <updated>2013-03-05T10:16:26+01:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -39,6 +39,9 @@ npm install sax@"&gt;=0.1.0 &lt;0.2.0"
 </code></p>
 
 <p>This command will install sax package between version range 0.1.0 and 0.2.0</p>
+
+<!-- more -->
+
 
 <p><strong>Package with Specific Tag:</strong> <code>npm install {package}@{tag}</code></p>
 
@@ -174,6 +177,9 @@ npm install {package_name}
 
 <p>This will install NPM package {package_name} in the current working directory. This is typically root of the project.</p>
 
+<!-- more -->
+
+
 <h2>Global Install</h2>
 
 <p>At times you may want to have some packages installed globally in the system. Gloabl packages are not project specific. Any package can be installed globaly if you add the <code>-g</code> switch</p>
@@ -213,7 +219,7 @@ sudo npm install -g {package_name}
 <p>   ],
   "version": "0.0.1-77",
   "homepage": "http://mementodb.com",
-  "author": "Himanshu Gilani <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#104;&#x67;&#x69;&#108;&#97;&#x6e;&#105;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#x68;&#103;&#x69;&#108;&#97;&#110;&#x69;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a> (http://himanshu.gilani.info)",
+  "author": "Himanshu Gilani <a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#104;&#x67;&#x69;&#108;&#x61;&#110;&#105;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x68;&#x67;&#x69;&#108;&#97;&#110;&#x69;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a> (http://himanshu.gilani.info)",
   "private": true,
   "scripts": {</p>
 

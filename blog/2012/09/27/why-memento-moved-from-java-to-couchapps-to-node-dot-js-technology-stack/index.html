@@ -110,6 +110,9 @@
 
 <p>With my lean strategy in mind I quickly used <a href="http://www.springsource.org/spring-roo"><strong>Spring Roo</strong></a>, a rapid application development tool for Java developers to generate the complete app with front-end, back-end, authentication, persistence, logging, and unit tests within couple of hours. So far I was happy.</p>
 
+<!-- more -->
+
+
 <p>Now it was time to learn the magic tool and enhance the app. After hacking on Spring Roo for a couple of days I developed a good understanding of how it works. I absolutely loved the way it bootstrapped the complete app. It’s an absolute must-use tool for anyone who wants to bootstrap a Java web application. Though it has these great features, there are also some not-so-great ones. For front-end of the app, Spring Roo (spring-roo-1.1.4.RELEASE) used Dojo JavaScript framework, Spring MVC JSP tags, and JSPX technology. And the entire front-end generation was tied to the database model. This meant every time I made changes to the database model my user-interface was affected. After some initial hacking I came to an understanding that Spring Roo is not an ideal tool for managing the front-end. With this knowledge I decided to stop using it for managing the user interface changes. I was happy with this decision, as I wanted Memento to have an awesome user interface that I enjoyed using. And this would have required a lot of custom changes.</p>
 
 <p>As the next step I started implementing the back-end logic for the memento. I decided that I will not develop any new logic without writing unit tests for it. These unit tests were really crucial for me because they allow you to discover problems quickly, and reduce manual testing time. After about two months I had a basic MVP (minimum viable product) ready and I wanted to host Memento on the web.</p>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: express | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/express/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-03-05T10:08:16+01:00</updated>
+  <updated>2013-03-05T10:16:26+01:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -35,6 +35,9 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 </code></p>
+
+<!-- more -->
+
 
 <p>In the code <code>development</code> refers to the dev environment. Any dev specific setup that you want to do can be configured under this block. This snippet just configures a error handler for the dev environment. If you need to configure settings for any other environments like staging, production, etc then you can configure them the same way.</p>
 
