@@ -56,7 +56,7 @@ First this we need to do is upgrade ruby to the latest version. For this I am us
 4. yum: This cookbook configures the various yum components on Red Hat-like systems. Even though yum is not used on ubuntu this cookook is needed as it seems to be the pre-requisite for the rbenv cookbook.
 5. ruby_build: Contains LWRP for the rbenv cookbook.
 
-??? give a link to my cookbook repo ???
+Note: You can download All the Cookbooks used in this post from my [cookbooks repo on github](https://github.com/hgilani/cookbooks)
 
 With this run-list Vagrantfile would have following chef settings
 
