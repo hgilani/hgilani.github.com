@@ -4,7 +4,7 @@
   <title><![CDATA[Category: virtualbox | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/virtualbox/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-11-12T10:29:46+01:00</updated>
+  <updated>2013-11-12T10:49:06+01:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -78,7 +78,7 @@ end
 </ol>
 
 
-<p>??? give a link to my cookbook repo ???</p>
+<p>Note: You can download All the Cookbooks used in this post from my <a href="https://github.com/hgilani/cookbooks">cookbooks repo on github</a></p>
 
 <p>With this run-list Vagrantfile would have following chef settings</p>
 
