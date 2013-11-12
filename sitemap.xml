@@ -45,15 +45,21 @@
         <lastmod>2013-03-05T10:08:11+01:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/
+        </loc>
+        <lastmod>2013-11-12T10:19:41+01:00</lastmod>
+    </url>
+    <url>
         <loc>http://hgilani.github.com/about-me/</loc>
         <lastmod>2013-01-16T10:28:20+01:00</lastmod>
     </url>
     <url>
         <loc>http://hgilani.github.com/blog/archives/</loc>
-        <lastmod>2013-03-05T10:15:07+01:00</lastmod>
+        <lastmod>2013-11-12T10:19:41+01:00</lastmod>
     </url>
     <url>
         <loc>http://hgilani.github.com/</loc>
-        <lastmod>2013-03-05T10:15:07+01:00</lastmod>
+        <lastmod>2013-11-12T10:19:41+01:00</lastmod>
     </url>
 </urlset>

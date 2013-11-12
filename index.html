@@ -9,7 +9,7 @@
   <meta name="author" content="Himanshu Gilani">
 
   
-  <meta name="description" content="In part 1 of this post I explained how to track page views and events in Google Analytics. In this post I will explain How to use Google Analytics &hellip;">
+  <meta name="description" content="Vagrant is a powerful tool as it allows us to create &#8220;lightweight, reproducible, and portable&#8221; Virtual Machines (VM) on the developer &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Configuring a Vagrant VM as Chef Workstation: Part 1</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-12T10:15:00+01:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://vagrantup.com">Vagrant</a> is a powerful tool as it allows us to create &#8220;lightweight, reproducible, and portable&#8221; Virtual Machines (VM) on the developer machine using provisioning tools like chef and puppet. If you are using chef as the provisioning tool then you would already know that vagrant VM already has <code>chef-client</code> tool installed along with the version of ruby. Since the vagrant VM already has <code>chef-client</code> and <code>ruby</code> it should be straightforward to use any vagrant VM as a workstation for working the Hosted Chef server for provisioning and maintaining VMs in cloud services like AWS and Rackspace. However, I found this not to be the case and I realized that the process of configuring a chef workstation is rather convoluted as both the version of chef-client and its pre-requisite ruby are really old versions of the software that result in all sorts of errors on trying to use the latest chef plug-ins and services. In the end after a lot of trial and error I came to realize that before you can Vagrant VM as chef workstation you need to configure latest version of chef and ruby.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -548,6 +591,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Configuring a Vagrant VM as Chef Workstation: Part 1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/">Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources</a>
       </li>
     
@@ -561,10 +608,6 @@
     
       <li class="post">
         <a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/17/npm-features-and-options-demystified/">NPM Features and Options Demystified</a>
       </li>
     
   </ul>

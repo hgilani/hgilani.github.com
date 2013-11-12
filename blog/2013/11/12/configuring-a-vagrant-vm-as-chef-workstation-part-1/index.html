@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Configuring a Vagrant VM as Chef Workstation: Part 1 - Himanshu Gilani</title>
+  <meta name="author" content="Himanshu Gilani">
+
+  
+  <meta name="description" content="Vagrant is a powerful tool as it allows us to create &#8220;lightweight, reproducible, and portable&#8221; Virtual Machines (VM) on the developer &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Himanshu Gilani" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34055934-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Himanshu Gilani</a></h1>
+  
+    <h2>Web Developer and Entrepreneur. Founder of mementodb.com</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgilani.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Configuring a Vagrant VM as Chef Workstation: Part 1</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-12T10:15:00+01:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://vagrantup.com">Vagrant</a> is a powerful tool as it allows us to create &#8220;lightweight, reproducible, and portable&#8221; Virtual Machines (VM) on the developer machine using provisioning tools like chef and puppet. If you are using chef as the provisioning tool then you would already know that vagrant VM already has <code>chef-client</code> tool installed along with the version of ruby. Since the vagrant VM already has <code>chef-client</code> and <code>ruby</code> it should be straightforward to use any vagrant VM as a workstation for working the Hosted Chef server for provisioning and maintaining VMs in cloud services like AWS and Rackspace. However, I found this not to be the case and I realized that the process of configuring a chef workstation is rather convoluted as both the version of chef-client and its pre-requisite ruby are really old versions of the software that result in all sorts of errors on trying to use the latest chef plug-ins and services. In the end after a lot of trial and error I came to realize that before you can Vagrant VM as chef workstation you need to configure latest version of chef and ruby.</p>
+
+<!-- more -->
+
+
+<p>Following are the steps for configuring a vagrant VM as chef workstation. Chances are that you have already using and have both VirtualBox and Vagrant installed on your system. If this is the case, skip the first 2 steps and start with step 3.</p>
+
+<h2>Step 1: Install VirtualBox</h2>
+
+<p>VirtualBox is an open source virtualization application that allows you to create Virtual machines on Windows, Linux, Macintosh, and Solaris hosts. To get started install the latest version of VirtualBox. For this download and install the latest version for your OS from the <a href="https://www.virtualbox.org/wiki/Downloads">VirtualbBx download page.</a>.</p>
+
+<h2>Stpe 2: Install Vagrant</h2>
+
+<p>Vagrant is a command-line tool that can be used for provisioning and configuring VMs running in VirtualBox. For provisioning VMs it integrates with provisioning tools like chef and puppet. Vagrant also has a concept of <code>Vagrantfile</code> which uses ruby DSL and contains instructions on how a VM should be configured and provisioned. You can read more about Vagrant on its <a href="http://vagrantup.com">website</a> which has excellent documentation. You can download and install the latest version of vagrant for your OS from the <a href="http://downloads.vagrantup.com">Vagrant downloads page.</a></p>
+
+<p><strong>Note</strong>: Vagrant also supports VMWare if you purchase a license.</p>
+
+<h2>Step 3: Create VM using following Vagrantfile</h2>
+
+<p>Lets start with a bare bones Vagrantfile. In the chef run-list you would see <code>apt</code> cookbook which is used to update the <strong>Ubuntu</strong> package repositories</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># -*- mode: ruby -*-
+</span><span class='line'># vi: set ft=ruby :
+</span><span class='line'>
+</span><span class='line'># Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+</span><span class='line'>VAGRANTFILE_API_VERSION = "2"
+</span><span class='line'>
+</span><span class='line'>Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+</span><span class='line'>  config.vm.box = "precise64"
+</span><span class='line'>  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+</span><span class='line'> 
+</span><span class='line'>  config.vm.provision :chef_solo do |chef| 
+</span><span class='line'>    chef.log_level = :debug    
+</span><span class='line'>    chef.cookbooks_path = "~/Dropbox/chef/cookbooks" 
+</span><span class='line'>
+</span><span class='line'>    chef.add_recipe ("apt")
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Step 4: Upgrade Ruby</h2>
+
+<p>First this we need to do is upgrade ruby to the latest version. For this I am using following cookbooks in my chef run-list</p>
+
+<ol>
+<li>apt: Used to configure and manage the apt package repositories and proxy settings.</li>
+<li>git: We would use git for managing cookbooks.</li>
+<li>build-essential: This cookbook installs the tools and packages required for compiling software from source.</li>
+<li>yum: This cookbook configures the various yum components on Red Hat-like systems. Even though yum is not used on ubuntu this cookook is needed as it seems to be the pre-requisite for the rbenv cookbook.</li>
+<li>ruby_build: Contains LWRP for the rbenv cookbook.</li>
+</ol>
+
+
+<p>??? give a link to my cookbook repo ???</p>
+
+<p>With this run-list Vagrantfile would have following chef settings</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  config.vm.provision :chef_solo do |chef| 
+</span><span class='line'>    chef.log_level = :debug    
+</span><span class='line'>    chef.cookbooks_path = "~/Dropbox/chef/cookbooks" 
+</span><span class='line'>
+</span><span class='line'>    chef.add_recipe ("apt")   
+</span><span class='line'>    chef.add_recipe ("git")
+</span><span class='line'>    chef.add_recipe ("yum")
+</span><span class='line'>    chef.add_recipe "build-essential"
+</span><span class='line'>    chef.add_recipe "ruby_build"
+</span><span class='line'>    chef.add_recipe "rbenv::vagrant"
+</span><span class='line'>    chef.add_recipe "rbenv::user"
+</span><span class='line'>
+</span><span class='line'>    chef.json = {
+</span><span class='line'>      'rbenv' =&gt; {
+</span><span class='line'>        'user_installs' =&gt; [
+</span><span class='line'>          {
+</span><span class='line'>            'user'    =&gt; 'vagrant',
+</span><span class='line'>            'rubies'  =&gt; ['2.0.0-p247'],
+</span><span class='line'>            'global'  =&gt; '2.0.0-p247',
+</span><span class='line'>            'gems'    =&gt; {
+</span><span class='line'>              '2.0.0-p247' =&gt; [
+</span><span class='line'>                { 'name'    =&gt; 'bundler' },
+</span><span class='line'>                { 'name'    =&gt; 'rails' },
+</span><span class='line'>                { 'name'    =&gt; 'haml' }
+</span><span class='line'>              ]
+</span><span class='line'>            }
+</span><span class='line'>          }
+</span><span class='line'>        ]
+</span><span class='line'>        }
+</span><span class='line'>      }
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice that in the <code>chef.json</code> block in the above code snippet we configured to install Ruby version <code>2.0.0-p247</code>. We also configured to install ruby gems <code>bundler</code>,<code>rails</code>, and <code>haml</code>. We would need these gems in our chef workstation later on when we want to install chef plug-ins for working with AWS and Rackspace.</p>
+
+<h2>Step 5: Upgrade Chef</h2>
+
+<p>For upgrading chef you need to install the vagrant-omnibus plug-in. For these execute the following command in you host OS (do not do this in VM)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant plugin install vagrant-omnibus</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once this plug-in is installed you can tell vagrant to upgrade to the latest version of chef by adding following line in the Vagranfile.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>config.omnibus.chef_version = :latest</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you have followed thus far following is you Vagrantfile</p>
+
+<div><script src='https://gist.github.com/7426779.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist/7426779&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>Running <code>vagrant provision</code> would now upgrade both ruby and chef to the latest version.</p>
+
+<p>In the next post I would discuss the steps for configuring chef workstation and we would provision a Rackspace VM.</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Himanshu Gilani</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-12T10:15:00+01:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/chef/'>chef</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/vagrant/'>vagrant</a>, <a class='category' href='/blog/categories/virtualbox/'>virtualbox</a>, <a class='category' href='/blog/categories/vm/'>vm</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/" data-via="hgilani" data-counturl="http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/" title="Previous Post: Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources">&laquo; Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Configuring a Vagrant VM as Chef Workstation: Part 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/">Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hgilani">@hgilani</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hgilani',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("hgilani", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/hgilani" class="twitter-follow-button" data-show-count="false">Follow @hgilani</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Himanshu Gilani -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'hgilani';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/';
+        var disqus_url = 'http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
