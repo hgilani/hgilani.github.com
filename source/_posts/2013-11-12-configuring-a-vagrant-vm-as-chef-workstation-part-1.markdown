@@ -3,7 +3,7 @@ layout: post
 title: "Configuring a Vagrant VM as Chef Workstation: Part 1"
 date: 2013-11-12 10:15
 comments: true
-categories: ["chef", "vagrant", "virtualbox", "vm", "ruby"] 
+categories: "chef","vagrant","virtualbox","vm","ruby","devops" 
 ---
 
 [Vagrant](http://vagrantup.com) is a powerful tool as it allows us to create "lightweight, reproducible, and portable" Virtual Machines (VM) on the developer machine using provisioning tools like chef and puppet. If you are using chef as the provisioning tool then you would already know that vagrant VM already has `chef-client` tool installed along with the version of ruby. Since the vagrant VM already has `chef-client` and `ruby` it should be straightforward to use any vagrant VM as a workstation for working the Hosted Chef server for provisioning and maintaining VMs in cloud services like AWS and Rackspace. However, I found this not to be the case and I realized that the process of configuring a chef workstation is rather convoluted as both the version of chef-client and its pre-requisite ruby are really old versions of the software that result in all sorts of errors on trying to use the latest chef plug-ins and services. In the end after a lot of trial and error I came to realize that before you can Vagrant VM as chef workstation you need to configure latest version of chef and ruby.

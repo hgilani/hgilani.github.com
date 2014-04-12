@@ -3,8 +3,9 @@ layout: post
 title: "Scripting Google Analytics: Part 1 - Tracking Pages and Events"
 date: 2013-01-16 11:31
 comments: true
-categories: ["analytics","google-analytics"] 
+categories: analytics,google-analytics
 ---
+
 [Google Analytics](http://www.google.com/analytics) is a free web analytics tool from Google that you can use for tracking website statistics like page views, traffic sources, audience information, goals, funnels, etc. While a lot of the stuff is tracked automatically, it becomes overwhelming pretty quickly if you want to track customize analytics or want to track or create custom metrics. In this post, I will detail things I learned by experimenting with Google Analytics.
 
 <!-- more -->

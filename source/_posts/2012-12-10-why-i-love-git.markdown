@@ -3,7 +3,7 @@ layout: post
 title: "Why I Love Git"
 date: 2012-12-10 11:05
 comments: true
-categories: ["Git","SVN","DVCS"] 
+categories: Git,SVN,DVCS
 ---
 
 Recently I was in a discussion with couple of friends who still have to migrate on to the Git version control system. My friends had a lot of questions and showed hesitation in moving from SVN to Git. This post articulates my thoughts on why you should use Git and contains links to some excellent resources on Git that you can use to understand Git quickly.

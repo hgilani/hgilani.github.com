@@ -3,7 +3,7 @@ layout: post
 title: "Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources"
 date: 2013-03-03 21:19
 comments: true
-categories: ["analytics","google-analytics"]
+categories: analytics,google-analytics
 ---
 
 In [part 1](http://himanshu.gilani.info/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/) of this post I explained how to track page views and events in [Google Analytics](http://www.google.com/analytics/). In this post I will explain
