@@ -4,7 +4,7 @@
   <title><![CDATA[Category: npm | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/npm/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2012-08-14T10:12:39+02:00</updated>
+  <updated>2014-04-12T09:05:28+00:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[NPM and package.json]]></title>
     <link href="http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json/"/>
-    <updated>2012-07-29T09:28:00+02:00</updated>
+    <updated>2012-07-29T09:28:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json</id>
     <content type="html"><![CDATA[<p>NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be installed locally for a project or globally for the entire system. Whenever you install packages these packages are fetched from the <a href="https://npmjs.org/">NPM registry</a>.</p>
 
@@ -29,6 +29,9 @@ npm install {package_name}
 </code></p>
 
 <p>This will install NPM package {package_name} in the current working directory. This is typically root of the project.</p>
+
+<!-- more -->
+
 
 <h2>Global Install</h2>
 
@@ -69,7 +72,7 @@ sudo npm install -g {package_name}
 <p>   ],
   "version": "0.0.1-77",
   "homepage": "http://mementodb.com",
-  "author": "Himanshu Gilani <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#104;&#103;&#x69;&#x6c;&#x61;&#x6e;&#105;&#x40;&#103;&#109;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;">&#104;&#x67;&#105;&#x6c;&#x61;&#110;&#105;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#x6d;</a> (http://himanshu.gilani.info)",
+  "author": "Himanshu Gilani <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x68;&#x67;&#105;&#x6c;&#x61;&#x6e;&#105;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#104;&#103;&#105;&#108;&#97;&#x6e;&#105;&#x40;&#x67;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#109;</a> (http://himanshu.gilani.info)",
   "private": true,
   "scripts": {</p>
 
@@ -128,6 +131,8 @@ sudo npm install -g {package_name}
 <li><a href="http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules">Ten Lessons Learned Maintaining Nodejs Modules</a></li>
 </ul>
 
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
 ]]></content>
   </entry>
   

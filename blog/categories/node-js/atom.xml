@@ -4,7 +4,7 @@
   <title><![CDATA[Category: node.js | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/node-js/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2012-08-14T10:12:39+02:00</updated>
+  <updated>2014-04-12T09:05:28+00:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -14,9 +14,194 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Why Memento moved from Java to CouchApps to Node.js Technology Stack]]></title>
+    <link href="http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/"/>
+    <updated>2012-09-27T19:53:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack</id>
+    <content type="html"><![CDATA[<p><a href="http://mementodb.com">Memento</a>, the app that I launched recently has already seen three technology stack changes. I started working on memento to be able to keep what I find on web with me as a personal memento. Being a Java architect I kicked off memento using Java. Since I was a solo developer on this project I wanted to keep everything lean in order to iterate quickly. This meant having an automatic code generation for the boilerplate code, using simple and powerful frameworks, following best practices, and tons of unit tests for making changes quickly and verifying the health of the app.</p>
+
+<h2>Spring Roo</h2>
+
+<p>With my lean strategy in mind I quickly used <a href="http://www.springsource.org/spring-roo"><strong>Spring Roo</strong></a>, a rapid application development tool for Java developers to generate the complete app with front-end, back-end, authentication, persistence, logging, and unit tests within couple of hours. So far I was happy.</p>
+
+<!-- more -->
+
+
+<p>Now it was time to learn the magic tool and enhance the app. After hacking on Spring Roo for a couple of days I developed a good understanding of how it works. I absolutely loved the way it bootstrapped the complete app. It’s an absolute must-use tool for anyone who wants to bootstrap a Java web application. Though it has these great features, there are also some not-so-great ones. For front-end of the app, Spring Roo (spring-roo-1.1.4.RELEASE) used Dojo JavaScript framework, Spring MVC JSP tags, and JSPX technology. And the entire front-end generation was tied to the database model. This meant every time I made changes to the database model my user-interface was affected. After some initial hacking I came to an understanding that Spring Roo is not an ideal tool for managing the front-end. With this knowledge I decided to stop using it for managing the user interface changes. I was happy with this decision, as I wanted Memento to have an awesome user interface that I enjoyed using. And this would have required a lot of custom changes.</p>
+
+<p>As the next step I started implementing the back-end logic for the memento. I decided that I will not develop any new logic without writing unit tests for it. These unit tests were really crucial for me because they allow you to discover problems quickly, and reduce manual testing time. After about two months I had a basic MVP (minimum viable product) ready and I wanted to host Memento on the web.</p>
+
+<h2>VPS and EC2</h2>
+
+<p>I started with a VPS provider, <a href="http://webfaction.com"><strong>Webfaction</strong></a>, for hosting Memento. After spending some time on configuring the VPS m/c and deploying Memento I was happy that memento was up and running. To my surprise, in the next one hour I go an email from the <strong>WebFction</strong> support that they have the killed the java process for my app as it was taking too much memory. This confused me since during the app development I never noticed any abnormal memory usage. This led to a realization that hosting a basic app on <a href="http://tomcat.apache.org">Tomcat</a> or <a href="http://jetty.codehaus.org">Jetty</a> servlet container required 256 MB of minimum RAM. In my opinion this is due to JVM overhead and th number of jars (58 jar files) that memento was loading in the JVM due to frameworks selected. This kicked VPS provider out of equation.</p>
+
+<p>Next I decided to evaluate <a href="http://aws.amazon.com/">Amazon EC2</a>. For new customers Amazon EC2 provides a micro instance free for the first year. This meant no upfront cost to get started and no more memory constraints. After using Memento on EC2 for a month, I decided to host a continuous integration server, <a href="http://www.eclipse.org/hudson/">Hudson</a>. At this point I got another surprise. Whenever CI server started building memento on code commits entire EC2 instance would freeze. After some debugging I realized that's how Amazon wants a micro instance to perform. It defines a micro instance as-</p>
+
+<p>"Micro instances (t1.micro) provide a small amount of consistent CPU resources and allow you to increase CPU capacity in short bursts when additional cycles are available. They are well suited for lower throughput applications and web sites that require additional compute cycles periodically"</p>
+
+<p>What this definition does not tell is that every time there is some constant CPU activity for 3 seconds, entire micro-instance will halt for next 6 seconds as it will not get any CPU cycle. This meant EC2 micro instances are not suitable for even light CPU intensive jobs. Once I figured out how CPU bursts work on a EC2 micro instance, I stopped using it as the CI server.</p>
+
+<p>My experience around memory and CPU utilization got me thinking about how to design memento for low resource utilization.</p>
+
+<h2>Moving on to CouchDB and CouchApps</h2>
+
+<p>At the time I was searching for a solution to archive web pages. I did not want to store the web pages in SQL database as that would have caused the database to grow to pretty quickly with maintenance overhead. After some research I decided to use NoSQL data store <a href="http://couchdb.apache.org">CouchDB</a> for storing web pages. I started hacking its <strong>Map</strong> <strong>Reduce</strong> views for querying data and came to know about CouchApps.</p>
+
+<p>Following is how <a href="http://couchapp.org">couchapp.org</a> defines what are CouchApps</p>
+
+<p>"CouchApps are JavaScript and HTML5 applications served directly from CouchDB. If you can fit your application into those constraints, then you get CouchDB's scalability and flexibility "for free" (and deploying your app is as simple as replicating it to the production server)."</p>
+
+<p>My initial thought was that CouchApp would act as a lean 2-tier stack with no middle tier and a low resource utilization.I decided to rewrite the java version of memento as CouchApp. However, this technology stack change was not as smooth as I anticipated. It required learning the CouchApps technology and its tool chain for building/deploying the app. This obviously resulted in a tremendous learning effort. JavaScript, jQuery, Sammy.js, Compass, Sass, and Node.js were learnt. After 6 months the second version of the MVP was ready as CouchApp and now it was again time to host it on the web.</p>
+
+<p>This is when I started realizing the limitations of the CouchApps. Since, the app was hosted out of the CouchDB database I was forced into funky URLs (as dictated by CouchDB design documents), and weak authentication/security. There was limited community support for libraries and tool chains.</p>
+
+<h2>Node.js</h2>
+
+<p>The CouchApp tool, <a href="http://kan.so/">kan.so</a> that I was using for building and deploying CouchApps introduced me to Node.js. <strong>kan.so</strong> used it for packaging and deploying CouchApps. In the process of rewriting <a href="http://mementodb.com">Memento</a> as a CouchApp I hacked on some of the Node.js modules.</p>
+
+<p>Since I was again researching solutions CouchApp issues it occurred to me that Node.js could act as a thin layer between CouchDB and HTML5 GUI. Node.js is event oriented, asynchronous and has low memory and CPU utilization. Community support for the new features in the language itself and libraries/frameworks is fantastic. I was able to quickly iterate third version of MVP using Node.js within next three months and this is the version that is live in production today :-)</p>
+
+<p>After working with Node.js technology stack I can now say with certainty that Node.js is my favorite language. It is the secret ingredient in Memento. Having said this Java still remains my first love.</p>
+
+<h2>Conclusion</h2>
+
+<ol>
+<li>Java is good for developing apps and services when resource utilization is not an issue or if you want to write CPU intensive services.</li>
+<li>CouchApps are good for rapid prototyping and for apps that do not have strict security requirements.</li>
+<li>Node.js is even driven, light-weight and perfect langauge for developing next generation responsive applications.</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Bootstraping a Node.js App for Dev/Prod Environment]]></title>
+    <link href="http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/"/>
+    <updated>2012-09-26T19:30:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment</id>
+    <content type="html"><![CDATA[<p>Setting up a web server in node is really simple. A <a href="http://nodeguide.com/beginner.html#a-hello-world-http-server">basic hello world http server</a> can be written in under 10 lines. However, if you want to write a production grade app then you are better of by using any framework that provides foundation and structure to your logic. When choosing frameworks there are no right or wrong answers. Important thing is to select a framework that is being actively developed, has community support and most of important of all you love the way it works.</p>
+
+<h2>Bootstrap a Node.js App with Express Application</h2>
+
+<p><a href="http://expressjs.com">Express</a> is a web application framework for Node.js. It is simple to use and can be configured to work with popular technologies. To understand how Express works you can follow the <a href="http://expressjs.com/guide.html">Getting Started</a> page on the express web site. This guide also explains <a href="http://expressjs.com/guide.html#executable">how to use the express global executable</a> for generating a skeleton web app.</p>
+
+<p>Once you have generated a skeleton web application. You need to understand how to structure the skeleton app for the Dev/Prod parity as well as making few changes to the app for making your app modular.</p>
+
+<h3>Dev/Prod parity</h3>
+
+<p>You will notice following snippet in the skeleton app</p>
+
+<p><code>
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
+</code></p>
+
+<!-- more -->
+
+
+<p>In the code <code>development</code> refers to the dev environment. Any dev specific setup that you want to do can be configured under this block. This snippet just configures a error handler for the dev environment. If you need to configure settings for any other environments like staging, production, etc then you can configure them the same way.</p>
+
+<p>```
+app.configure('production', function(){</p>
+
+<p>  // production env. specific settings</p>
+
+<p>});
+```</p>
+
+<h3>process.env</h3>
+
+<p>In your express skeleton you will notice that port on which your app listens is configured as following</p>
+
+<p><code>
+process.env.PORT
+</code></p>
+
+<p>Now you may begin to think what is <code>process.env</code>. Node.js <a href="http://nodejs.org/api/process.html#process_process">documentation</a> defines the <code>process</code> as a global object that can be accessed from anywhere. And <code>process.env</code> is an object that contains the user environment.</p>
+
+<p>If you were running in bash shell and you have configured a <code>PORT</code> environment variable with value <code>80</code> then inside the app <code>process.env.PORT</code> will have the value 80. In the same vein you can configure a NODE_ENV environment variable that indicates to express in which environment it is executing.</p>
+
+<p>On the production host you can execute</p>
+
+<p><code>
+export port=80
+export NODE_ENV=prodction
+</code></p>
+
+<p>And on the development host you can let express use its default settings of running on port 3000 and set NODE_ENV to 'development'</p>
+
+<h3>Simulating production environment during testing</h3>
+
+<p>If you ever want to simulate production environment for testing then that is easy. This can be easily done without configuring NODE_ENV variable in your environment. Instead of starting your app using <code>node app.js</code> you can start it as following</p>
+
+<p><code>  
+NODE_ENV=production node app.js
+</code>
+This way NODE_ENV variable is only set for the current process execution and the value is not persisted in the environment settings.</p>
+
+<h3>env.json</h3>
+
+<p>Setting environment variables to configure different settings for different environment is nice but it does not scale well. What we need is persistent storage for the environment properties that can act as a gold standard and is simple and easy to use. Meet <strong>env.json</strong>, add a new file in the project root with the name <code>env.json</code>. You can structure this file in the following way add key/value properties with right settings per environment.</p>
+
+<p>```
+{</p>
+
+<pre><code>"development": {
+    "facebook_app_id": "facebook_dummy_dev_app_id",
+    "facebook_app_secret": "facebook_dummy_dev_app_secret",
+}, 
+"production": {
+    "facebook_app_id": "facebook_dummy_prod_app_id",
+    "facebook_app_secret": "facebook_dummy_prod_app_secret",
+}
+</code></pre>
+
+<p>```</p>
+
+<p>This snippet shows how to configure same settings for development and production environment. If you ever has a need to add a new environment, then you can simply extend this file and add another property block.</p>
+
+<p>Working with <code>env.json</code> is easy. In node parsing is a json file is as simple as loading the file using <code>require</code> statement.</p>
+
+<p>I like to abstract all the code that I can reuse as functions in <code>common.js</code> file. So start by creating <code>common.js</code> file. Following is the parsing logic for env.json in this file.</p>
+
+<p>```
+var env = require('env.json');</p>
+
+<p>exports.config = function() {</p>
+
+<pre><code>var node_env = process.env.NODE_ENV || 'development';
+return env[node_env];
+</code></pre>
+
+<p>};
+```</p>
+
+<p>Once you have created the common.js file using it for reading environment specific properties is as simple as loading it in app.js and using an object property.</p>
+
+<p>```
+var common = require('./routes/common')
+var config = common.config();</p>
+
+<p>...</p>
+
+<p>var facebook_app_id = config.facebook_app_id;
+// do something with facebook_app_id</p>
+
+<p>```</p>
+
+<h3>Structuring express application with Open/Closed principle</h3>
+
+<p>After you have configured app.js correctly. You want to close it down from future modifications but you still need a way to extend it by adding new routes to the app. This is simple and easy to do. Read <a href="http://blog.pixelingene.com/2012/06/a-simple-organization-scheme-for-expressjs-apps/">A Simple Organization Scheme for Handling Routes in ExpressJS Apps</a> for understanding how to do this by establishing some conventions for your project.</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[NPM and package.json]]></title>
     <link href="http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json/"/>
-    <updated>2012-07-29T09:28:00+02:00</updated>
+    <updated>2012-07-29T09:28:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json</id>
     <content type="html"><![CDATA[<p>NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be installed locally for a project or globally for the entire system. Whenever you install packages these packages are fetched from the <a href="https://npmjs.org/">NPM registry</a>.</p>
 
@@ -29,6 +214,9 @@ npm install {package_name}
 </code></p>
 
 <p>This will install NPM package {package_name} in the current working directory. This is typically root of the project.</p>
+
+<!-- more -->
+
 
 <h2>Global Install</h2>
 
@@ -69,7 +257,7 @@ sudo npm install -g {package_name}
 <p>   ],
   "version": "0.0.1-77",
   "homepage": "http://mementodb.com",
-  "author": "Himanshu Gilani <a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x68;&#x67;&#105;&#108;&#97;&#110;&#105;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;">&#104;&#103;&#x69;&#108;&#97;&#x6e;&#105;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a> (http://himanshu.gilani.info)",
+  "author": "Himanshu Gilani <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x68;&#103;&#x69;&#108;&#x61;&#110;&#x69;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;">&#104;&#x67;&#x69;&#108;&#97;&#110;&#x69;&#64;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a> (http://himanshu.gilani.info)",
   "private": true,
   "scripts": {</p>
 
@@ -128,6 +316,8 @@ sudo npm install -g {package_name}
 <li><a href="http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules">Ten Lessons Learned Maintaining Nodejs Modules</a></li>
 </ul>
 
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
 ]]></content>
   </entry>
   

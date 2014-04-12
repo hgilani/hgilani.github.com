@@ -4,7 +4,7 @@
   <title><![CDATA[Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2012-08-14T10:12:39+02:00</updated>
+  <updated>2014-04-12T09:05:28+00:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -14,9 +14,1227 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Configuring a Vagrant VM as Chef Workstation: Part 2]]></title>
+    <link href="http://hgilani.github.com/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/"/>
+    <updated>2014-04-12T08:19:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2</id>
+    <content type="html"><![CDATA[<p>In this part we would configure chef workstation that we created in <a href="http://himanshu.gilani.info/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Part 1</a> to provision nodes on the Rackspace cloud provider.</p>
+
+<h2>Chef Terminology</h2>
+
+<p>Before we go over details of how to provision a Rackspace VM, lets review the chef terminology so that we have some common vocabulary</p>
+
+<ul>
+<li><strong>Nodes</strong>: Servers, VMs or physical machines or cloud instances.</li>
+<li><strong>Cookbook</strong>: A cookbook is a collection of recipes, attributes, and templates that Chef uses to package, distribute, and share configuration details. A chef repository can have many cookbooks and typically a cookbook configures only one service.</li>
+<li><strong>Roles</strong>: Roles are a way to group nodes by the function. Each role is associated with a run_list i.e. a set of cookbook/recipies that need to execute in given sequence for configuring the node. Nodes can have multiple roles.</li>
+<li><strong>Environments</strong>: In chef different nodes could belong to different environments like dev, stage, prod, etc. Like roles environments also have a run_list.</li>
+<li><strong>Data Bags</strong>: Data bags are like cookbook attributes but are used to store sensitive information like passwords, api keys, secrets, etc.</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Setup Chef Server</h2>
+
+<p>Chef is a real powerful tool and comes in 2 different flavors at a high level i.e. chef server or chef solo. If you want to manage a single node then chef-solo is real simple and the way to go, but if you want to manage a set of nodes in a dynamic environment then chef-server is the way to go. Chef-serve tracks all provisioned nodes and manages chef repository i.e. cookbooks, roles, environments, etc.</p>
+
+<p>In this blog post we would use chef server hosted and managed by Opscode (makers of chef). They offer free service that could be used for managing 5 nodes. For setting up a chef-server account do following steps</p>
+
+<ol>
+<li>Sign up for an account at <a href="https://manage.opscode.com/signup">https://manage.opscode.com/signup</a>.</li>
+<li>Once you have created your account download your user key (USER.pem)</li>
+<li>Create an Organization</li>
+<li>Download Organization key (ORGANIZATION-validator.pem)</li>
+<li>Download knife configuration(knife.rb) from the Organization page</li>
+</ol>
+
+
+<p>If you followed steps this far you would have following 3 files</p>
+
+<ol>
+<li>{USERNAME}.pem</li>
+<li>{ORGANIZATION}-validator.pem</li>
+<li>knife.rb</li>
+</ol>
+
+
+<p><strong>NOTE</strong>: In file name above {USERNAME} and {ORGANIZATION} are placeholder for the user name and organization name on chef server.</p>
+
+<p>If you get stuck then refer to <a href="https://learnchef.opscode.com">chef documentation</a>.</p>
+
+<h2>Setup Chef Repository (chef-repo) on your workstation</h2>
+
+<p>For setting up chef repository clone an empty chef repository project in <code>/vagrant</code> folder</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /vagrant
+</span><span class='line'>git clone git://github.com/opscode/chef-repo.git</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, create <code>.chef</code> folder inside the chef-repo folder and copy {USERNAME}.pem, {ORGANIZATION}-validator.pem and knife.rb that you downloaded. If you have followed this far then we would have following in /vagrant/chef-repo folder</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chef-repo
+</span><span class='line'>|-- certificates
+</span><span class='line'>|-- .chef
+</span><span class='line'>|   |-- {USERNAME}.pem
+</span><span class='line'>|   |-- knife.rb
+</span><span class='line'>|   |-- {ORGANIZATION}-validator.pem
+</span><span class='line'>|-- chefignore
+</span><span class='line'>|-- config
+</span><span class='line'>|-- cookbooks
+</span><span class='line'>|-- data_bags
+</span><span class='line'>|-- environments
+</span><span class='line'>|-- roles
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>NOTE</strong>: Since we are using vagrant VM as chef-workstation we created chef-repo in /vagrant folder so that we do not loose chef-repo when we destroy vagrant VM</p>
+
+<h2>knife</h2>
+
+<p>When we installed chef in <a href="http://himanshu.gilani.info/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">part 1</a> it installed knife a command-line tool that provides an interface between a local chef-repo and the Chef server. Knife  manages nodes, roles, environments, data bags, cookbooks, etc on the chef server. In other words, it is a client of the chef server and it interacts with chef server using REST api. It is an essential tool when working with chef and we first need to configure our workspace so that we can use it.</p>
+
+<h3>knife.rb location</h3>
+
+<p>Knife uses configuration in knife.rb file for working with chef server. The default location in which knife expects to find knife.rb file is <code>~/.chef/knife.rb</code>. Since we configured our chef-repo in <code>/vagrant</code> folder we either need to pass location of knife.rb file using &#8211;config option when executing knife commands (yes this needs to be done for every command as I did not find any configuration option for this) or execute all the knife commands from <code>/vagrant/chef-repo</code> folder.</p>
+
+<h3>EDITOR environment variable</h3>
+
+<p>Configure your favorite editor in EDITOR environment variable as some of the knife commands open up an editor so that you modify the roles, environments, data bags, etc in JSON format.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export EDITOR=vi</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Create a role for your node</h2>
+
+<p>Create an empty role file</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>knife role create base</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>NOTE</em>: A role can have a run list of cookbooks or recipes that would be applied to a node. We are using an empty run list as a minimal example.</p>
+
+<h2>knife-rackspace</h2>
+
+<p>Since we would be working with Rackspace cloud provider we need to install <code>knife-rackspace</code> gem so that we can manage nodes on Rackspace. To do this execute following command</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install knife-rackspace</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Creating node on Rackspace</h3>
+
+<p>Since knife-rackspace plugin needs to provision nodes on Rackspace we need to configure Rackspace user and API key first. For this add following in <code>/vagrant/chef-repo/.chef/knife.rb</code> file</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>knife[:rackspace_api_username] = "Your Rackspace API username"
+</span><span class='line'>knife[:rackspace_api_key] = "Your Rackspace API Key"
+</span><span class='line'>knife[:rackspace_version] = 'v2'</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>NOTE</strong>: For production these values should come from environment variables and should not be checked into version control systems.</p>
+
+<p>Now, we can use following command to provision a node in Rackspace</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>knife rackspace server create -r 'role[base]' --server-name mean --node-name mean --image 8a3a9f96-b997-46fd-b7a8-a9e740796ffd --flavor 2 --rackspace-region dfw</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Deleting node on Rackspace</h3>
+
+<p>First find the instance if of node you just create on Rackspace using command <code>knife rackspace server list</code> and then execute following command</p>
+
+<p><code>
+knife rackspace server delete {instance_id} --purge
+</code></p>
+
+<p><strong>NOTE</strong>: For cleaning up nodes on chef-server use &#8211;purge in above command as otherwise you would need to execute following commands as well</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>knife node delete {node_name}
+</span><span class='line'>knife client delete {node_name}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>NOTE</strong>: It is important to delete nodes on Rackspace once you are done testing as otherwise you could incurs costs for running servers on Rackspace.</p>
+
+<p>For details on different command line options for knife-rackspace plugin refer to their <a href="https://github.com/opscode/knife-rackspace">github repo.</a></p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Configuring A Vagrant Vm As Chef Workstation Part 1]]></title>
+    <link href="http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/"/>
+    <updated>2013-11-12T00:00:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1</id>
+    <content type="html"><![CDATA[<p><a href="http://vagrantup.com">Vagrant</a> is a powerful tool as it allows us to create &#8220;lightweight, reproducible, and portable&#8221; Virtual Machines (VM) on the developer machine using provisioning tools like chef and puppet. If you are using chef as the provisioning tool then you would already know that vagrant VM already has <code>chef-client</code> tool installed along with the version of ruby. Since the vagrant VM already has <code>chef-client</code> and <code>ruby</code> it should be straightforward to use any vagrant VM as a workstation for working the Hosted Chef server for provisioning and maintaining VMs in cloud services like AWS and Rackspace. However, I found this not to be the case and I realized that the process of configuring a chef workstation is rather convoluted as both the version of chef-client and its pre-requisite ruby are really old versions of the software that result in all sorts of errors on trying to use the latest chef plug-ins and services. In the end after a lot of trial and error I came to realize that before you can Vagrant VM as chef workstation you need to configure latest version of chef and ruby.</p>
+
+<!-- more -->
+
+
+<p>Following are the steps for configuring a vagrant VM as chef workstation. Chances are that you have already using and have both VirtualBox and Vagrant installed on your system. If this is the case, skip the first 2 steps and start with step 3.</p>
+
+<h2>Step 1: Install VirtualBox</h2>
+
+<p>VirtualBox is an open source virtualization application that allows you to create Virtual machines on Windows, Linux, Macintosh, and Solaris hosts. To get started install the latest version of VirtualBox. For this download and install the latest version for your OS from the <a href="https://www.virtualbox.org/wiki/Downloads">VirtualbBx download page.</a>.</p>
+
+<h2>Stpe 2: Install Vagrant</h2>
+
+<p>Vagrant is a command-line tool that can be used for provisioning and configuring VMs running in VirtualBox. For provisioning VMs it integrates with provisioning tools like chef and puppet. Vagrant also has a concept of <code>Vagrantfile</code> which uses ruby DSL and contains instructions on how a VM should be configured and provisioned. You can read more about Vagrant on its <a href="http://vagrantup.com">website</a> which has excellent documentation. You can download and install the latest version of vagrant for your OS from the <a href="http://downloads.vagrantup.com">Vagrant downloads page.</a></p>
+
+<p><strong>Note</strong>: Vagrant also supports VMWare if you purchase a license.</p>
+
+<h2>Step 3: Create VM using following Vagrantfile</h2>
+
+<p>Lets start with a bare bones Vagrantfile. In the chef run-list you would see <code>apt</code> cookbook which is used to update the <strong>Ubuntu</strong> package repositories</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># -*- mode: ruby -*-
+</span><span class='line'># vi: set ft=ruby :
+</span><span class='line'>
+</span><span class='line'># Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+</span><span class='line'>VAGRANTFILE_API_VERSION = "2"
+</span><span class='line'>
+</span><span class='line'>Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+</span><span class='line'>  config.vm.box = "precise64"
+</span><span class='line'>  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+</span><span class='line'> 
+</span><span class='line'>  config.vm.provision :chef_solo do |chef| 
+</span><span class='line'>    chef.log_level = :debug    
+</span><span class='line'>    chef.cookbooks_path = "~/Dropbox/chef/cookbooks" 
+</span><span class='line'>
+</span><span class='line'>    chef.add_recipe ("apt")
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Step 4: Upgrade Ruby</h2>
+
+<p>First this we need to do is upgrade ruby to the latest version. For this I am using following cookbooks in my chef run-list</p>
+
+<ol>
+<li>apt: Used to configure and manage the apt package repositories and proxy settings.</li>
+<li>git: We would use git for managing cookbooks.</li>
+<li>build-essential: This cookbook installs the tools and packages required for compiling software from source.</li>
+<li>yum: This cookbook configures the various yum components on Red Hat-like systems. Even though yum is not used on ubuntu this cookook is needed as it seems to be the pre-requisite for the rbenv cookbook.</li>
+<li>ruby_build: Contains LWRP for the rbenv cookbook.</li>
+</ol>
+
+
+<p>Note: You can download All the Cookbooks used in this post from my <a href="https://github.com/hgilani/cookbooks">cookbooks repo on github</a></p>
+
+<p>With this run-list Vagrantfile would have following chef settings</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  config.vm.provision :chef_solo do |chef| 
+</span><span class='line'>    chef.log_level = :debug    
+</span><span class='line'>    chef.cookbooks_path = "~/Dropbox/chef/cookbooks" 
+</span><span class='line'>
+</span><span class='line'>    chef.add_recipe ("apt")   
+</span><span class='line'>    chef.add_recipe ("git")
+</span><span class='line'>    chef.add_recipe ("yum")
+</span><span class='line'>    chef.add_recipe "build-essential"
+</span><span class='line'>    chef.add_recipe "ruby_build"
+</span><span class='line'>    chef.add_recipe "rbenv::vagrant"
+</span><span class='line'>    chef.add_recipe "rbenv::user"
+</span><span class='line'>
+</span><span class='line'>    chef.json = {
+</span><span class='line'>      'rbenv' =&gt; {
+</span><span class='line'>        'user_installs' =&gt; [
+</span><span class='line'>          {
+</span><span class='line'>            'user'    =&gt; 'vagrant',
+</span><span class='line'>            'rubies'  =&gt; ['2.0.0-p247'],
+</span><span class='line'>            'global'  =&gt; '2.0.0-p247',
+</span><span class='line'>            'gems'    =&gt; {
+</span><span class='line'>              '2.0.0-p247' =&gt; [
+</span><span class='line'>                { 'name'    =&gt; 'bundler' },
+</span><span class='line'>                { 'name'    =&gt; 'rails' },
+</span><span class='line'>                { 'name'    =&gt; 'haml' }
+</span><span class='line'>              ]
+</span><span class='line'>            }
+</span><span class='line'>          }
+</span><span class='line'>        ]
+</span><span class='line'>        }
+</span><span class='line'>      }
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice that in the <code>chef.json</code> block in the above code snippet we configured to install Ruby version <code>2.0.0-p247</code>. We also configured to install ruby gems <code>bundler</code>,<code>rails</code>, and <code>haml</code>. We would need these gems in our chef workstation later on when we want to install chef plug-ins for working with AWS and Rackspace.</p>
+
+<h2>Step 5: Upgrade Chef</h2>
+
+<p>For upgrading chef you need to install the vagrant-omnibus plug-in. For these execute the following command in you host OS (do not do this in VM)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant plugin install vagrant-omnibus</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once this plug-in is installed you can tell vagrant to upgrade to the latest version of chef by adding following line in the Vagranfile.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>config.omnibus.chef_version = :latest</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you have followed thus far following is you Vagrantfile</p>
+
+<div><script src='https://gist.github.com/7426779.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist/7426779&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>Running <code>vagrant provision</code> would now upgrade both ruby and chef to the latest version.</p>
+
+<p>In the next post I would discuss the steps for configuring chef workstation and we would provision a Rackspace VM.</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources]]></title>
+    <link href="http://hgilani.github.com/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/"/>
+    <updated>2013-03-03T21:19:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources</id>
+    <content type="html"><![CDATA[<p>In <a href="http://himanshu.gilani.info/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">part 1</a> of this post I explained how to track page views and events in <a href="http://www.google.com/analytics/">Google Analytics</a>. In this post I will explain</p>
+
+<ol>
+<li>How to use Google Analytics for logging data and javascript errors.</li>
+<li>Custom Variables in Google Analytics.</li>
+<li>How to use Google Analytics for track traffic sources.</li>
+</ol>
+
+
+<!-- more -->
+
+
+<h2>Logging data and Javascript Errors</h2>
+
+<p>Google Analytics events could be used for logging custom data and tracking Javascript errors in Google Analytics. For logging data just execute following</p>
+
+<figure class='code'><figcaption><span>Logging Data</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">_gaq</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span> <span class="s1">&#39;Data to log...&#39;</span><span class="p">,</span> <span class="nx">url</span><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This mechanism could also be used to track error codes or messages received from AJAX calls or a REST service call. Following example assumes <code>response.code</code> contains the error code received in an AJAX call.</p>
+
+<figure class='code'><figcaption><span>Logging Error Codes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">_gaq</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">code</span><span class="p">,</span> <span class="nx">url</span><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We could also use the same approach for tracking global javascript errors that are not handled.</p>
+
+<figure class='code'><figcaption><span>Tracking Javascript errors using Google Analytics</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">lineNumber</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">_gaq</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="nx">file</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">lineNumber</span><span class="p">,</span> <span class="nx">message</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="p">]);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This snippet simply attaches a callback on the <code>onerror</code> callback of the <code>window</code> object for logging errors.</p>
+
+<h2>Custom Variables</h2>
+
+<p>Google Analytics is pretty good in tracking page views, but a lot of times we need a way to attach custom data to the page views. Custom variables in Google Analytics lets you do this. For setting a custom variable you could add following snippet</p>
+
+<figure class='code'><figcaption><span>Setting Up Custom Variables</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">_gaq</span><span class="o">.</span><span class="n">_setCustomVar</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the above snippet, <code>_setCustomVar</code> has 4 arguments.</p>
+
+<ul>
+<li><code>index</code> argument is a slot or the position of the variable. Google Analytics only allows you track 5 variables per page page view and as a result this argument has a value between 1 to 5.</li>
+<li><code>name</code> and <code>value</code> define the data that you are tracking. Think of it as <strong>key - value</strong> data associated with the current page view.</li>
+<li><p><code>scope</code> argument defines the duration for which Google Analytics should track this variable. It can take a value between 1 to 3 i.e. 1 (page level), 2 (session level) and 3 (visitor level)</p>
+
+<ol>
+<li><strong>Page</strong> level scope means variable would be tracked only for the duration of current page view.</li>
+<li><strong>Session</strong> level means variable applies to a single session or visit.</li>
+<li><strong>Visitor</strong> level means variable would be tracked across sessions till users removes the Analytics cookie.</li>
+</ol>
+</li>
+</ul>
+
+
+<h3>Custom Variables gotchas</h3>
+
+<ol>
+<li>You can only set 5 variables per page view.</li>
+<li>Do not change the variable names and slots (index) across page views. This will help in keeping things consistent.</li>
+<li>Custom variable are tied to the current page view. So, any variable that you want to be tracked with the page view should be set before the <code>_trackPageview</code> call.</li>
+</ol>
+
+
+<h3>Custom Variables uses</h3>
+
+<p>You might wonder what can I do with custom variables, well possibilities are endless. Once you start tracking some custom information then you could go in Google Analytics and do some custom analysis to understand how users behave with your website. Following are some examples of what to track using custom variables</p>
+
+<ol>
+<li>Identify type of user  who viewed the page e.g. visitor, member, gold-user, platinum-user, etc</li>
+<li>Track demographic information e.g. age, gender, etc of users who viewed the page.</li>
+<li>Track how user arrived at the page e.g. paid search campaign, RSS, email newsletter, social n/w, etc</li>
+<li>Track users who successfully shopped on your website.</li>
+<li>Track users who contacted customer support.</li>
+</ol>
+
+
+<h2>Track Traffic Sources</h2>
+
+<p>When the visitors start coming to your website then one of the metrics that you would want to track is who is referring users to your website. Users might have discovered your website through a search engine like Google, Yahoo, Bing, etc or might have come to your website by following a link from the newsletter you sent. But, if you want to track other sources then you need to format your inbound URL with following attributes</p>
+
+<ul>
+<li><code>utm_source</code>: name of the traffic source e.g. bing.com, email newsletter, social, etc</li>
+<li><code>utm_medium</code>: medium through which user came to your website e.g. cpc campaign, email, RSS, etc</li>
+<li><code>utm_campaign</code>: string that lets you identify you campaigns e.g. bing_campaign_1, Spring 2013 newsletter, etc</li>
+<li><code>utm_term</code>: keywords or tags that you want to associate with the source in Google Analytics</li>
+</ul>
+
+
+<p>Using these attributes an inbound URL in email newsletter would be formatted like</p>
+
+<figure class='code'><figcaption><span>Setting Up Custom Variables</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">http</span><span class="ss">:/</span><span class="o">/</span><span class="n">mementodb</span><span class="o">.</span><span class="n">com?utm_source</span><span class="o">=</span><span class="n">email_newsletter</span><span class="o">&amp;</span><span class="n">utm_medium</span><span class="o">=</span><span class="n">email</span><span class="o">&amp;</span><span class="n">utm_campaign</span><span class="o">=</span><span class="n">spring_newsletter</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Google Analytics automatically tracks the traffic sources, keywords, and type of search i.e. organic or paid (Ad Words campaign) for all traffic coming from google.com What this means is that if you are using an Ad Words campaign then you don&#8217;t need to do anything. But for traffic coming from Bing Ads it will not track the keywords and campaign details. Luckily this could be easily fixed but you would need to format the destination URL of the ads in Bing Ads account to use the <code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, and <code>utm_term</code> query parameters. If the bing campaign name is campaign_1 then this URL would be formatted as shown below</p>
+
+<figure class='code'><figcaption><span>Setting Up Custom Variables</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">http</span><span class="ss">:/</span><span class="o">/</span><span class="n">mementodb</span><span class="o">.</span><span class="n">com?utm_source</span><span class="o">=</span><span class="n">bing</span><span class="o">&amp;</span><span class="n">utm_medium</span><span class="o">=</span><span class="n">cpc</span><span class="o">&amp;</span><span class="n">utm_campaign</span><span class="o">=</span><span class="n">campaign_1</span><span class="o">&amp;</span><span class="n">utm_term</span><span class="o">=</span><span class="p">{</span><span class="no">QueryString</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this URL pay attention to <strong>{QueryString}</strong> this should be entered exactly as shown with curly braces as Bind Ads platform will dynamically replace with search terms when the ad is served.</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Scripting Google Analytics: Part 1 - Tracking Pages and Events]]></title>
+    <link href="http://hgilani.github.com/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/"/>
+    <updated>2013-01-16T11:31:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events</id>
+    <content type="html"><![CDATA[<p><a href="http://www.google.com/analytics">Google Analytics</a> is a free web analytics tool from Google that you can use for tracking website statistics like page views, traffic sources, audience information, goals, funnels, etc. While a lot of the stuff is tracked automatically, it becomes overwhelming pretty quickly if you want to track customize analytics or want to track or create custom metrics. In this post, I will detail things I learned by experimenting with Google Analytics.</p>
+
+<!-- more -->
+
+
+<h2>Setup Google Analytics</h2>
+
+<p>If you are new to Google Analytics then head over to the <a href="http://www.google.com/analytics">Google Analytics</a> website and create an account. Once you have created an account, you will be assigned a tracking code which will look like <code>UA-XXXXX-X</code>. For starting to capture analytics replace <code>UA-XXXXX-X</code> with the actual tracking code in the following code snippet and place it before the closing <code>&lt;/head&gt;</code> element of the page where you want to track analytics. Ideally you want this code to execute on every page served on your web site.</p>
+
+<figure class='code'><figcaption><span>Getting Started with Google Analytics</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="n">script</span> <span class="n">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">var</span> <span class="n">_gaq</span> <span class="o">=</span> <span class="n">_gaq</span> <span class="o">||</span> <span class="o">[]</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">_gaq</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="o">[</span><span class="s1">&#39;_setAccount&#39;</span><span class="p">,</span> <span class="s1">&#39;UA-XXXXX-X&#39;</span><span class="o">]</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">_gaq</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="o">[</span><span class="s1">&#39;_trackPageview&#39;</span><span class="o">]</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">(</span><span class="n">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">ga</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span> <span class="n">ga</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span> <span class="n">ga</span><span class="o">.</span><span class="n">async</span> <span class="o">=</span> <span class="kp">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">ga</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;https:&#39;</span> <span class="o">==</span> <span class="n">document</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">protocol</span> <span class="p">?</span> <span class="s1">&#39;https://ssl&#39;</span> <span class="p">:</span> <span class="s1">&#39;http://www&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.google-analytics.com/ga.js&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">var</span> <span class="n">s</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span> <span class="n">s</span><span class="o">.</span><span class="n">parentNode</span><span class="o">.</span><span class="n">insertBefore</span><span class="p">(</span><span class="n">ga</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">})();</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first line in this snippet initializes a JavaScript array variable <code>_gaq</code> on the page loads. You can think of this variable as a queue where you push events that you want to log in Google Analytics. In the next two lines we push two events to the tracking queue, first event(<code>_setAccount</code>) identifies the analytics account of your website and the second event(<code>_trackPageview</code>) tracks that page view i.e. some user visited the URL of the current web page. Rest of the lines dynamically add a <code>&lt;script&gt;</code> element to the web page for loading the Google Analytics library.</p>
+
+<p>So with this in place, every time a page is loaded in the browser a <code>_trackPageview</code> event will be recorded. Along with the page tracking Google analytics automatically tracks statistics on audience language and location, type of browsers and OS used, traffic sources, visitor flow, etc</p>
+
+<h2>Tracking page views in AJAX or Single Page Websites</h2>
+
+<p>For the page driven websites where actions or clicks results in loading of new pages, Google Analytics will track the page views without configuring anything else. But this tracking does not work for the single page applications or AJAX enabled websites where first request to the server results in loading of the application and actions or clicks result in AJAX calls to fetch data from the server. It does not work because we only downloaded one page from the server and sent only one <code>_trackPageview</code> event. So in an AJAX application each AJAX request that updates the application view should be tracked as page view. This means we have to push the tracking event to the queue manually on each AJAX requests. Use following snippet for this</p>
+
+<figure class='code'><figcaption><span>Tracking page views for AJAX applications</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">_gaq</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="o">[</span><span class="s1">&#39;_trackPageview&#39;</span><span class="p">,</span> <span class="s1">&#39;{AJAX_REQUEST_LABEL}&#39;</span><span class="o">]</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this snippet {AJAX_REQUEST_LABEL} is a string that you use to identify the request. If you are using a URL router like sammy.js that changes the hash of the page URL to reflect the current route then you can use following snippet for each route</p>
+
+<figure class='code'><figcaption><span>tracking page hash for sammy.js style URL routers</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">_gaq</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="o">[</span><span class="s1">&#39;_trackPageview&#39;</span><span class="p">,</span> <span class="n">window</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">hash</span><span class="o">]</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Track Events</h2>
+
+<p>Besides tracking page views, you could also track events in Google Analytics. Events are a way to record user interaction and behavior on the page such as which signUp button was clicked on the landing page or which outbound link was clicked, if the user played the video or how far user scrolled down on the web page or did user started filling the credit card form and abandoned it half way. Possibilities are endless as it opens up a way to capture metrics that could allow you to optimize or redesign the pages.</p>
+
+<p>Events can be tracked by simply pushing <code>_trackEvent</code> message to the analytics queue. <code>_trackEvent</code> has five properties associated with it as explained in the <a href="https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide">Google Analytics Developer Guide</a></p>
+
+<ol>
+<li>Category (required): The name you supply for the group of objects you want to track.</li>
+<li>Action (required): A string that is uniquely paired with each category, and commonly used to define the type of user interaction for the web object.</li>
+<li>Label (optional): An optional string to provide additional dimensions to the event data.</li>
+<li>value (optional): An integer that you can use to provide numerical data about the user event.</li>
+<li>non-interaction (optional): A boolean that when set to true, indicates that the event hit will not be used in bounce-rate calculation.</li>
+</ol>
+
+
+<p>To track an even simply push <code>_trackEvent</code> message to the analytics queue.</p>
+
+<figure class='code'><figcaption><span>Tracking Events in Google Analytics</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">_gaq</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="o">[</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="o">]</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The simplest use of the <code>_trackEvent</code> is to attach it to the DOM events such as <code>onClick</code>, <code>onScroll</code>, <code>onKeyup</code>, etc</p>
+
+<figure class='code'><figcaption><span>Tracking DOM events</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;http://mementodb.com&quot;</span> <span class="n">onclick</span><span class="o">=</span><span class="s2">&quot;_gaq.push([&#39;_trackEvent&#39;, &#39;category&#39;, &#39;action&#39;, &#39;label&#39;]);&quot;</span><span class="o">&gt;</span><span class="no">Goto</span> <span class="no">Memento</span><span class="o">&lt;</span><span class="sr">/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This leaves an open question what should be the values of the <code>_trackEvent</code> properties. There are no specific values that you should or should not use. But to put things in perspective you could imagine category, action and labels as three dimensions of the event where category identifies the page, action identifies user activity on the page and label is anything helps you in tracking.To understand it clearly lets look at some examples</p>
+
+<ol>
+<li>Which login button user click on the landing page?</li>
+</ol>
+
+
+<figure class='code'><figcaption><span>User clicked on Login button in header</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">_gaq</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="o">[</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;Landing-Page&#39;</span><span class="p">,</span> <span class="s1">&#39;Click&#39;</span><span class="p">,</span> <span class="s1">&#39;Login button in header&#39;</span><span class="o">]</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><figcaption><span>User clicked on Login button in body</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">_gaq</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="o">[</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;Landing-Page&#39;</span><span class="p">,</span> <span class="s1">&#39;Click&#39;</span><span class="p">,</span> <span class="s1">&#39;Login button in body&#39;</span><span class="o">]</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Which outbound link was clicked?</li>
+</ol>
+
+
+<figure class='code'><figcaption><span>User clicked on mementodb.com link</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">_gaq</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="o">[</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;outbound link&#39;</span><span class="p">,</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;outbound link to mementodb.com&#39;</span><span class="o">]</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Which video user played?</li>
+</ol>
+
+
+<figure class='code'><figcaption><span>User played video with title &#8220;Linus Torvalds on Git&#8221;</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">_gaq</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="o">[</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;Videos&#39;</span><span class="p">,</span> <span class="s1">&#39;Play&#39;</span><span class="p">,</span> <span class="s1">&#39;Linus Torvalds on Git&#39;</span><span class="o">]</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Which version of software users are downloading?</li>
+</ol>
+
+
+<figure class='code'><figcaption><span>User downloaded Trial version of the software</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">_gaq</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="o">[</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;Downloads&#39;</span><span class="p">,</span> <span class="s1">&#39;Installer&#39;</span><span class="p">,</span> <span class="s1">&#39;Trial version&#39;</span><span class="o">]</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>User downloaded Pro version of the software</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">_gaq</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="s1">&#39;_trackEvent&#39;</span><span class="p">,</span> <span class="s1">&#39;Downloads&#39;</span><span class="p">,</span> <span class="s1">&#39;Installer&#39;</span><span class="p">,</span> <span class="s1">&#39;Pro version&#39;</span><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the next part of this post I will go over how to analyze the traffic sources, track errors, monitor how far users scroll on your web page</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Introduction to LDAP]]></title>
+    <link href="http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap/"/>
+    <updated>2013-01-12T01:53:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap</id>
+    <content type="html"><![CDATA[<p>LDAP is definitely not a buzz word technology these days, however a lot of organizations are still using LDAP. So, at some point in time you may be required to develop or maintain projects using LDAP. But since LDAP is an archaic technology, it is tough to discover right information about it on the web. Whenever I searched for it on the web, I found the right information filled with technical jargon and scattered across various articles. This post is my attempt at explaining everything you need to know to understand how LDAP protocol works.</p>
+
+<!-- more -->
+
+
+<h2>What is LDAP?</h2>
+
+<p>LDAP stands for <strong>Lightweight Directory Access Protocol</strong>. It is an Internet protocol for accessing distributed directory services. Using LDAP organizations can organize their users and resources into a hierarchical directory (or tree) structure. Benefits of this organization is that it can act as a centralized source of information for the organization there by providing following services</p>
+
+<ol>
+<li>Organize contact information of users into directories. Think of this as an address book.</li>
+<li>Resources like printers, scanners, meeting rooms , etc can also be organized in LDAP.</li>
+<li>LDAP supports ACLs i.e. you can control what can a user access in the directory.</li>
+<li>LDAP can store login credentials of users, there by acting as a company wide authentication and authorization database. And as such a lot of organizations use LDAP with their Single Sign On (SSO) integration.</li>
+</ol>
+
+
+<h2>Common LDAP Attributes and Acronyms</h2>
+
+<p>Now that we understand why an organization would use LDAP, lets get familiar with some of the common LDAP Acronyms and Attributes so that we can discuss LDAP easily.</p>
+
+<h3>LDAP Acronyms</h3>
+
+<ol>
+<li>DIT: Directory Information Tree - A DIT is hierarchical tree structure which has Distinguished Names (DNs) for directory service entries i.e. users, resources, departments, etc.</li>
+<li>LDIF: LDAP Data Interchange Format - A simple data format that can be used for representing information stored in DIT. LDIF is commonly used for export and import operations on DIT.</li>
+<li>DN: Distinguished NAME - An unique identifier for each entry in the DIT. A DN is composed of series of RDNs found by walking up the directory tree.</li>
+<li>RDN: Relative Distinguished Name - A relative distinguished name (RDN) represents a single node of a DN. Thus if you combine RDNs walking up DIT you can form DN.</li>
+</ol>
+
+
+<h3>LDAP Attributes</h3>
+
+<p>Each node in DIT can use different type of attributes for storing informations. Following are some of the frequently used attributes</p>
+
+<ol>
+<li>dc: domain component</li>
+<li>o: organization</li>
+<li>ou: organizational Unit</li>
+<li>cn: common Name</li>
+<li>sn: surname</li>
+<li>uid: userid</li>
+<li>l: location</li>
+<li>st: status</li>
+<li>c: country</li>
+</ol>
+
+
+<h2>DIT nodes, attributes, and objectclass</h2>
+
+<p>To Understand how a DIT is represented look at the following hypothetical tree.</p>
+
+<p><img src="http://hgilani.github.com/images/dit.png" title="[Directory Information Tree [Directory Information Tree]]" ></p>
+
+<p>Observe how the DIT is organized starting at the &#8220;domain component(dc)&#8221; at the root level, followed by &#8220;organizational unit(out)&#8221; i.e. departments. Departments hold persons which can be described using &#8220;common name(cn)&#8221; attributes. Following illustration shows the &#8220;dn of each level in the DIT. Notice how each node includes &#8220;rdn&#8221; of the parent in its &#8220;dn&#8221;.</p>
+
+<p><img src="http://hgilani.github.com/images/dn.png" title="[LDAP Distinguished Name [LDAP Distinguished Name]]" ></p>
+
+<p>In the above illustration we used only handful of attributes, but any number of attributes can be used to store information at any node. Some of the commonly used attributes are sn, uid, l, st, and c.</p>
+
+<p>In addition to standard attributes, LDAP also has the concept of &#8220;objectclass&#8221; i.e. schema. An object class specifies what set of mandatory and optional attributes can be used to describe a node in DIT. For example, if you create an object class printer then it could contain attributes that can define printer such as printerid, printername, ip, and modelno. An object class can inherit from other object classes and and all object classes inherit from the abstract object class top. In essence, objectclass is really there to enforce consistency and maintain integrity of the DIT. For more information on objectclass read <a href="http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=%2Frzahy%2Frzahyobjectclass.htm">Object Classes</a></p>
+
+<p><img src="http://hgilani.github.com/images/objectclass.png" title="[LDAP Object Class [LDAP Object class]]" ></p>
+
+<p>LDIF is the data interchange format that can be used to represent a DIT. In this format our example DIT will look like as below</p>
+
+<pre><code># domain component level
+dn: dc=mementodb,dc=com
+objectclass: organization
+objectclass: dcObject
+
+# organization unit level
+dn: ou=IT, dc=mementodb,dc=com
+objectclass: organizationalUnit
+ou: IT
+
+dn: ou=SALES, dc=mementodb,dc=com
+objectclass: organizationalUnit 
+ou: SALES
+
+# person level
+dn: cn=Bob Jones, ou=IT, dc=mementodb,dc=com
+objectclass: person
+cn: Bob Jones
+
+dn: cn=Paul Hunt, ou=IT, dc=mementodb,dc=com
+objectclass: person
+cn: Paul Hunt
+</code></pre>
+
+<p>For more information on DIT and LDAP organization refer to <a href="http://coewww.rutgers.edu/www1/linuxclass2003/lessons/lecture8.html">Introduction to LDAP</a> and <a href="http://quark.humbug.org.au/publications/ldap/ldap_tut.html">Introduction to LDAP</a></p>
+
+<h2>Working with LDAP</h2>
+
+<p>LDAP is a connected protocol. What this means is that you first need to create a socket connect to the LDAP server before invoking any operation. Following is a typical sequence of operations when working with LDAP</p>
+
+<ol>
+<li>connect: Create a socket connection</li>
+<li>bind: Set a base DN, all subsequent operations will be performed relative to this DN. For binding to a DN you also need to authenticate. Please note that you can authenticate anonymously as well. Authenticating creates a session.</li>
+<li>execute LDAP operations
+
+<ul>
+<li>create or add</li>
+<li>delete</li>
+<li>modify</li>
+<li>search or filter</li>
+</ul>
+</li>
+<li>unbind - remove session</li>
+<li>disconnect - Release the socket connection</li>
+</ol>
+
+
+<p>For information on how to perform these operations using Java language refer to <a href="http://directory.apache.org/api/five-minutes-tutorial.html">Five Minutes Tutorial</a></p>
+
+<p>If you have any thoughts or any concept that you would like me to incorporate in this tutorial then please feel free to leave a comment.</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why I Love Git]]></title>
+    <link href="http://hgilani.github.com/blog/2012/12/10/why-i-love-git/"/>
+    <updated>2012-12-10T11:05:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2012/12/10/why-i-love-git</id>
+    <content type="html"><![CDATA[<p>Recently I was in a discussion with couple of friends who still have to migrate on to the Git version control system. My friends had a lot of questions and showed hesitation in moving from SVN to Git. This post articulates my thoughts on why you should use Git and contains links to some excellent resources on Git that you can use to understand Git quickly.</p>
+
+<!-- more -->
+
+
+<h2>What is Git?</h2>
+
+<p>Git is a distributed version control(DVCS) system. In Git you are not required to connect to a central server for tracking changes. Changes or revisions to files are tracked locally in Git workspace, <code>.git</code> folder, of the project. Every Git workspace is a complete version control system that maintains complete version history. In other words, Git does not need to connect to any remote server for tracking changes.</p>
+
+<p>Git allows easy collaboration to remote respoitories by using <code>push</code> and <code>pull</code> operations. Since each Git workspace is a complete version control system, developers can also <code>push</code> and <code>pull</code> changes with each other. This is fundamentally different when compared to SVN/CVS which requires a central repository (repo) for tracking changes. To simplify collaboration most project setups have a remote repo where everybody pushes and pulls from. This remote repo is commonly referred as &#8220;origin&#8221;. It is incorrect to think of the &#8220;origin&#8221; as a central repo equivalent of SVN/CVS as Git allows you to have multiple &#8220;origin&#8221; repos. With all this in mind you can also think of Git as &#8220;Decentralized&#8221; version control system.</p>
+
+<h2>Why should you use Git?</h2>
+
+<p>Git is fast as all chnages are first committed to local repo and then later pushed to a remote repository.</p>
+
+<p>In git branching and merging is a first class operation i.e. fast and easy. Compared to SVN it does not involve figuring out change sets that should be merged. Anyone who has created and merged branches in SVN would say you need a whole day to merge branches and resolve conflcts. But, since Git maintains complete revision history merging is simple, does not require figuring out change sets and results in no conflicts. In fact once you start working with local branches in Git, it quickly becomes your favorite and essential feature of Git.</p>
+
+<p>Git also maintains complete SHA1 checkums for each commit to the repository. These checksums help it in maintaning the repo integrity by rejecting malicious code merges from downstream repos that fail checksum verifications.</p>
+
+<p>If you still have doubts on why you should use Git watch the Tech Talk from the master &#8220;Linus Torvalds&#8221; himself on why you should use Git.</p>
+
+<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/4XpnKHJAok8 "></iframe></div>
+
+
+<h2>Learning Git</h2>
+
+<ol>
+<li>Git Basics
+
+<ul>
+<li><a href="http://rogerdudler.github.com/git-guide/">git - the simple guide</a></li>
+<li><a href="http://scottr.org/presentations/git-in-5-minutes/">Git In Five Minutes</a></li>
+</ul>
+</li>
+<li>Beyond Basics
+
+<ul>
+<li><a href="http://git-scm.com/book">Pro Git book</a></li>
+<li><a href="http://www.kernel.org/pub/software/scm/git/docs/user-manual.html">Git User Manual</a></li>
+</ul>
+</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[NPM Features and Options Demystified]]></title>
+    <link href="http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified/"/>
+    <updated>2012-10-17T16:58:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified</id>
+    <content type="html"><![CDATA[<p>In the previous post, <a href="http://himanshu.gilani.info/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a>, I discussed how NPM and package.json could be used for managing the project and its dependencies. In this post I will discuss some of the overlooked features of NPM that help you in achieving more out of this tool</p>
+
+<h2>npm install and package versions</h2>
+
+<p><code>npm install {package}</code> by default installs the package version tagged as &#8220;latest&#8221; in the npm registry. If you do not want the latest version of the package then you have few options. You can execute commands in the following way to control which package should be installed and from where to fetch the package.</p>
+
+<p><strong>Package with Specific Version:</strong> <code>npm install {package}@{version}</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install express@3.0.0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command will install version 3.0.0 of express package form npm registry.</p>
+
+<p><strong>Package in a Version Range:</strong>  <code>npm install {package}@"{version range}"</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install sax@"&gt;=0.1.0 &lt;0.2.0"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command will install sax package between version range 0.1.0 and 0.2.0</p>
+
+<!-- more -->
+
+
+<p><strong>Package with Specific Tag:</strong> <code>npm install {package}@{tag}</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install passport@latest</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command will install passport package with latest tag.</p>
+
+<p><strong>Private package:</strong> <code>npm install {folder}</code> or <code>npm install {tarball file}</code> or <code>npm install {tarball url}</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install ./myPackage
+</span><span class='line'>npm install ./myPackage.tgz
+</span><span class='line'>npm install http://download.com/myPackage.tgz</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Package from Git Repository:</strong> <code>npm install {git repo url}</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install git@github.com:hgilani/html2markdown.git</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Using npm install to also maintain package.json</h2>
+
+<p>When installing a new package, <code>npm install</code> could also update the package.json if you want. For updating package.json, you need to use one of these flags that indicate what kind of dependency you are installing</p>
+
+<ol>
+<li><code>--save</code>: Package will be added in the dependencies section of package.json</li>
+<li><code>--save-dev</code>: Package will be added in the devDepenctions section of package.json</li>
+<li><code>--save-optional</code>: Package will be added in the optionalDepenctions section of package.json</li>
+</ol>
+
+
+<h2>npm install or npm update</h2>
+
+<p>A lot of time you want to depend on the latest version of the packages so that you automatically get all the bug fixes and new features. If so then you should be able to update some or all the packages installed in your environment to the latest version. You should start by correctly configuring the versions properly in your package.json. For example, if you depend on version 2.0.0 of the express library then your package.json can say</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  "dependencies": {
+</span><span class='line'>      ...
+</span><span class='line'>    "express": "2.0.0",
+</span><span class='line'>      ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This tells NPM that you want to depend on a specific version of the package. This will keep things tight but it also makes upgrading to latest packages a manual effort. For ease of update, you should configure flexible versions in package.json that permit upgrading packages</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  "dependencies": {
+</span><span class='line'>      ...
+</span><span class='line'>    "express": "2.x",
+</span><span class='line'>      ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>What this says is you want to depend on the latest express package with major version 2. With versions configured for easy upgrade, you can update to latest version of express package by executing either <code>npm install express</code> or <code>npm update express</code></p>
+
+<p>You can also update all packages by executing either <code>npm install</code> or <code>npm update</code>. For updating multiple packages you can execute <code>npm install {package1} {package2}</code> or <code>npm install {package1} {package2}</code></p>
+
+<h3>Difference between npm update and npm install</h3>
+
+<ol>
+<li>npm install will also update devDependencies. However, npm update will not</li>
+<li>npm install will always reinstall the package. However, npm update will only update if the latest package is not installed.</li>
+</ol>
+
+
+<p>In addition to upgrading package versions, <code>npm update</code> can also install any missing packages. In other words, it can function as <code>npm install</code> but the difference is that it will not install missing dev dependencies.</p>
+
+<h2>Speeding up npm install</h2>
+
+<p>In the blog post <a href="http://www.devthought.com/2012/02/17/npm-tricks/">NPM Tricks</a>, Guillermo Rauch has mentioned following two tricks that can help in speeding up npm install</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install --production
+</span><span class='line'>npm install --loglevel warn</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When you add <code>--production</code> option then npm will skip installing dev dependencies. In addition, when you add <code>--loglevel warn</code> then only useful information will be logged into console.</p>
+
+<h2>Some useful NPM commands</h2>
+
+<ol>
+<li><code>npm list</code>: List installed npm packages with their dependencies.</li>
+<li><code>npm outdated</code>: List all installed packages for which a latest version of package is available in npm registry.</li>
+<li><code>npm prune</code>: This command removes &#8220;extraneous&#8221; packages i.e. packages installed but not listed in package.json file.</li>
+<li><code>npm pack</code>: This commands creates an installable tarball from a package. This tarball can then be published on npm registry or installed in some other environment e.g. production.</li>
+<li><code>npm help json</code>: If you ever want a reference documentation of different options you can configure in <code>package.json</code> file.</li>
+</ol>
+
+
+<p>There are a lot more commands. To list all the commands you can execute <code>npm help</code> and for reading documentation on a specific command, you can execute <code>npm help {command}</code></p>
+
+<h2>.npmignore and .gitignore</h2>
+
+<p><code>npm pack</code> is a useful command however sometimes you want to avoid packing some project resources in the tarball. For example if you are creating a package for installing in production environment then you will want to avoid packing unit tests in this package. This can be easily achieved by adding either <code>.npmignore</code> file or <code>.gitignore</code> file. Section <a href="https://npmjs.org/doc/developers.html">&#8220;Keeping files out of your package&#8221;</a> in the &#8220;NPM Developer page&#8221; states following</p>
+
+<blockquote><p>Use a .npmignorefile to keep stuff out of your package. If there&#8217;s no .npmignore file, but there is a .gitignore file, then npm will ignore the stuff matched by the .gitignore file. If you want to include something that is excluded by your .gitignore file, you can create an empty .npmignore file to override it.</p></blockquote>
+
+<h2>Setup npm for tab completion</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm completion</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Executing this command configures the tab completions into your current shell. It also outputs a shell script on command line that you can add to your ~/.bashrc or ~/.zshrcfile to make completions available for future shell sessions.</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why Memento moved from Java to CouchApps to Node.js Technology Stack]]></title>
+    <link href="http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/"/>
+    <updated>2012-09-27T19:53:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack</id>
+    <content type="html"><![CDATA[<p><a href="http://mementodb.com">Memento</a>, the app that I launched recently has already seen three technology stack changes. I started working on memento to be able to keep what I find on web with me as a personal memento. Being a Java architect I kicked off memento using Java. Since I was a solo developer on this project I wanted to keep everything lean in order to iterate quickly. This meant having an automatic code generation for the boilerplate code, using simple and powerful frameworks, following best practices, and tons of unit tests for making changes quickly and verifying the health of the app.</p>
+
+<h2>Spring Roo</h2>
+
+<p>With my lean strategy in mind I quickly used <a href="http://www.springsource.org/spring-roo"><strong>Spring Roo</strong></a>, a rapid application development tool for Java developers to generate the complete app with front-end, back-end, authentication, persistence, logging, and unit tests within couple of hours. So far I was happy.</p>
+
+<!-- more -->
+
+
+<p>Now it was time to learn the magic tool and enhance the app. After hacking on Spring Roo for a couple of days I developed a good understanding of how it works. I absolutely loved the way it bootstrapped the complete app. It’s an absolute must-use tool for anyone who wants to bootstrap a Java web application. Though it has these great features, there are also some not-so-great ones. For front-end of the app, Spring Roo (spring-roo-1.1.4.RELEASE) used Dojo JavaScript framework, Spring MVC JSP tags, and JSPX technology. And the entire front-end generation was tied to the database model. This meant every time I made changes to the database model my user-interface was affected. After some initial hacking I came to an understanding that Spring Roo is not an ideal tool for managing the front-end. With this knowledge I decided to stop using it for managing the user interface changes. I was happy with this decision, as I wanted Memento to have an awesome user interface that I enjoyed using. And this would have required a lot of custom changes.</p>
+
+<p>As the next step I started implementing the back-end logic for the memento. I decided that I will not develop any new logic without writing unit tests for it. These unit tests were really crucial for me because they allow you to discover problems quickly, and reduce manual testing time. After about two months I had a basic MVP (minimum viable product) ready and I wanted to host Memento on the web.</p>
+
+<h2>VPS and EC2</h2>
+
+<p>I started with a VPS provider, <a href="http://webfaction.com"><strong>Webfaction</strong></a>, for hosting Memento. After spending some time on configuring the VPS m/c and deploying Memento I was happy that memento was up and running. To my surprise, in the next one hour I go an email from the <strong>WebFction</strong> support that they have the killed the java process for my app as it was taking too much memory. This confused me since during the app development I never noticed any abnormal memory usage. This led to a realization that hosting a basic app on <a href="http://tomcat.apache.org">Tomcat</a> or <a href="http://jetty.codehaus.org">Jetty</a> servlet container required 256 MB of minimum RAM. In my opinion this is due to JVM overhead and th number of jars (58 jar files) that memento was loading in the JVM due to frameworks selected. This kicked VPS provider out of equation.</p>
+
+<p>Next I decided to evaluate <a href="http://aws.amazon.com/">Amazon EC2</a>. For new customers Amazon EC2 provides a micro instance free for the first year. This meant no upfront cost to get started and no more memory constraints. After using Memento on EC2 for a month, I decided to host a continuous integration server, <a href="http://www.eclipse.org/hudson/">Hudson</a>. At this point I got another surprise. Whenever CI server started building memento on code commits entire EC2 instance would freeze. After some debugging I realized that&#8217;s how Amazon wants a micro instance to perform. It defines a micro instance as-</p>
+
+<p>&#8220;Micro instances (t1.micro) provide a small amount of consistent CPU resources and allow you to increase CPU capacity in short bursts when additional cycles are available. They are well suited for lower throughput applications and web sites that require additional compute cycles periodically&#8221;</p>
+
+<p>What this definition does not tell is that every time there is some constant CPU activity for 3 seconds, entire micro-instance will halt for next 6 seconds as it will not get any CPU cycle. This meant EC2 micro instances are not suitable for even light CPU intensive jobs. Once I figured out how CPU bursts work on a EC2 micro instance, I stopped using it as the CI server.</p>
+
+<p>My experience around memory and CPU utilization got me thinking about how to design memento for low resource utilization.</p>
+
+<h2>Moving on to CouchDB and CouchApps</h2>
+
+<p>At the time I was searching for a solution to archive web pages. I did not want to store the web pages in SQL database as that would have caused the database to grow to pretty quickly with maintenance overhead. After some research I decided to use NoSQL data store <a href="http://couchdb.apache.org">CouchDB</a> for storing web pages. I started hacking its <strong>Map</strong> <strong>Reduce</strong> views for querying data and came to know about CouchApps.</p>
+
+<p>Following is how <a href="http://couchapp.org">couchapp.org</a> defines what are CouchApps</p>
+
+<p>&#8220;CouchApps are JavaScript and HTML5 applications served directly from CouchDB. If you can fit your application into those constraints, then you get CouchDB&#8217;s scalability and flexibility &#8220;for free&#8221; (and deploying your app is as simple as replicating it to the production server).&#8221;</p>
+
+<p>My initial thought was that CouchApp would act as a lean 2-tier stack with no middle tier and a low resource utilization.I decided to rewrite the java version of memento as CouchApp. However, this technology stack change was not as smooth as I anticipated. It required learning the CouchApps technology and its tool chain for building/deploying the app. This obviously resulted in a tremendous learning effort. JavaScript, jQuery, Sammy.js, Compass, Sass, and Node.js were learnt. After 6 months the second version of the MVP was ready as CouchApp and now it was again time to host it on the web.</p>
+
+<p>This is when I started realizing the limitations of the CouchApps. Since, the app was hosted out of the CouchDB database I was forced into funky URLs (as dictated by CouchDB design documents), and weak authentication/security. There was limited community support for libraries and tool chains.</p>
+
+<h2>Node.js</h2>
+
+<p>The CouchApp tool, <a href="http://kan.so/">kan.so</a> that I was using for building and deploying CouchApps introduced me to Node.js. <strong>kan.so</strong> used it for packaging and deploying CouchApps. In the process of rewriting <a href="http://mementodb.com">Memento</a> as a CouchApp I hacked on some of the Node.js modules.</p>
+
+<p>Since I was again researching solutions CouchApp issues it occurred to me that Node.js could act as a thin layer between CouchDB and HTML5 GUI. Node.js is event oriented, asynchronous and has low memory and CPU utilization. Community support for the new features in the language itself and libraries/frameworks is fantastic. I was able to quickly iterate third version of MVP using Node.js within next three months and this is the version that is live in production today :-)</p>
+
+<p>After working with Node.js technology stack I can now say with certainty that Node.js is my favorite language. It is the secret ingredient in Memento. Having said this Java still remains my first love.</p>
+
+<h2>Conclusion</h2>
+
+<ol>
+<li>Java is good for developing apps and services when resource utilization is not an issue or if you want to write CPU intensive services.</li>
+<li>CouchApps are good for rapid prototyping and for apps that do not have strict security requirements.</li>
+<li>Node.js is even driven, light-weight and perfect langauge for developing next generation responsive applications.</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Bootstraping a Node.js App for Dev/Prod Environment]]></title>
+    <link href="http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/"/>
+    <updated>2012-09-26T19:30:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment</id>
+    <content type="html"><![CDATA[<p>Setting up a web server in node is really simple. A <a href="http://nodeguide.com/beginner.html#a-hello-world-http-server">basic hello world http server</a> can be written in under 10 lines. However, if you want to write a production grade app then you are better of by using any framework that provides foundation and structure to your logic. When choosing frameworks there are no right or wrong answers. Important thing is to select a framework that is being actively developed, has community support and most of important of all you love the way it works.</p>
+
+<h2>Bootstrap a Node.js App with Express Application</h2>
+
+<p><a href="http://expressjs.com">Express</a> is a web application framework for Node.js. It is simple to use and can be configured to work with popular technologies. To understand how Express works you can follow the <a href="http://expressjs.com/guide.html">Getting Started</a> page on the express web site. This guide also explains <a href="http://expressjs.com/guide.html#executable">how to use the express global executable</a> for generating a skeleton web app.</p>
+
+<p>Once you have generated a skeleton web application. You need to understand how to structure the skeleton app for the Dev/Prod parity as well as making few changes to the app for making your app modular.</p>
+
+<h3>Dev/Prod parity</h3>
+
+<p>You will notice following snippet in the skeleton app</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>app.configure('development', function(){
+</span><span class='line'>  app.use(express.errorHandler());
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
+
+
+<p>In the code <code>development</code> refers to the dev environment. Any dev specific setup that you want to do can be configured under this block. This snippet just configures a error handler for the dev environment. If you need to configure settings for any other environments like staging, production, etc then you can configure them the same way.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>app.configure('production', function(){
+</span><span class='line'>
+</span><span class='line'>  // production env. specific settings 
+</span><span class='line'>
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>process.env</h3>
+
+<p>In your express skeleton you will notice that port on which your app listens is configured as following</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>process.env.PORT</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you may begin to think what is <code>process.env</code>. Node.js <a href="http://nodejs.org/api/process.html#process_process">documentation</a> defines the <code>process</code> as a global object that can be accessed from anywhere. And <code>process.env</code> is an object that contains the user environment.</p>
+
+<p>If you were running in bash shell and you have configured a <code>PORT</code> environment variable with value <code>80</code> then inside the app <code>process.env.PORT</code> will have the value 80. In the same vein you can configure a NODE_ENV environment variable that indicates to express in which environment it is executing.</p>
+
+<p>On the production host you can execute</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export port=80
+</span><span class='line'>export NODE_ENV=prodction</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And on the development host you can let express use its default settings of running on port 3000 and set NODE_ENV to &#8216;development&#8217;</p>
+
+<h3>Simulating production environment during testing</h3>
+
+<p>If you ever want to simulate production environment for testing then that is easy. This can be easily done without configuring NODE_ENV variable in your environment. Instead of starting your app using <code>node app.js</code> you can start it as following</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NODE_ENV=production node app.js</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This way NODE_ENV variable is only set for the current process execution and the value is not persisted in the environment settings.</p>
+
+<h3>env.json</h3>
+
+<p>Setting environment variables to configure different settings for different environment is nice but it does not scale well. What we need is persistent storage for the environment properties that can act as a gold standard and is simple and easy to use. Meet <strong>env.json</strong>, add a new file in the project root with the name <code>env.json</code>. You can structure this file in the following way add key/value properties with right settings per environment.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "development": {
+</span><span class='line'>      "facebook_app_id": "facebook_dummy_dev_app_id",
+</span><span class='line'>      "facebook_app_secret": "facebook_dummy_dev_app_secret",
+</span><span class='line'>  }, 
+</span><span class='line'>  "production": {
+</span><span class='line'>      "facebook_app_id": "facebook_dummy_prod_app_id",
+</span><span class='line'>      "facebook_app_secret": "facebook_dummy_prod_app_secret",
+</span><span class='line'>  }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This snippet shows how to configure same settings for development and production environment. If you ever has a need to add a new environment, then you can simply extend this file and add another property block.</p>
+
+<p>Working with <code>env.json</code> is easy. In node parsing is a json file is as simple as loading the file using <code>require</code> statement.</p>
+
+<p>I like to abstract all the code that I can reuse as functions in <code>common.js</code> file. So start by creating <code>common.js</code> file. Following is the parsing logic for env.json in this file.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var env = require('env.json');
+</span><span class='line'>
+</span><span class='line'>exports.config = function() {
+</span><span class='line'>  var node_env = process.env.NODE_ENV || 'development';
+</span><span class='line'>  return env[node_env];
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you have created the common.js file using it for reading environment specific properties is as simple as loading it in app.js and using an object property.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var common = require('./routes/common')
+</span><span class='line'>var config = common.config();
+</span><span class='line'>
+</span><span class='line'>...
+</span><span class='line'>
+</span><span class='line'>var facebook_app_id = config.facebook_app_id;
+</span><span class='line'>// do something with facebook_app_id
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Structuring express application with Open/Closed principle</h3>
+
+<p>After you have configured app.js correctly. You want to close it down from future modifications but you still need a way to extend it by adding new routes to the app. This is simple and easy to do. Read <a href="http://blog.pixelingene.com/2012/06/a-simple-organization-scheme-for-expressjs-apps/">A Simple Organization Scheme for Handling Routes in ExpressJS Apps</a> for understanding how to do this by establishing some conventions for your project.</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Introducing Memento]]></title>
+    <link href="http://hgilani.github.com/blog/2012/09/17/introducing-memento/"/>
+    <updated>2012-09-17T06:19:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2012/09/17/introducing-memento</id>
+    <content type="html"><![CDATA[<p>Here is a wonderful application that allows you to save any web page that you like. It is your personal space with all that you like on the web. Some space that you can access whenver you like. You can create an account at <a href="http://www.mementodb.com">www.mementodb.com</a></p>
+
+<h2>What are mementos?</h2>
+
+<p>Mementos are anything that you save using this application. You can think of a memento as a copy of the entire web page saved into your account for you to <strong>&#8220;use&#8221;</strong> later. When we say <strong>&#8220;use&#8221;</strong> we really mean you should be able to read, edit or print the mementos. For creating mementos we convert web pages that you want to collect into a text format that any one can edit without understanding the techonolgies of the web.</p>
+
+<h2>Why Use Memento?</h2>
+
+<p>Web is constantly changing, pages that you bookmark today may vanish tomorrow. But what if you found something on web that you want to keep as a personal memento. With Memento you can <strong>Save</strong>, <strong>Collect</strong> and <strong>Use</strong> your web.</p>
+
+<h2>How it Works?</h2>
+
+<p>Memento provides a bookmarklet that converts the web page you want to keep into Markdown and saves it to your account.</p>
+
+<!-- more -->
+
+
+<h2>Memento Features</h2>
+
+<p>Memento is designed for usability and following are some of its features</p>
+
+<ul>
+<li>Simple and amazingly Fast.</li>
+<li>Convert and Save any page as Memento.</li>
+<li>Takes new Notes or edit your saved mementos.</li>
+<li>Organize saved mementos using Tags.</li>
+<li>Distraction free Reading environment.</li>
+<li>Best Writing experience with Markdown.</li>
+<li>Saved mementos are Printer friendly.</li>
+</ul>
+
+
+<h2>Memento Quicklook</h2>
+
+<h3>List of mementos saved in your personal account</h3>
+
+<p><img src="http://hgilani.github.com/images/hero-shot1.png" title="[title text [alt text]]" ></p>
+
+<h3>Saving mementos using bookmarklet</h3>
+
+<p><img src="http://hgilani.github.com/images/hero-shot2.png" title="[title text [alt text]]" ></p>
+
+<h3>Saving mementos using bookmarklet (saved copy of page)</h3>
+
+<p><img src="http://hgilani.github.com/images/hero-shot3.png" title="[title text [alt text]]" ></p>
+
+<h2>Feedback, Ideas or Suggestions</h2>
+
+<p>If you have any ideas, feedback, or suggestions for improving Memento then please email me at hgilani[at]gmail[dot]com</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[NPM and package.json]]></title>
     <link href="http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json/"/>
-    <updated>2012-07-29T09:28:00+02:00</updated>
+    <updated>2012-07-29T09:28:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json</id>
     <content type="html"><![CDATA[<p>NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be installed locally for a project or globally for the entire system. Whenever you install packages these packages are fetched from the <a href="https://npmjs.org/">NPM registry</a>.</p>
 
@@ -29,6 +1247,9 @@
 
 
 <p>This will install NPM package {package_name} in the current working directory. This is typically root of the project.</p>
+
+<!-- more -->
+
 
 <h2>Global Install</h2>
 
@@ -147,6 +1368,8 @@
 <li><a href="http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules">Ten Lessons Learned Maintaining Nodejs Modules</a></li>
 </ul>
 
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
 ]]></content>
   </entry>
   

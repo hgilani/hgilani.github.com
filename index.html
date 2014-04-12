@@ -9,7 +9,7 @@
   <meta name="author" content="Himanshu Gilani">
 
   
-  <meta name="description" content="NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be &hellip;">
+  <meta name="description" content="In this part we would configure chef workstation that we created in Part 1 to provision nodes on the Rackspace cloud provider. Chef Terminology &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,7 +69,6 @@
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
-  <li><a href="/about-me">About Me</a></li>
 </ul>
 
 </nav>
@@ -83,7 +82,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/">Configuring a Vagrant VM as Chef Workstation: Part 2</a></h1>
     
     
       <p class="meta">
@@ -99,152 +98,492 @@
   
 
 
-<time datetime="2012-07-29T09:28:00+02:00" pubdate data-updated="true">Jul 29<span>th</span>, 2012</time>
+<time datetime="2014-04-12T08:19:00+00:00" pubdate data-updated="true">Apr 12<span>th</span>, 2014</time>
         
-         | <a href="/blog/2012/07/29/npm-and-package-dot-json/#disqus_thread">Comments</a>
+         | <a href="/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/#disqus_thread">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be installed locally for a project or globally for the entire system. Whenever you install packages these packages are fetched from the <a href="https://npmjs.org/">NPM registry</a>.</p>
+  <div class="entry-content"><p>In this part we would configure chef workstation that we created in <a href="http://himanshu.gilani.info/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Part 1</a> to provision nodes on the Rackspace cloud provider.</p>
 
-<h2>Local Install</h2>
+<h2>Chef Terminology</h2>
 
-<p>If you want to install any node package then you can simply do</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>npm install {package_name}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will install NPM package {package_name} in the current working directory. This is typically root of the project.</p>
-
-<h2>Global Install</h2>
-
-<p>At times you may want to have some packages installed globally in the system. Gloabl packages are not project specific. Any package can be installed globaly if you add the <code>-g</code> switch</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo npm install -g {package_name} </span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice the use of <code>sudo</code> in the above command. This is because the package will be available globally in your system and you need admin privileges for making changes that affect the entire system.</p>
-
-<h2>Local vs Global Install</h2>
-
-<p>When working with NPM packages you want to think in terms of local vs global packages. Local packages are project specific and need to be installed in project root folder. This way 2 different projects can use different version of the same package.</p>
-
-<h3>So when will you need global packages?</h3>
-
-<p>Global packages are useful when you need something for maintaining your project e.g. packages needed for building/testing your project. These packages typically do not get installed in the production environment.</p>
-
-<p>For a detailed description of different options available for npm command refer to <a href="http://blog.nodejitsu.com/npm-cheatsheet">npm cheatsheet</a></p>
-
-<h2>package.json</h2>
-
-<p>This is all good. Now we need a way to maintain dependencies for the project. This is typically done by creating a package.json at the root of the project and project dependencies in dependencies section. In addition to the project dependencies this file can contain project specific metadata like project name, description, version, author, script to execute for running/testing the application, etc.</p>
-
-<p>Following is a sample package.json file</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;memento&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Memento: Discover and Save your Web&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;subdomain&quot;</span><span class="p">:</span> <span class="s2">&quot;memento&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;domains&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>    <span class="s2">&quot;mementodb.com&quot;</span>
-</span><span class='line'>   <span class="p">],</span>
-</span><span class='line'>  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1-77&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;homepage&quot;</span><span class="p">:</span> <span class="s2">&quot;http://mementodb.com&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Himanshu Gilani &lt;hgilani@gmail.com&gt; (http://himanshu.gilani.info)&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;private&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;mocha test/*-test.js&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;app.js&quot;</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="nt">&quot;engines&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;node&quot;</span><span class="p">:</span> <span class="s2">&quot;0.6.x&quot;</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;mustache&quot;</span><span class="p">:</span> <span class="s2">&quot;0.4.x&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;request&quot;</span><span class="p">:</span> <span class="s2">&quot;2.9.x&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;express&quot;</span><span class="p">:</span> <span class="s2">&quot;2.5.x&quot;</span><span class="p">,</span>
-</span><span class='line'>   <span class="p">},</span>
-</span><span class='line'>  <span class="nt">&quot;devDependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;mocha&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;=1.0.3&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;should&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;=0.6.3&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;assert&quot;</span><span class="p">:</span> <span class="s2">&quot;0.4.9&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;jake&quot;</span><span class="p">:</span> <span class="s2">&quot;0.2.33&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;uglify-js&quot;</span><span class="p">:</span> <span class="s2">&quot;1.2.6&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;cloudfiles&quot;</span><span class="p">:</span> <span class="s2">&quot;0.3.3&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>Armed with this file anybody can get the bigger about the project. In addition to providing bigger it provides a standard way of maintaining node.js packages. Think of this like <strong>Convention over Configuration</strong> as when this file is available it prodvides following useful NPM commands</p>
+<p>Before we go over details of how to provision a Rackspace VM, lets review the chef terminology so that we have some common vocabulary</p>
 
 <ul>
-<li>Install all project specific dependencies - <code>npm install</code></li>
-<li>Start the application - <code>npm start</code></li>
-<li>Execute unit tests - <code>npm test</code></li>
+<li><strong>Nodes</strong>: Servers, VMs or physical machines or cloud instances.</li>
+<li><strong>Cookbook</strong>: A cookbook is a collection of recipes, attributes, and templates that Chef uses to package, distribute, and share configuration details. A chef repository can have many cookbooks and typically a cookbook configures only one service.</li>
+<li><strong>Roles</strong>: Roles are a way to group nodes by the function. Each role is associated with a run_list i.e. a set of cookbook/recipies that need to execute in given sequence for configuring the node. Nodes can have multiple roles.</li>
+<li><strong>Environments</strong>: In chef different nodes could belong to different environments like dev, stage, prod, etc. Like roles environments also have a run_list.</li>
+<li><strong>Data Bags</strong>: Data bags are like cookbook attributes but are used to store sensitive information like passwords, api keys, secrets, etc.</li>
 </ul>
 
-
-<p>Since executing these commands does not require any knowledge about the module. This is for the win.</p>
-
-<p>For a good description of different properties that can be configured in package.json file refer to <a href="http://package.json.nodejitsu.com">package.json cheatsheet</a></p>
-
-<h2>Best practices</h2>
-
-<p>For best practices refer to following 2 blog posts</p>
-
-<ul>
-<li><a href="http://blog.nodejitsu.com/package-dependencies-done-right">Package.json dependencies done right</a></li>
-<li><a href="http://blog.nodejitsu.com/ten-lessons-learned-maintaining-nodejs-modules">Ten Lessons Learned Maintaining Nodejs Modules</a></li>
-</ul>
 
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Configuring a Vagrant Vm as Chef Workstation Part 1</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-12T00:00:00+00:00" pubdate data-updated="true">Nov 12<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://vagrantup.com">Vagrant</a> is a powerful tool as it allows us to create &#8220;lightweight, reproducible, and portable&#8221; Virtual Machines (VM) on the developer machine using provisioning tools like chef and puppet. If you are using chef as the provisioning tool then you would already know that vagrant VM already has <code>chef-client</code> tool installed along with the version of ruby. Since the vagrant VM already has <code>chef-client</code> and <code>ruby</code> it should be straightforward to use any vagrant VM as a workstation for working the Hosted Chef server for provisioning and maintaining VMs in cloud services like AWS and Rackspace. However, I found this not to be the case and I realized that the process of configuring a chef workstation is rather convoluted as both the version of chef-client and its pre-requisite ruby are really old versions of the software that result in all sorts of errors on trying to use the latest chef plug-ins and services. In the end after a lot of trial and error I came to realize that before you can Vagrant VM as chef workstation you need to configure latest version of chef and ruby.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/">Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-03T21:19:00+00:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
+        
+         | <a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In <a href="http://himanshu.gilani.info/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">part 1</a> of this post I explained how to track page views and events in <a href="http://www.google.com/analytics/">Google Analytics</a>. In this post I will explain</p>
+
+<ol>
+<li>How to use Google Analytics for logging data and javascript errors.</li>
+<li>Custom Variables in Google Analytics.</li>
+<li>How to use Google Analytics for track traffic sources.</li>
+</ol>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-16T11:31:00+00:00" pubdate data-updated="true">Jan 16<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.google.com/analytics">Google Analytics</a> is a free web analytics tool from Google that you can use for tracking website statistics like page views, traffic sources, audience information, goals, funnels, etc. While a lot of the stuff is tracked automatically, it becomes overwhelming pretty quickly if you want to track customize analytics or want to track or create custom metrics. In this post, I will detail things I learned by experimenting with Google Analytics.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-12T01:53:00+00:00" pubdate data-updated="true">Jan 12<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/01/12/introduction-to-ldap/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>LDAP is definitely not a buzz word technology these days, however a lot of organizations are still using LDAP. So, at some point in time you may be required to develop or maintain projects using LDAP. But since LDAP is an archaic technology, it is tough to discover right information about it on the web. Whenever I searched for it on the web, I found the right information filled with technical jargon and scattered across various articles. This post is my attempt at explaining everything you need to know to understand how LDAP protocol works.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/01/12/introduction-to-ldap/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-10T11:05:00+00:00" pubdate data-updated="true">Dec 10<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/12/10/why-i-love-git/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently I was in a discussion with couple of friends who still have to migrate on to the Git version control system. My friends had a lot of questions and showed hesitation in moving from SVN to Git. This post articulates my thoughts on why you should use Git and contains links to some excellent resources on Git that you can use to understand Git quickly.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/12/10/why-i-love-git/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/17/npm-features-and-options-demystified/">NPM Features and Options Demystified</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-17T16:58:00+00:00" pubdate data-updated="true">Oct 17<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/10/17/npm-features-and-options-demystified/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In the previous post, <a href="http://himanshu.gilani.info/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a>, I discussed how NPM and package.json could be used for managing the project and its dependencies. In this post I will discuss some of the overlooked features of NPM that help you in achieving more out of this tool</p>
+
+<h2>npm install and package versions</h2>
+
+<p><code>npm install {package}</code> by default installs the package version tagged as &#8220;latest&#8221; in the npm registry. If you do not want the latest version of the package then you have few options. You can execute commands in the following way to control which package should be installed and from where to fetch the package.</p>
+
+<p><strong>Package with Specific Version:</strong> <code>npm install {package}@{version}</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install express@3.0.0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command will install version 3.0.0 of express package form npm registry.</p>
+
+<p><strong>Package in a Version Range:</strong>  <code>npm install {package}@"{version range}"</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm install sax@"&gt;=0.1.0 &lt;0.2.0"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command will install sax package between version range 0.1.0 and 0.2.0</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/10/17/npm-features-and-options-demystified/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/">Why Memento Moved From Java to CouchApps to Node.js Technology Stack</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-27T19:53:00+00:00" pubdate data-updated="true">Sep 27<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://mementodb.com">Memento</a>, the app that I launched recently has already seen three technology stack changes. I started working on memento to be able to keep what I find on web with me as a personal memento. Being a Java architect I kicked off memento using Java. Since I was a solo developer on this project I wanted to keep everything lean in order to iterate quickly. This meant having an automatic code generation for the boilerplate code, using simple and powerful frameworks, following best practices, and tons of unit tests for making changes quickly and verifying the health of the app.</p>
+
+<h2>Spring Roo</h2>
+
+<p>With my lean strategy in mind I quickly used <a href="http://www.springsource.org/spring-roo"><strong>Spring Roo</strong></a>, a rapid application development tool for Java developers to generate the complete app with front-end, back-end, authentication, persistence, logging, and unit tests within couple of hours. So far I was happy.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/">Bootstraping a Node.js App for Dev/Prod Environment</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-26T19:30:00+00:00" pubdate data-updated="true">Sep 26<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Setting up a web server in node is really simple. A <a href="http://nodeguide.com/beginner.html#a-hello-world-http-server">basic hello world http server</a> can be written in under 10 lines. However, if you want to write a production grade app then you are better of by using any framework that provides foundation and structure to your logic. When choosing frameworks there are no right or wrong answers. Important thing is to select a framework that is being actively developed, has community support and most of important of all you love the way it works.</p>
+
+<h2>Bootstrap a Node.js App with Express Application</h2>
+
+<p><a href="http://expressjs.com">Express</a> is a web application framework for Node.js. It is simple to use and can be configured to work with popular technologies. To understand how Express works you can follow the <a href="http://expressjs.com/guide.html">Getting Started</a> page on the express web site. This guide also explains <a href="http://expressjs.com/guide.html#executable">how to use the express global executable</a> for generating a skeleton web app.</p>
+
+<p>Once you have generated a skeleton web application. You need to understand how to structure the skeleton app for the Dev/Prod parity as well as making few changes to the app for making your app modular.</p>
+
+<h3>Dev/Prod parity</h3>
+
+<p>You will notice following snippet in the skeleton app</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>app.configure('development', function(){
+</span><span class='line'>  app.use(express.errorHandler());
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/09/17/introducing-memento/">Introducing Memento</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-17T06:19:00+00:00" pubdate data-updated="true">Sep 17<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/09/17/introducing-memento/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Here is a wonderful application that allows you to save any web page that you like. It is your personal space with all that you like on the web. Some space that you can access whenver you like. You can create an account at <a href="http://www.mementodb.com">www.mementodb.com</a></p>
+
+<h2>What are mementos?</h2>
+
+<p>Mementos are anything that you save using this application. You can think of a memento as a copy of the entire web page saved into your account for you to <strong>&#8220;use&#8221;</strong> later. When we say <strong>&#8220;use&#8221;</strong> we really mean you should be able to read, edit or print the mementos. For creating mementos we convert web pages that you want to collect into a text format that any one can edit without understanding the techonolgies of the web.</p>
+
+<h2>Why Use Memento?</h2>
+
+<p>Web is constantly changing, pages that you bookmark today may vanish tomorrow. But what if you found something on web that you want to keep as a personal memento. With Memento you can <strong>Save</strong>, <strong>Collect</strong> and <strong>Use</strong> your web.</p>
+
+<h2>How it Works?</h2>
+
+<p>Memento provides a bookmarklet that converts the web page you want to keep into Markdown and saves it to your account.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/09/17/introducing-memento/">Read on &rarr;</a>
+    </footer>
   
 
 
     </article>
   
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -257,7 +596,23 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a>
+        <a href="/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/">Configuring a Vagrant VM as Chef Workstation: Part 2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Configuring A Vagrant Vm As Chef Workstation Part 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/">Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a>
       </li>
     
   </ul>
@@ -319,7 +674,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Himanshu Gilani -
+  Copyright &copy; 2014 - Himanshu Gilani -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
