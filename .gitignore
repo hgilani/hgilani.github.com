@@ -5,6 +5,8 @@
 .pygments-cache
 .vagrant
 _deploy
+blog
+images
 public
 sass.old
 source.old
