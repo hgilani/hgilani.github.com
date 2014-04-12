@@ -1,0 +1,459 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Configuring a Vagrant VM as Chef Workstation: Part 2 - Himanshu Gilani</title>
+  <meta name="author" content="Himanshu Gilani">
+
+  
+  <meta name="description" content="In this part we would configure chef workstation that we created in Part 1 to provision nodes on the Rackspace cloud provider. Chef Terminology &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgilani.github.com/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Himanshu Gilani" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34055934-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Himanshu Gilani</a></h1>
+  
+    <h2>Web Developer and Entrepreneur. Founder of mementodb.com</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgilani.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Configuring a Vagrant VM as Chef Workstation: Part 2</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-12T08:19:00+00:00" pubdate data-updated="true">Apr 12<span>th</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In this part we would configure chef workstation that we created in <a href="http://himanshu.gilani.info/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Part 1</a> to provision nodes on the Rackspace cloud provider.</p>
+
+<h2>Chef Terminology</h2>
+
+<p>Before we go over details of how to provision a Rackspace VM, lets review the chef terminology so that we have some common vocabulary</p>
+
+<ul>
+<li><p><em>Nodes</em>: Servers, VMs or physical machines or cloud instances.</p></li>
+<li><p><em>Cookbook</em>: A cookbook is a collection of recipes, attributes, and templates that Chef uses to package, distribute, and share configuration details. A chef repository can have many cookbooks and typically a cookbook configures only one service.</p></li>
+<li><p><em>Roles</em>: Roles are a way to group nodes by the function. Each role is associated with a run_list i.e. a set of cookbook/recipies that need to execute in given sequence for configuring the node. Nodes can have multiple roles.</p></li>
+<li><p><em>Environments</em>: In chef different nodes could belong to different environments like dev, stage, prod, etc. Like roles environments also have a run_list.</p></li>
+<li><p><em>Data Bags</em>: Data bags are like cookbook attributes but are used to store sensitive information like passwords, api keys, secrets, etc.</p></li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Setup Chef Server</h2>
+
+<p>Chef is a real powerful tool and comes in 2 different flavors at a high level i.e. chef server or chef solo. If you want to manage a single node then chef-solo is real simple and the way to go, but if you want to manage a set of nodes in a dynamic environment then chef-server is the way to go. Chef-serve tracks all provisioned nodes and manages chef repository i.e. cookbooks, roles, environments, etc.</p>
+
+<p>In this blog post we would use chef server hosted and managed by Opscode (makers of chef). They offer free service that could be used for managing 5 nodes. For setting up a chef-server account do following steps</p>
+
+<ol>
+<li>Sign up for an account at <a href="https://manage.opscode.com/signup">https://manage.opscode.com/signup</a>.</li>
+<li>Once you have created your account download your user key (USER.pem)</li>
+<li>Create an Organization</li>
+<li>Download Organization key (ORGANIZATION-validator.pem)</li>
+<li>Download knife configuration(knife.rb) from the Organization page</li>
+</ol>
+
+
+<p>If you get stuck then refer to <a href="https://learnchef.opscode.com">chef documentation</a>.</p>
+
+<p>If you followed steps this far you would have following 3 files</p>
+
+<ol>
+<li>{USERNAME}.pem</li>
+<li>{ORGANIZATION}-validator.pem</li>
+<li>knife.rb</li>
+</ol>
+
+
+<p><em>NOTE</em>: above replace {USERNAME} and {ORGANIZATION} is a placeholder for the user name and organization name on chef server.</p>
+
+<h2>Setup Chef Repository (chef-repo) on your workstation</h2>
+
+<p>For setting up chef repository clone an empty chef repository project in <code>/vagrant</code> folder</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd /vagrant
+</span><span class='line'>git clone git://github.com/opscode/chef-repo.git</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, create <code>.chef</code> folder inside the chef-repo folder and copy {USERNAME}.pem, {ORGANIZATION}-validator.pem and knife.rb that you downloaded. If you have followed this far then we would have following in /vagrant/chef-repo folder</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chef-repo
+</span><span class='line'>|-- certificates
+</span><span class='line'>|-- .chef
+</span><span class='line'>|   |-- {USERNAME}.pem
+</span><span class='line'>|   |-- knife.rb
+</span><span class='line'>|   |-- {ORGANIZATION}-validator.pem
+</span><span class='line'>|-- chefignore
+</span><span class='line'>|-- config
+</span><span class='line'>|-- cookbooks
+</span><span class='line'>|-- data_bags
+</span><span class='line'>|-- environments
+</span><span class='line'>|-- roles
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>NOTE</em>: Since we are using vagrant VM as chef-workstation we created chef-repo in /vagrant folder so that we do not loose chef-repo when we destroy vagrant VM</p>
+
+<h2>knife</h2>
+
+<p>When we installed chef in <a href="http://himanshu.gilani.info/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">part 1</a> it installed knife a command-line tool that provides an interface between a local chef-repo and the Chef server. Knife  manages nodes, roles, environments, data bags, cookbooks, etc on the chef server. In other words, it is a client of the chef server and it interacts with chef server using REST api. It is an essential tool when working with chef and we first need to configure our workspace so that we can use it.</p>
+
+<h3>knife.rb location</h3>
+
+<p>Knife uses configuration in knife.rb file for working with chef server. The default location in which knife expects to find knife.rb file is <code>~/.chef/knife.rb</code>. Since we configured our chef-repo in <code>/vagrant</code> folder we either need to pass location of knife.rb file using &#8211;config option when executing knife commands (yes this needs to be done for every command as I did not find any configuration option for this) or execute all the knife commands from <code>/vagrant/chef-repo</code> folder.</p>
+
+<h3>EDITOR environment variable</h3>
+
+<p>Configure your favorite editor in EDITOR environment variable as some of the knife commands open up an editor so that you modify the roles, environments, data bags, etc in JSON format.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export EDITOR=vi</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Create a role for your node</h2>
+
+<p>Create an empty role file</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>knife role create mean</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>NOTE</em>: A role can have a run list of cookbooks or recipes that would be applied to a node. We are using an empty run list as a minimal example.</p>
+
+<h2>knife-rackspace</h2>
+
+<p>Since we would be working with Rackspace cloud provider we need to install <code>knife-rackspace</code> gem so that we can manage nodes on Rackspace. To do this execute following command</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install knife-rackspace</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Creating node on Rackspace</h3>
+
+<p>Since knife-rackspace plugin needs to provision nodes on Rackspace we need to configure Rackspace user and API key first. For this add following in <code>/vagrant/chef-repo/.chef/knife.rb</code> file</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>knife[:rackspace_api_username] = "Your Rackspace API username"
+</span><span class='line'>knife[:rackspace_api_key] = "Your Rackspace API Key"
+</span><span class='line'>knife[:rackspace_version] = 'v2'</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>NOTE</em>: For production these values should come from environment variables and should not be checked into version control systems.</p>
+
+<p>Now, we can use following command to provision a node in Rackspace</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>knife rackspace server create -r 'role[WEB]' --server-name mean --node-name mean --image 8a3a9f96-b997-46fd-b7a8-a9e740796ffd --flavor 2 --rackspace-region dfw</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Deleting node on Rackspace</h3>
+
+<p>First find the instance if of node you just create on Rackspace using command <code>knife rackspace server list</code> and then execute following command</p>
+
+<p><code>
+knife rackspace server delete {instance_id} --purge
+</code></p>
+
+<p>NOTE: For cleaning up nodes on chef-server use &#8211;purge in above command as otherwise you would need to do execute following commands as well</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>knife node delete {node_name}
+</span><span class='line'>knife client delete {node_name}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>NOTE</em>: It is important to delete nodes on Rackspace once you are done testing as otherwise you could incurs costs for running servers on Rackspace.</p>
+
+<p>For details on different command line options for knife-rackspace plugin refer to their <a href="https://github.com/opscode/knife-rackspace">github repo.</a></p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Himanshu Gilani</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-12T08:19:00+00:00" pubdate data-updated="true">Apr 12<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/chef-/'>chef,</a>, <a class='category' href='/blog/categories/devops-/'>devops,</a>, <a class='category' href='/blog/categories/knife-/'>knife,</a>, <a class='category' href='/blog/categories/rackspace/'>rackspace</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgilani.github.com/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/" data-via="hgilani" data-counturl="http://hgilani.github.com/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/" title="Previous Post: Configuring a Vagrant VM as Chef Workstation: Part 1">&laquo; Configuring a Vagrant VM as Chef Workstation: Part 1</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/">Configuring a Vagrant VM as Chef Workstation: Part 2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Configuring a Vagrant VM as Chef Workstation: Part 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/">Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hgilani">@hgilani</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hgilani',
+            count: 5,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("hgilani", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/hgilani" class="twitter-follow-button" data-show-count="false">Follow @hgilani</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Himanshu Gilani -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'hgilani';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hgilani.github.com/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/';
+        var disqus_url = 'http://hgilani.github.com/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

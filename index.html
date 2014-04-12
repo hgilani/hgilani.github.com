@@ -9,7 +9,7 @@
   <meta name="author" content="Himanshu Gilani">
 
   
-  <meta name="description" content="Vagrant is a powerful tool as it allows us to create &#8220;lightweight, reproducible, and portable&#8221; Virtual Machines (VM) on the developer &hellip;">
+  <meta name="description" content="In this part we would configure chef workstation that we created in Part 1 to provision nodes on the Rackspace cloud provider. Chef Terminology &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -82,6 +82,62 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/">Configuring a Vagrant VM as Chef Workstation: Part 2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-12T08:19:00+00:00" pubdate data-updated="true">Apr 12<span>th</span>, 2014</time>
+        
+         | <a href="/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In this part we would configure chef workstation that we created in <a href="http://himanshu.gilani.info/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Part 1</a> to provision nodes on the Rackspace cloud provider.</p>
+
+<h2>Chef Terminology</h2>
+
+<p>Before we go over details of how to provision a Rackspace VM, lets review the chef terminology so that we have some common vocabulary</p>
+
+<ul>
+<li><p><em>Nodes</em>: Servers, VMs or physical machines or cloud instances.</p></li>
+<li><p><em>Cookbook</em>: A cookbook is a collection of recipes, attributes, and templates that Chef uses to package, distribute, and share configuration details. A chef repository can have many cookbooks and typically a cookbook configures only one service.</p></li>
+<li><p><em>Roles</em>: Roles are a way to group nodes by the function. Each role is associated with a run_list i.e. a set of cookbook/recipies that need to execute in given sequence for configuring the node. Nodes can have multiple roles.</p></li>
+<li><p><em>Environments</em>: In chef different nodes could belong to different environments like dev, stage, prod, etc. Like roles environments also have a run_list.</p></li>
+<li><p><em>Data Bags</em>: Data bags are like cookbook attributes but are used to store sensitive information like passwords, api keys, secrets, etc.</p></li>
+</ul>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Configuring a Vagrant VM as Chef Workstation: Part 1</a></h1>
     
     
@@ -125,7 +181,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/">Scripting Google Analytics Part 2 Logging Custom Variables and Tracking Traffic Sources</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/">Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources</a></h1>
     
     
       <p class="meta">
@@ -141,7 +197,7 @@
   
 
 
-<time datetime="2013-03-03T00:00:00+00:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
+<time datetime="2013-03-03T21:19:00+00:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
         
          | <a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/#disqus_thread">Comments</a>
         
@@ -175,7 +231,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics Part 1 Tracking Pages and Events</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a></h1>
     
     
       <p class="meta">
@@ -191,7 +247,7 @@
   
 
 
-<time datetime="2013-01-16T00:00:00+00:00" pubdate data-updated="true">Jan 16<span>th</span>, 2013</time>
+<time datetime="2013-01-16T11:31:00+00:00" pubdate data-updated="true">Jan 16<span>th</span>, 2013</time>
         
          | <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/#disqus_thread">Comments</a>
         
@@ -277,7 +333,7 @@
   
 
 
-<time datetime="2012-12-10T00:00:00+00:00" pubdate data-updated="true">Dec 10<span>th</span>, 2012</time>
+<time datetime="2012-12-10T11:05:00+00:00" pubdate data-updated="true">Dec 10<span>th</span>, 2012</time>
         
          | <a href="/blog/2012/12/10/why-i-love-git/#disqus_thread">Comments</a>
         
@@ -304,7 +360,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/10/17/npm-features-and-options-demystified/">Npm Features and Options Demystified</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/10/17/npm-features-and-options-demystified/">NPM Features and Options Demystified</a></h1>
     
     
       <p class="meta">
@@ -320,7 +376,7 @@
   
 
 
-<time datetime="2012-10-17T00:00:00+00:00" pubdate data-updated="true">Oct 17<span>th</span>, 2012</time>
+<time datetime="2012-10-17T16:58:00+00:00" pubdate data-updated="true">Oct 17<span>th</span>, 2012</time>
         
          | <a href="/blog/2012/10/17/npm-features-and-options-demystified/#disqus_thread">Comments</a>
         
@@ -525,60 +581,9 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-29T09:28:00+00:00" pubdate data-updated="true">Jul 29<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/07/29/npm-and-package-dot-json/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be installed locally for a project or globally for the entire system. Whenever you install packages these packages are fetched from the <a href="https://npmjs.org/">NPM registry</a>.</p>
-
-<h2>Local Install</h2>
-
-<p>If you want to install any node package then you can simply do</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>npm install {package_name}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will install NPM package {package_name} in the current working directory. This is typically root of the project.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/07/29/npm-and-package-dot-json/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -591,23 +596,23 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/">Configuring a Vagrant VM as Chef Workstation: Part 2</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Configuring a Vagrant VM as Chef Workstation: Part 1</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/">Scripting Google Analytics Part 2 Logging Custom Variables And Tracking Traffic Sources</a>
+        <a href="/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/">Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics Part 1 Tracking Pages And Events</a>
+        <a href="/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">Scripting Google Analytics: Part 1 - Tracking Pages and Events</a>
       </li>
     
       <li class="post">
         <a href="/blog/2013/01/12/introduction-to-ldap/">Introduction to LDAP</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/10/why-i-love-git/">Why I Love Git</a>
       </li>
     
   </ul>

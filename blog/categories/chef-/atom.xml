@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: chef, | Himanshu Gilani]]></title>
+  <link href="http://hgilani.github.com/blog/categories/chef-/atom.xml" rel="self"/>
+  <link href="http://hgilani.github.com/"/>
+  <updated>2014-04-12T08:34:39+00:00</updated>
+  <id>http://hgilani.github.com/</id>
+  <author>
+    <name><![CDATA[Himanshu Gilani]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Configuring a Vagrant VM as Chef Workstation: Part 2]]></title>
+    <link href="http://hgilani.github.com/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2/"/>
+    <updated>2014-04-12T08:19:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2014/04/12/configuring-a-vagrant-vm-as-chef-workstation-part-2</id>
+    <content type="html"><![CDATA[<p>In this part we would configure chef workstation that we created in <a href="http://himanshu.gilani.info/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">Part 1</a> to provision nodes on the Rackspace cloud provider.</p>
+
+<h2>Chef Terminology</h2>
+
+<p>Before we go over details of how to provision a Rackspace VM, lets review the chef terminology so that we have some common vocabulary</p>
+
+<ul>
+<li><p><em>Nodes</em>: Servers, VMs or physical machines or cloud instances.</p></li>
+<li><p><em>Cookbook</em>: A cookbook is a collection of recipes, attributes, and templates that Chef uses to package, distribute, and share configuration details. A chef repository can have many cookbooks and typically a cookbook configures only one service.</p></li>
+<li><p><em>Roles</em>: Roles are a way to group nodes by the function. Each role is associated with a run_list i.e. a set of cookbook/recipies that need to execute in given sequence for configuring the node. Nodes can have multiple roles.</p></li>
+<li><p><em>Environments</em>: In chef different nodes could belong to different environments like dev, stage, prod, etc. Like roles environments also have a run_list.</p></li>
+<li><p><em>Data Bags</em>: Data bags are like cookbook attributes but are used to store sensitive information like passwords, api keys, secrets, etc.</p></li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Setup Chef Server</h2>
+
+<p>Chef is a real powerful tool and comes in 2 different flavors at a high level i.e. chef server or chef solo. If you want to manage a single node then chef-solo is real simple and the way to go, but if you want to manage a set of nodes in a dynamic environment then chef-server is the way to go. Chef-serve tracks all provisioned nodes and manages chef repository i.e. cookbooks, roles, environments, etc.</p>
+
+<p>In this blog post we would use chef server hosted and managed by Opscode (makers of chef). They offer free service that could be used for managing 5 nodes. For setting up a chef-server account do following steps</p>
+
+<ol>
+<li>Sign up for an account at <a href="https://manage.opscode.com/signup">https://manage.opscode.com/signup</a>.</li>
+<li>Once you have created your account download your user key (USER.pem)</li>
+<li>Create an Organization</li>
+<li>Download Organization key (ORGANIZATION-validator.pem)</li>
+<li>Download knife configuration(knife.rb) from the Organization page</li>
+</ol>
+
+
+<p>If you get stuck then refer to <a href="https://learnchef.opscode.com">chef documentation</a>.</p>
+
+<p>If you followed steps this far you would have following 3 files</p>
+
+<ol>
+<li>{USERNAME}.pem</li>
+<li>{ORGANIZATION}-validator.pem</li>
+<li>knife.rb</li>
+</ol>
+
+
+<p><em>NOTE</em>: above replace {USERNAME} and {ORGANIZATION} is a placeholder for the user name and organization name on chef server.</p>
+
+<h2>Setup Chef Repository (chef-repo) on your workstation</h2>
+
+<p>For setting up chef repository clone an empty chef repository project in <code>/vagrant</code> folder</p>
+
+<p><code>
+cd /vagrant
+git clone git://github.com/opscode/chef-repo.git
+</code></p>
+
+<p>Now, create <code>.chef</code> folder inside the chef-repo folder and copy {USERNAME}.pem, {ORGANIZATION}-validator.pem and knife.rb that you downloaded. If you have followed this far then we would have following in /vagrant/chef-repo folder</p>
+
+<p>```
+chef-repo
+|-- certificates
+|-- .chef
+|   |-- {USERNAME}.pem
+|   |-- knife.rb
+|   |-- {ORGANIZATION}-validator.pem
+|-- chefignore
+|-- config
+|-- cookbooks
+|-- data_bags
+|-- environments
+|-- roles</p>
+
+<p>```</p>
+
+<p><em>NOTE</em>: Since we are using vagrant VM as chef-workstation we created chef-repo in /vagrant folder so that we do not loose chef-repo when we destroy vagrant VM</p>
+
+<h2>knife</h2>
+
+<p>When we installed chef in <a href="http://himanshu.gilani.info/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/">part 1</a> it installed knife a command-line tool that provides an interface between a local chef-repo and the Chef server. Knife  manages nodes, roles, environments, data bags, cookbooks, etc on the chef server. In other words, it is a client of the chef server and it interacts with chef server using REST api. It is an essential tool when working with chef and we first need to configure our workspace so that we can use it.</p>
+
+<h3>knife.rb location</h3>
+
+<p>Knife uses configuration in knife.rb file for working with chef server. The default location in which knife expects to find knife.rb file is <code>~/.chef/knife.rb</code>. Since we configured our chef-repo in <code>/vagrant</code> folder we either need to pass location of knife.rb file using --config option when executing knife commands (yes this needs to be done for every command as I did not find any configuration option for this) or execute all the knife commands from <code>/vagrant/chef-repo</code> folder.</p>
+
+<h3>EDITOR environment variable</h3>
+
+<p>Configure your favorite editor in EDITOR environment variable as some of the knife commands open up an editor so that you modify the roles, environments, data bags, etc in JSON format.</p>
+
+<p><code>
+export EDITOR=vi
+</code></p>
+
+<h2>Create a role for your node</h2>
+
+<p>Create an empty role file</p>
+
+<p><code>
+knife role create mean
+</code></p>
+
+<p><em>NOTE</em>: A role can have a run list of cookbooks or recipes that would be applied to a node. We are using an empty run list as a minimal example.</p>
+
+<h2>knife-rackspace</h2>
+
+<p>Since we would be working with Rackspace cloud provider we need to install <code>knife-rackspace</code> gem so that we can manage nodes on Rackspace. To do this execute following command</p>
+
+<p><code>
+gem install knife-rackspace
+</code></p>
+
+<h3>Creating node on Rackspace</h3>
+
+<p>Since knife-rackspace plugin needs to provision nodes on Rackspace we need to configure Rackspace user and API key first. For this add following in <code>/vagrant/chef-repo/.chef/knife.rb</code> file</p>
+
+<p><code>
+knife[:rackspace_api_username] = "Your Rackspace API username"
+knife[:rackspace_api_key] = "Your Rackspace API Key"
+knife[:rackspace_version] = 'v2'
+</code></p>
+
+<p><em>NOTE</em>: For production these values should come from environment variables and should not be checked into version control systems.</p>
+
+<p>Now, we can use following command to provision a node in Rackspace</p>
+
+<p><code>
+knife rackspace server create -r 'role[WEB]' --server-name mean --node-name mean --image 8a3a9f96-b997-46fd-b7a8-a9e740796ffd --flavor 2 --rackspace-region dfw
+</code></p>
+
+<h3>Deleting node on Rackspace</h3>
+
+<p>First find the instance if of node you just create on Rackspace using command <code>knife rackspace server list</code> and then execute following command</p>
+
+<p><code>
+knife rackspace server delete {instance_id} --purge
+</code></p>
+
+<p>NOTE: For cleaning up nodes on chef-server use --purge in above command as otherwise you would need to do execute following commands as well</p>
+
+<p><code>
+knife node delete {node_name}
+knife client delete {node_name}
+</code></p>
+
+<p><em>NOTE</em>: It is important to delete nodes on Rackspace once you are done testing as otherwise you could incurs costs for running servers on Rackspace.</p>
+
+<p>For details on different command line options for knife-rackspace plugin refer to their <a href="https://github.com/opscode/knife-rackspace">github repo.</a></p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+]]></content>
+  </entry>
+  
+</feed>

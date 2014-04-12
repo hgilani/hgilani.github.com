@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: node.js,npm" | Himanshu Gilani]]></title>
+  <link href="http://hgilani.github.com/blog/categories/node-js-npm-/atom.xml" rel="self"/>
+  <link href="http://hgilani.github.com/"/>
+  <updated>2014-04-12T08:34:39+00:00</updated>
+  <id>http://hgilani.github.com/</id>
+  <author>
+    <name><![CDATA[Himanshu Gilani]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[NPM Features and Options Demystified]]></title>
+    <link href="http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified/"/>
+    <updated>2012-10-17T16:58:00+00:00</updated>
+    <id>http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified</id>
+    <content type="html"><![CDATA[<p>In the previous post, <a href="http://himanshu.gilani.info/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a>, I discussed how NPM and package.json could be used for managing the project and its dependencies. In this post I will discuss some of the overlooked features of NPM that help you in achieving more out of this tool</p>
+
+<h2>npm install and package versions</h2>
+
+<p><code>npm install {package}</code> by default installs the package version tagged as "latest" in the npm registry. If you do not want the latest version of the package then you have few options. You can execute commands in the following way to control which package should be installed and from where to fetch the package.</p>
+
+<p><strong>Package with Specific Version:</strong> <code>npm install {package}@{version}</code></p>
+
+<p><code>
+npm install express@3.0.0
+</code></p>
+
+<p>This command will install version 3.0.0 of express package form npm registry.</p>
+
+<p><strong>Package in a Version Range:</strong>  <code>npm install {package}@"{version range}"</code></p>
+
+<p><code>
+npm install sax@"&gt;=0.1.0 &lt;0.2.0"
+</code></p>
+
+<p>This command will install sax package between version range 0.1.0 and 0.2.0</p>
+
+<!-- more -->
+
+
+<p><strong>Package with Specific Tag:</strong> <code>npm install {package}@{tag}</code></p>
+
+<p><code>
+npm install passport@latest
+</code></p>
+
+<p>This command will install passport package with latest tag.</p>
+
+<p><strong>Private package:</strong> <code>npm install {folder}</code> or <code>npm install {tarball file}</code> or <code>npm install {tarball url}</code></p>
+
+<p><code>
+npm install ./myPackage
+npm install ./myPackage.tgz
+npm install http://download.com/myPackage.tgz
+</code></p>
+
+<p><strong>Package from Git Repository:</strong> <code>npm install {git repo url}</code></p>
+
+<p><code>
+npm install git@github.com:hgilani/html2markdown.git
+</code></p>
+
+<h2>Using npm install to also maintain package.json</h2>
+
+<p>When installing a new package, <code>npm install</code> could also update the package.json if you want. For updating package.json, you need to use one of these flags that indicate what kind of dependency you are installing</p>
+
+<ol>
+<li><code>--save</code>: Package will be added in the dependencies section of package.json</li>
+<li><code>--save-dev</code>: Package will be added in the devDepenctions section of package.json</li>
+<li><code>--save-optional</code>: Package will be added in the optionalDepenctions section of package.json</li>
+</ol>
+
+
+<h2>npm install or npm update</h2>
+
+<p>A lot of time you want to depend on the latest version of the packages so that you automatically get all the bug fixes and new features. If so then you should be able to update some or all the packages installed in your environment to the latest version. You should start by correctly configuring the versions properly in your package.json. For example, if you depend on version 2.0.0 of the express library then your package.json can say</p>
+
+<p>```
+  "dependencies": {</p>
+
+<pre><code>    ...
+"express": "2.0.0",
+    ...
+</code></pre>
+
+<p>}
+```</p>
+
+<p>This tells NPM that you want to depend on a specific version of the package. This will keep things tight but it also makes upgrading to latest packages a manual effort. For ease of update, you should configure flexible versions in package.json that permit upgrading packages</p>
+
+<p>```
+  "dependencies": {</p>
+
+<pre><code>    ...
+"express": "2.x",
+    ...
+</code></pre>
+
+<p>}
+```</p>
+
+<p>What this says is you want to depend on the latest express package with major version 2. With versions configured for easy upgrade, you can update to latest version of express package by executing either <code>npm install express</code> or <code>npm update express</code></p>
+
+<p>You can also update all packages by executing either <code>npm install</code> or <code>npm update</code>. For updating multiple packages you can execute <code>npm install {package1} {package2}</code> or <code>npm install {package1} {package2}</code></p>
+
+<h3>Difference between npm update and npm install</h3>
+
+<ol>
+<li>npm install will also update devDependencies. However, npm update will not</li>
+<li>npm install will always reinstall the package. However, npm update will only update if the latest package is not installed.</li>
+</ol>
+
+
+<p>In addition to upgrading package versions, <code>npm update</code> can also install any missing packages. In other words, it can function as <code>npm install</code> but the difference is that it will not install missing dev dependencies.</p>
+
+<h2>Speeding up npm install</h2>
+
+<p>In the blog post <a href="http://www.devthought.com/2012/02/17/npm-tricks/">NPM Tricks</a>, Guillermo Rauch has mentioned following two tricks that can help in speeding up npm install</p>
+
+<p><code>
+npm install --production
+npm install --loglevel warn
+</code></p>
+
+<p>When you add <code>--production</code> option then npm will skip installing dev dependencies. In addition, when you add <code>--loglevel warn</code> then only useful information will be logged into console.</p>
+
+<h2>Some useful NPM commands</h2>
+
+<ol>
+<li><code>npm list</code>: List installed npm packages with their dependencies.</li>
+<li><code>npm outdated</code>: List all installed packages for which a latest version of package is available in npm registry.</li>
+<li><code>npm prune</code>: This command removes "extraneous" packages i.e. packages installed but not listed in package.json file.</li>
+<li><code>npm pack</code>: This commands creates an installable tarball from a package. This tarball can then be published on npm registry or installed in some other environment e.g. production.</li>
+<li><code>npm help json</code>: If you ever want a reference documentation of different options you can configure in <code>package.json</code> file.</li>
+</ol>
+
+
+<p>There are a lot more commands. To list all the commands you can execute <code>npm help</code> and for reading documentation on a specific command, you can execute <code>npm help {command}</code></p>
+
+<h2>.npmignore and .gitignore</h2>
+
+<p><code>npm pack</code> is a useful command however sometimes you want to avoid packing some project resources in the tarball. For example if you are creating a package for installing in production environment then you will want to avoid packing unit tests in this package. This can be easily achieved by adding either <code>.npmignore</code> file or <code>.gitignore</code> file. Section <a href="https://npmjs.org/doc/developers.html">"Keeping files out of your package"</a> in the "NPM Developer page" states following</p>
+
+<blockquote><p>Use a .npmignorefile to keep stuff out of your package. If there's no .npmignore file, but there is a .gitignore file, then npm will ignore the stuff matched by the .gitignore file. If you want to include something that is excluded by your .gitignore file, you can create an empty .npmignore file to override it.</p></blockquote>
+
+<h2>Setup npm for tab completion</h2>
+
+<p><code>
+npm completion
+</code></p>
+
+<p>Executing this command configures the tab completions into your current shell. It also outputs a shell script on command line that you can add to your ~/.bashrc or ~/.zshrcfile to make completions available for future shell sessions.</p>
+
+<p>Follow me on twitter <a href="http://twitter.com/hgilani">here</a></p>
+]]></content>
+  </entry>
+  
+</feed>
