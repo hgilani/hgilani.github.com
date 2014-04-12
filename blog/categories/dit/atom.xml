@@ -4,7 +4,7 @@
   <title><![CDATA[Category: DIT | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/dit/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-11-12T10:49:06+01:00</updated>
+  <updated>2014-04-12T08:13:47+00:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Introduction to LDAP]]></title>
     <link href="http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap/"/>
-    <updated>2013-01-12T01:53:00+01:00</updated>
+    <updated>2013-01-12T01:53:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap</id>
     <content type="html"><![CDATA[<p>LDAP is definitely not a buzz word technology these days, however a lot of organizations are still using LDAP. So, at some point in time you may be required to develop or maintain projects using LDAP. But since LDAP is an archaic technology, it is tough to discover right information about it on the web. Whenever I searched for it on the web, I found the right information filled with technical jargon and scattered across various articles. This post is my attempt at explaining everything you need to know to understand how LDAP protocol works.</p>
 

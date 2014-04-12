@@ -4,7 +4,7 @@
   <title><![CDATA[Category: vm | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/vm/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-11-12T10:49:06+01:00</updated>
+  <updated>2014-04-12T08:13:47+00:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Configuring a Vagrant VM as Chef Workstation: Part 1]]></title>
     <link href="http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/"/>
-    <updated>2013-11-12T10:15:00+01:00</updated>
+    <updated>2013-11-12T10:15:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1</id>
     <content type="html"><![CDATA[<p><a href="http://vagrantup.com">Vagrant</a> is a powerful tool as it allows us to create "lightweight, reproducible, and portable" Virtual Machines (VM) on the developer machine using provisioning tools like chef and puppet. If you are using chef as the provisioning tool then you would already know that vagrant VM already has <code>chef-client</code> tool installed along with the version of ruby. Since the vagrant VM already has <code>chef-client</code> and <code>ruby</code> it should be straightforward to use any vagrant VM as a workstation for working the Hosted Chef server for provisioning and maintaining VMs in cloud services like AWS and Rackspace. However, I found this not to be the case and I realized that the process of configuring a chef workstation is rather convoluted as both the version of chef-client and its pre-requisite ruby are really old versions of the software that result in all sorts of errors on trying to use the latest chef plug-ins and services. In the end after a lot of trial and error I came to realize that before you can Vagrant VM as chef workstation you need to configure latest version of chef and ruby.</p>
 

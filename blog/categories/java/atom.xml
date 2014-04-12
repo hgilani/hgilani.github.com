@@ -4,7 +4,7 @@
   <title><![CDATA[Category: java | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-11-12T10:49:06+01:00</updated>
+  <updated>2014-04-12T08:13:47+00:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Why Memento moved from Java to CouchApps to Node.js Technology Stack]]></title>
     <link href="http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/"/>
-    <updated>2012-09-27T19:53:00+02:00</updated>
+    <updated>2012-09-27T19:53:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack</id>
     <content type="html"><![CDATA[<p><a href="http://mementodb.com">Memento</a>, the app that I launched recently has already seen three technology stack changes. I started working on memento to be able to keep what I find on web with me as a personal memento. Being a Java architect I kicked off memento using Java. Since I was a solo developer on this project I wanted to keep everything lean in order to iterate quickly. This meant having an automatic code generation for the boilerplate code, using simple and powerful frameworks, following best practices, and tons of unit tests for making changes quickly and verifying the health of the app.</p>
 

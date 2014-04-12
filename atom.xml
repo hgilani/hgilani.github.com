@@ -4,7 +4,7 @@
   <title><![CDATA[Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-11-12T10:49:06+01:00</updated>
+  <updated>2014-04-12T08:13:47+00:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Configuring a Vagrant VM as Chef Workstation: Part 1]]></title>
     <link href="http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1/"/>
-    <updated>2013-11-12T10:15:00+01:00</updated>
+    <updated>2013-11-12T10:15:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2013/11/12/configuring-a-vagrant-vm-as-chef-workstation-part-1</id>
     <content type="html"><![CDATA[<p><a href="http://vagrantup.com">Vagrant</a> is a powerful tool as it allows us to create &#8220;lightweight, reproducible, and portable&#8221; Virtual Machines (VM) on the developer machine using provisioning tools like chef and puppet. If you are using chef as the provisioning tool then you would already know that vagrant VM already has <code>chef-client</code> tool installed along with the version of ruby. Since the vagrant VM already has <code>chef-client</code> and <code>ruby</code> it should be straightforward to use any vagrant VM as a workstation for working the Hosted Chef server for provisioning and maintaining VMs in cloud services like AWS and Rackspace. However, I found this not to be the case and I realized that the process of configuring a chef workstation is rather convoluted as both the version of chef-client and its pre-requisite ruby are really old versions of the software that result in all sorts of errors on trying to use the latest chef plug-ins and services. In the end after a lot of trial and error I came to realize that before you can Vagrant VM as chef workstation you need to configure latest version of chef and ruby.</p>
 
@@ -187,9 +187,9 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Scripting Google Analytics: Part 2 - Logging, Custom Variables & Traffic Sources]]></title>
+    <title type="html"><![CDATA[Scripting Google Analytics Part 2 Logging Custom Variables And Tracking Traffic Sources]]></title>
     <link href="http://hgilani.github.com/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources/"/>
-    <updated>2013-03-03T21:19:00+01:00</updated>
+    <updated>2013-03-03T00:00:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2013/03/03/scripting-google-analytics-part-2-logging-custom-variables-and-tracking-traffic-sources</id>
     <content type="html"><![CDATA[<p>In <a href="http://himanshu.gilani.info/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/">part 1</a> of this post I explained how to track page views and events in <a href="http://www.google.com/analytics/">Google Analytics</a>. In this post I will explain</p>
 
@@ -312,9 +312,9 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Scripting Google Analytics: Part 1 - Tracking Pages and Events]]></title>
+    <title type="html"><![CDATA[Scripting Google Analytics Part 1 Tracking Pages And Events]]></title>
     <link href="http://hgilani.github.com/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events/"/>
-    <updated>2013-01-16T11:31:00+01:00</updated>
+    <updated>2013-01-16T00:00:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2013/01/16/scripting-google-analytics-part-1-tracking-pages-and-events</id>
     <content type="html"><![CDATA[<p><a href="http://www.google.com/analytics">Google Analytics</a> is a free web analytics tool from Google that you can use for tracking website statistics like page views, traffic sources, audience information, goals, funnels, etc. While a lot of the stuff is tracked automatically, it becomes overwhelming pretty quickly if you want to track customize analytics or want to track or create custom metrics. In this post, I will detail things I learned by experimenting with Google Analytics.</p>
 
@@ -468,7 +468,7 @@
   <entry>
     <title type="html"><![CDATA[Introduction to LDAP]]></title>
     <link href="http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap/"/>
-    <updated>2013-01-12T01:53:00+01:00</updated>
+    <updated>2013-01-12T01:53:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2013/01/12/introduction-to-ldap</id>
     <content type="html"><![CDATA[<p>LDAP is definitely not a buzz word technology these days, however a lot of organizations are still using LDAP. So, at some point in time you may be required to develop or maintain projects using LDAP. But since LDAP is an archaic technology, it is tough to discover right information about it on the web. Whenever I searched for it on the web, I found the right information filled with technical jargon and scattered across various articles. This post is my attempt at explaining everything you need to know to understand how LDAP protocol works.</p>
 
@@ -594,7 +594,7 @@ cn: Paul Hunt
   <entry>
     <title type="html"><![CDATA[Why I Love Git]]></title>
     <link href="http://hgilani.github.com/blog/2012/12/10/why-i-love-git/"/>
-    <updated>2012-12-10T11:05:00+01:00</updated>
+    <updated>2012-12-10T00:00:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2012/12/10/why-i-love-git</id>
     <content type="html"><![CDATA[<p>Recently I was in a discussion with couple of friends who still have to migrate on to the Git version control system. My friends had a lot of questions and showed hesitation in moving from SVN to Git. This post articulates my thoughts on why you should use Git and contains links to some excellent resources on Git that you can use to understand Git quickly.</p>
 
@@ -643,9 +643,9 @@ cn: Paul Hunt
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[NPM Features and Options Demystified]]></title>
+    <title type="html"><![CDATA[Npm Features And Options Demystified]]></title>
     <link href="http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified/"/>
-    <updated>2012-10-17T16:58:00+02:00</updated>
+    <updated>2012-10-17T00:00:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2012/10/17/npm-features-and-options-demystified</id>
     <content type="html"><![CDATA[<p>In the previous post, <a href="http://himanshu.gilani.info/blog/2012/07/29/npm-and-package-dot-json/">NPM and package.json</a>, I discussed how NPM and package.json could be used for managing the project and its dependencies. In this post I will discuss some of the overlooked features of NPM that help you in achieving more out of this tool</p>
 
@@ -799,7 +799,7 @@ cn: Paul Hunt
   <entry>
     <title type="html"><![CDATA[Why Memento moved from Java to CouchApps to Node.js Technology Stack]]></title>
     <link href="http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack/"/>
-    <updated>2012-09-27T19:53:00+02:00</updated>
+    <updated>2012-09-27T19:53:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2012/09/27/why-memento-moved-from-java-to-couchapps-to-node-dot-js-technology-stack</id>
     <content type="html"><![CDATA[<p><a href="http://mementodb.com">Memento</a>, the app that I launched recently has already seen three technology stack changes. I started working on memento to be able to keep what I find on web with me as a personal memento. Being a Java architect I kicked off memento using Java. Since I was a solo developer on this project I wanted to keep everything lean in order to iterate quickly. This meant having an automatic code generation for the boilerplate code, using simple and powerful frameworks, following best practices, and tons of unit tests for making changes quickly and verifying the health of the app.</p>
 
@@ -860,7 +860,7 @@ cn: Paul Hunt
   <entry>
     <title type="html"><![CDATA[Bootstraping a Node.js App for Dev/Prod Environment]]></title>
     <link href="http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/"/>
-    <updated>2012-09-26T19:30:00+02:00</updated>
+    <updated>2012-09-26T19:30:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment</id>
     <content type="html"><![CDATA[<p>Setting up a web server in node is really simple. A <a href="http://nodeguide.com/beginner.html#a-hello-world-http-server">basic hello world http server</a> can be written in under 10 lines. However, if you want to write a production grade app then you are better of by using any framework that provides foundation and structure to your logic. When choosing frameworks there are no right or wrong answers. Important thing is to select a framework that is being actively developed, has community support and most of important of all you love the way it works.</p>
 
@@ -1005,7 +1005,7 @@ cn: Paul Hunt
   <entry>
     <title type="html"><![CDATA[Introducing Memento]]></title>
     <link href="http://hgilani.github.com/blog/2012/09/17/introducing-memento/"/>
-    <updated>2012-09-17T06:19:00+02:00</updated>
+    <updated>2012-09-17T06:19:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2012/09/17/introducing-memento</id>
     <content type="html"><![CDATA[<p>Here is a wonderful application that allows you to save any web page that you like. It is your personal space with all that you like on the web. Some space that you can access whenver you like. You can create an account at <a href="http://www.mementodb.com">www.mementodb.com</a></p>
 
@@ -1064,7 +1064,7 @@ cn: Paul Hunt
   <entry>
     <title type="html"><![CDATA[NPM and package.json]]></title>
     <link href="http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json/"/>
-    <updated>2012-07-29T09:28:00+02:00</updated>
+    <updated>2012-07-29T09:28:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2012/07/29/npm-and-package-dot-json</id>
     <content type="html"><![CDATA[<p>NPM is a package manager for node. Working with NPM is really simple. It gets installed as part of the node.js installation. NPM packages can be installed locally for a project or globally for the entire system. Whenever you install packages these packages are fetched from the <a href="https://npmjs.org/">NPM registry</a>.</p>
 

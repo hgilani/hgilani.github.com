@@ -4,7 +4,7 @@
   <title><![CDATA[Category: express | Himanshu Gilani]]></title>
   <link href="http://hgilani.github.com/blog/categories/express/atom.xml" rel="self"/>
   <link href="http://hgilani.github.com/"/>
-  <updated>2013-11-12T10:49:06+01:00</updated>
+  <updated>2014-04-12T08:13:47+00:00</updated>
   <id>http://hgilani.github.com/</id>
   <author>
     <name><![CDATA[Himanshu Gilani]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Bootstraping a Node.js App for Dev/Prod Environment]]></title>
     <link href="http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment/"/>
-    <updated>2012-09-26T19:30:00+02:00</updated>
+    <updated>2012-09-26T19:30:00+00:00</updated>
     <id>http://hgilani.github.com/blog/2012/09/26/bootstraping-a-node-dot-js-app-for-dev-slash-prod-environment</id>
     <content type="html"><![CDATA[<p>Setting up a web server in node is really simple. A <a href="http://nodeguide.com/beginner.html#a-hello-world-http-server">basic hello world http server</a> can be written in under 10 lines. However, if you want to write a production grade app then you are better of by using any framework that provides foundation and structure to your logic. When choosing frameworks there are no right or wrong answers. Important thing is to select a framework that is being actively developed, has community support and most of important of all you love the way it works.</p>
 
